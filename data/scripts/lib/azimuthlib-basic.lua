@@ -155,6 +155,14 @@ end
   (Опции конфига с дефолтными значениями и комментариями. Дефолтные значения обязательны).
 * isSeedDependant - true if config is specific for this server. false otherwise.
   (true если конфиг предназначен для конкретно этого сервера. Иначе false).
+Returns:
+1. Config table.
+  (Таблица конфигурации).
+2. Error/status. Can be one of the following: (Ошибка/статус, может быть одним из следующих)
+  * String, it's an error message (Строка с описанием ошибки).
+  * Number, 1 - means that file wasn't found (1 - файл не был найден).
+  * Number, 0 - config was successfuly loaded, but was modified by `options`. You'll probably want to resave it (0 - конфиг был загружен, но модифицирован параметром `options`. Рекомендуется пересохранить конфиг).
+  * Nil, config was successfuly loaded, no modifications were made (Nil - конфиг был загружен, модификаций не было).
 Example: loadConfig("MyMod", { WindowWidth = { default = 300 } })
 Example: loadConfig("MyMod", { WindowWidth = { default = 300, comment = "UI window width", min = 100, max = 600, format = "ceil" } }, true) ]]
 function AzimuthBasic.loadConfig(modname, options, isSeedDependant)
@@ -166,25 +174,29 @@ function AzimuthBasic.loadConfig(modname, options, isSeedDependant)
     for k, v in pairs(options) do
         defaultValues[k] = v.default
     end
-    local file, err = io.open(filename .. ".lua", "r")
+    local file, err = io.open(filename .. ".lua", "rb")
     if err then
         if not err:find("No such file or directory", 1, true) then
             eprint("[ERROR]["..modname.."]: Failed to load config file '"..filename.."': " .. err)
             return defaultValues, err
         else
-            return defaultValues, 1
+            return defaultValues, 1 -- file wasn't found
         end
     end
-    local result, err = loadstring("return " .. file:read("*a"))
+    local fileContents = file:read("*all") or ""
+    local result, err = loadstring("return " .. fileContents)
     file:close()
     if not result then
-        eprint("[ERROR]["..modname.."]: Failed to load config file '"..filename.."': " .. err)
+        eprint("[ERROR]["..modname.."]: Failed to load config file '"..filename.."': " .. err .. "; File contents: "..fileContents)
         return defaultValues, err
     end
     result = result()
+    local isModified = false -- if modified is false, there is no need to rewrite config file
+    local value
     -- if file is empty, just use default
-    if not result then
+    if type(result) ~= "table" then
         result = defaultValues
+        isModified = true
     else
         -- now check if config variables are present and correct
         local rv
@@ -192,29 +204,41 @@ function AzimuthBasic.loadConfig(modname, options, isSeedDependant)
             rv = result[k]
             if rv == nil or type(rv) ~= type(v.default) then
                 result[k] = v.default
+                isModified = true
             else
                 if v.format then
                     if v.format == "ceil" then
-                        result[k] = math.ceil(result[k])
+                        value = math.ceil(result[k])
+                        isModified = isModified or (result[k] ~= value)
+                        result[k] = value
                     elseif v.format == "round" then
                         if result[k] >= 0 then
-                            result[k] = math.floor(result[k] + 0.5)
+                            value = math.floor(result[k] + 0.5)
+                            isModified = isModified or (result[k] ~= value)
+                            result[k] = value
                         else
-                            result[k] = math.ceil(result[k] - 0.5)
+                            value = math.ceil(result[k] - 0.5)
+                            isModified = isModified or (result[k] ~= value)
+                            result[k] = value
                         end
                     elseif v.format == "floor" then
-                        result[k] = math.floor(result[k])
+                        value = math.floor(result[k])
+                        isModified = isModified or (result[k] ~= value)
+                        result[k] = value
                     end
                 end
                 if v.min and rv < v.min then
                     result[k] = v.min
+                    isModified = true
                 elseif v.max and rv > v.max then
                     result[k] = v.max
+                    isModified = true
                 end
             end
         end
     end
-    return result
+    isModified = isModified and 0 or nil
+    return result, isModified
 end
 
 -- saveConfig(modname, config [, options [, isSeedDependant,]])
