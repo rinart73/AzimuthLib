@@ -14,14 +14,18 @@ local data = {}
 -- namespace AzimuthClientData
 AzimuthClientData = {}
 
+-- Example: Player():invokeFunction("azimuthlib-clientdata.lua", "setValue", "MyMod", { myModSettingsVar = 5 })
 function AzimuthClientData.setValue(key, value)
     data[key] = value
 end
 
+-- Example: local _, value = Player():invokeFunction("azimuthlib-clientdata.lua", "getValue", "MyMod")
 function AzimuthClientData.getValue(key)
     return data[key]
 end
 
+-- Allows to get multiple variable values at once (Позволяет получить значения нескольких переменных одновременно).
+-- Example: local _, val1, val2, val3 = Player():invokeFunction("azimuthlib-clientdata.lua", "getValuem", "Var1", "Var2", "Var3")
 function AzimuthClientData.getValuem(...)
     local result = {}
     for _, key in pairs({...}) do
@@ -30,6 +34,7 @@ function AzimuthClientData.getValuem(...)
     return unpack(result)
 end
 
+-- Get all saved values as table (Получает все сохраненные значения как таблицу).
 function AzimuthClientData.getValues()
     return data
 end

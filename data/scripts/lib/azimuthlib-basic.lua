@@ -6,11 +6,15 @@ local format = string.format
 
 local AzimuthBasic = {}
 
---[[ logs(modname, consoleLogLevel [, logLevel])
-Initializes logs (Инициализирует логи).
-* modname - Mod name (Название мода).
-* consoleLogLevel - Console log level (Уровень логов консоли).
-* logLevel - File log level. If not specified, consoleLogLevel will be used instead (Уровень логов файла. Если не указан, consoleLogLevel будет использован вместо него).
+-- logs(modname, consoleLogLevel [, logLevel])
+--[[Initializes logs
+Инициализирует логи.
+* modname - Mod name.
+  (Название мода).
+* consoleLogLevel - Console log level.
+  (Уровень логов консоли).
+* logLevel - File log level. If not specified, consoleLogLevel will be used instead.
+  (Уровень логов файла. Если не указан, consoleLogLevel будет использован вместо него).
 Example: local Log = AzimuthBasic.logs("MyMod", 2)
 Example: local Log = AzimuthBasic.logs("MyMod", config.consoleLogLevel, config.logLevel)
 Log.Info("Some info, player name: %s", player.name) ]]
@@ -18,34 +22,39 @@ function AzimuthBasic.logs(modname, consoleLogLevel, logLevel)
     local log = {
       modname = modname,
       consoleLogLevel = consoleLogLevel,
-      logLevel = logLevel or consoleLogLevel
+      logLevel = consoleLogLevel or logLevel
     }
+    local logMax = math.max(log.consoleLogLevel, log.logLevel)
+    log.isError = logMax >= 1
+    log.isWarning = logMax >= 2
+    log.isInfo = logMax >= 3
+    log.isDebug = logMax >= 4
     -- Code duplication because I don't want 30% function call overhead in log functions (especially debug one)
     log.Error = function(msg, ...)
         if 1 <= log.consoleLogLevel then
             eprint(format("[ERROR][%s]: "..msg, log.modname, ...))
-        else
+        elseif 1 <= log.logLevel then
             printlog(format("[ERROR][%s]: "..msg, log.modname, ...))
         end
     end
     log.Warn = function(msg, ...)
         if 2 <= log.consoleLogLevel then
             print(format("[WARN][%s]: "..msg, log.modname, ...))
-        else
+        elseif 2 <= log.logLevel then
             printlog(format("[WARN][%s]: "..msg, log.modname, ...))
         end
     end
     log.Info = function(msg, ...)
         if 3 <= log.consoleLogLevel then
             print(format("[INFO][%s]: "..msg, log.modname, ...))
-        else
+        elseif 3 <= log.logLevel then
             printlog(format("[INFO][%s]: "..msg, log.modname, ...))
         end
     end
     log.Debug = function(msg, ...)
         if 4 <= log.consoleLogLevel then
             print(format("[DEBUG][%s]: "..msg, log.modname, ...))
-        else
+        elseif 4 <= log.logLevel then
             printlog(format("[DEBUG][%s]: "..msg, log.modname, ...))
         end
     end
@@ -75,20 +84,25 @@ function AzimuthBasic.orderedPairs(t, f)
     return iter
 end
 
--- serialize(o [, options])
+-- serialize(o [, options [, prefix [, addCarriageReturn ]]])
 --[[ Serializes variable as readable multiline text.
 Сериализует переменную в мультистрочный текст.
-* o - table (таблица).
-* options - Optional argument. Since this function was initially meant to aid in saving config files, you can add default value and commentary to each variable
+* o - Table for serialization.
+  (Таблица для сериализации).
+* options - Optional argument. Since this function was initially meant to aid in saving config files, you can add default value and commentary to each variable.
   (Необязательный параметр. Так как эта функция изначально предназначена для помощи в сохранении файлов конфигурации, вы можете добавить дефолтное значение и комментарий к каждой переменной).
+* prefix - Default: "". Line prefix, used by the function itself.
+  (По-умолчанию: "". Префикс для строк, используется самой функцией).
+* addCarriageReturn - If true, function uses "\r\n" as new line instead of "\n". False by default because it messes up Avorion file logs.
+  (Если true, функция использует "\r\n" для переводов строк, вместо "\n". False по-умолчанию, так как это ломает файл логов Авориона).
 Example: serialize(myTable)
 Example: serialize({ myVar = 30 }, { myVar = { default = 20, comment = "This variable does stuff" } }) ]]
-function AzimuthBasic.serialize(o, options, prefix)
+function AzimuthBasic.serialize(o, options, prefix, addCarriageReturn)
     if not options then options = {} end
     if not prefix then prefix = "" end
 
     if type(o) == 'table' then
-        local s = "{\r\n"
+        local s = addCarriageReturn and "{\r\n" or "{\n"
         local newprefix = prefix .. "  "
         -- check if it's a list
         local isList = true
@@ -106,7 +120,7 @@ function AzimuthBasic.serialize(o, options, prefix)
         end
         if isList and minKey == 1 and maxKey == numVars then -- write as list
             for k = 1, numVars do
-                s = s .. newprefix .. AzimuthBasic.serialize(o[k], options, newprefix) .. ",\r\n"
+                s = s .. newprefix .. AzimuthBasic.serialize(o[k], options, newprefix, addCarriageReturn) .. (addCarriageReturn and ",\r\n" or ",\n")
             end
         else -- write as usual table
             local ov
@@ -114,15 +128,15 @@ function AzimuthBasic.serialize(o, options, prefix)
                 ov = options[k]
                 if ov then
                     if ov.default ~= nil and type(ov.default) ~= "table" then
-                        s = s .. newprefix .. "-- Default: " .. tostring(ov.default) .. (ov.comment and ". " .. ov.comment or "") .. "\r\n"
+                        s = s .. newprefix .. "-- Default: " .. tostring(ov.default) .. (ov.comment and ". " .. ov.comment or "") .. (addCarriageReturn and "\r\n" or "\n")
                     elseif ov.comment then
-                        s = s .. newprefix .. "-- " .. ov.comment .. "\r\n"
+                        s = s .. newprefix .. "-- " .. ov.comment .. (addCarriageReturn and "\r\n" or "\n")
                     end
                 end
                 if type(k) ~= 'number' then
                     k = '"' .. k .. '"'
                 end
-                s = s .. newprefix .. '[' .. k .. '] = ' .. AzimuthBasic.serialize(v, options, newprefix) .. ",\r\n"
+                s = s .. newprefix .. '[' .. k .. '] = ' .. AzimuthBasic.serialize(v, options, newprefix, addCarriageReturn) .. (addCarriageReturn and ",\r\n" or ",\n")
             end
         end
         s = s .. prefix .. "}"
@@ -135,9 +149,12 @@ end
 -- loadConfig(modname, options [, isSeedDependant])
 --[[ Loads mod config from file.
 Загружает конфигурацию мода из файла.
-* modname - String with modname (Строка с названием мода).
-* options - Config options with default values and comments. Default values are required. (Опции конфига с дефолтными значениями и комментариями. Дефолтные значения обязательны).
-* isSeedDependant - true if config is specific for this server. false otherwise (true если конфиг предназначен для конкретно этого сервера. Иначе false).
+* modname - String with modname.
+  (Строка с названием мода).
+* options - Config options with default values and comments. Default values are required.
+  (Опции конфига с дефолтными значениями и комментариями. Дефолтные значения обязательны).
+* isSeedDependant - true if config is specific for this server. false otherwise.
+  (true если конфиг предназначен для конкретно этого сервера. Иначе false).
 Example: loadConfig("MyMod", { WindowWidth = { default = 300 } })
 Example: loadConfig("MyMod", { WindowWidth = { default = 300, comment = "UI window width", min = 100, max = 600, format = "ceil" } }, true) ]]
 function AzimuthBasic.loadConfig(modname, options, isSeedDependant)
@@ -203,10 +220,14 @@ end
 -- saveConfig(modname, config [, options [, isSeedDependant,]])
 --[[ Saves mod config to file.
 Сохраняет конфигурацию мода в файл.
-* modname - String with modname (Строка с названием мода).
-* config - Config table (Таблица с конфигурацией мода).
-* options - Config options with default values and comments. (Опции конфига с дефолтными значениями и комментариями).
-* isSeedDependant - true if config is specific for this server. false otherwise (true если конфиг предназначен для конкретно этого сервера. Иначе false).
+* modname - String with modname.
+  (Строка с названием мода).
+* config - Config table.
+  (Таблица с конфигурацией мода).
+* options - Config options with default values and comments.
+  (Опции конфига с дефолтными значениями и комментариями).
+* isSeedDependant - true if config is specific for this server. false otherwise.
+  (true если конфиг предназначен для конкретно этого сервера. Иначе false).
 Example: saveConfig("MyMod", { WindowWidth = 300 })
 Example: saveConfig("MyMod", { WindowWidth = 300 }, { default = 300, comment = "UI window width", min = 100, max = 600 }, true) ]]
 function AzimuthBasic.saveConfig(modname, config, options, isSeedDependant)
@@ -219,7 +240,7 @@ function AzimuthBasic.saveConfig(modname, config, options, isSeedDependant)
         eprint("[ERROR]["..modname.."]: Failed to save config file '"..filename.."': " .. err)
         return false, err
     end
-    file:write(AzimuthBasic.serialize(config, options))
+    file:write(AzimuthBasic.serialize(config, options, "", true))
     file:close()
     return true
 end
