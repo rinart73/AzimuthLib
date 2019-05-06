@@ -27,8 +27,8 @@ end
 -- serialize(o)
 --[[ Serializes variable as readable multiline text.
 Сериализует переменную в мультистрочный текст. ]]
-function AzimuthBasic.serialize(o, comments, prefix)
-    if not comments then comments = {} end
+function AzimuthBasic.serialize(o, options, prefix)
+    if not options then options = {} end
     if not prefix then prefix = "" end
 
     if type(o) == 'table' then
@@ -50,17 +50,23 @@ function AzimuthBasic.serialize(o, comments, prefix)
         end
         if isList and minKey == 1 and maxKey == numVars then -- write as list
             for k = 1, numVars do
-                s = s .. newprefix .. AzimuthBasic.serialize(o[k], comments, newprefix) .. ",\r\n"
+                s = s .. newprefix .. AzimuthBasic.serialize(o[k], options, newprefix) .. ",\r\n"
             end
         else -- write as usual table
+            local ov
             for k,v in AzimuthBasic.orderedPairs(o) do
-                if comments[k] then
-                    s = s .. newprefix .. "-- " .. comments[k] .. "\r\n"
+                ov = options[k]
+                if ov then
+                    if ov.default ~= nil and type(ov.default) ~= "table" then
+                        s = s .. newprefix .. "-- Default: " .. tostring(ov.default) .. (ov.comment and ". " .. ov.comment or "") .. "\r\n"
+                    elseif ov.comment then
+                        s = s .. newprefix .. "-- " .. ov.comment .. "\r\n"
+                    end
                 end
                 if type(k) ~= 'number' then
                     k = '"' .. k .. '"'
                 end
-                s = s .. newprefix .. '[' .. k .. '] = ' .. AzimuthBasic.serialize(v, comments, newprefix) .. ",\r\n"
+                s = s .. newprefix .. '[' .. k .. '] = ' .. AzimuthBasic.serialize(v, options, newprefix) .. ",\r\n"
             end
         end
         s = s .. prefix .. "}"
@@ -74,53 +80,65 @@ end
 --[[ Loads mod config from file.
 Загружает конфигурацию мода из файла.
 * modname - String with modname (Строка с названием мода).
-* default - Default config table in case file is missing or something goes wrong (Дефолтный конфиг в виде таблицы, на случай, если файла нет или что-то пошло не так).
+* options - Config options with default values and comments. (Опции конфига с дефолтными значениями и комментариями).
 * isSeedDependant - true if config is specific for this server. false otherwise (true если конфиг предназначен для конкретно этого сервера. Иначе false).
-Example: loadConfig("MyMod", { WindowWidth = 300 }, true) ]]
-function AzimuthBasic.loadConfig(modname, default, isSeedDependant)
+Example: loadConfig("MyMod", { WindowWidth = { default = 300, comment = "UI window width", min = 100, max = 600 } }, true) ]]
+function AzimuthBasic.loadConfig(modname, options, isSeedDependant)
     local filename = modname .. "Config" .. (isSeedDependant and '_' .. GameSettings().seed or "")
     if onServer() then
         filename = Server().folder .. "/" .. filename
+    end
+    local defaultValues = {}
+    for k, v in pairs(options) do
+        defaultValues[k] = v.default
     end
     local file, err = io.open(filename .. ".lua", "r")
     if err then
         if not err:find("No such file or directory", 1, true) then
             eprint("[ERROR]["..modname.."]: Failed to load config file '"..filename.."': " .. err)
-            return default, err
+            return defaultValues, err
         else
-            return default, 1
+            return defaultValues, 1
         end
     end
     local result, err = loadstring("return " .. file:read("*a"))
     file:close()
     if not result then
         eprint("[ERROR]["..modname.."]: Failed to load config file '"..filename.."': " .. err)
-        return default, err
+        return defaultValues, err
     end
     result = result()
     -- if file is empty, just use default
     if not result then
-        result = default
+        result = defaultValues
     else
-        -- now set variables to default if they're not present
-        for k, v in pairs(default) do
-            if result[k] == nil then
-                result[k] = v
+        -- now check if config variables are present and correct
+        local rv
+        for k, v in pairs(options) do
+            rv = result[k]
+            if rv == nil or type(rv) ~= type(v.default) then
+                result[k] = v.default
+            else
+                if v.min and rv < v.min then
+                    result[k] = v.min
+                elseif v.max and rv > v.max then
+                    result[k] = v.max
+                end
             end
         end
     end
     return result
 end
 
--- saveConfig(modname, config [, comments [, isSeedDependant]])
+-- saveConfig(modname, config [, options [, isSeedDependant,]])
 --[[ Saves mod config to file.
 Сохраняет конфигурацию мода в файл.
 * modname - String with modname (Строка с названием мода).
 * config - Config table (Таблица с конфигурацией мода).
-* comments - Config variable comments (Комментарии к переменным конфига).
+* options - Config options with default values and comments. (Опции конфига с дефолтными значениями и комментариями).
 * isSeedDependant - true if config is specific for this server. false otherwise (true если конфиг предназначен для конкретно этого сервера. Иначе false).
-Example: saveConfig("MyMod", { WindowWidth = 300 }, { WindowWidth = "Default: 300. UI window width." }, true) ]]
-function AzimuthBasic.saveConfig(modname, config, comments, isSeedDependant)
+Example: saveConfig("MyMod", { WindowWidth = 300 }, { default = 300, comment = "UI window width", min = 100, max = 600 }, true) ]]
+function AzimuthBasic.saveConfig(modname, config, options, isSeedDependant)
     local filename = modname .. "Config" .. (isSeedDependant and '_' .. GameSettings().seed or "")
     if onServer() then
         filename = Server().folder .. "/" .. filename
@@ -130,7 +148,7 @@ function AzimuthBasic.saveConfig(modname, config, comments, isSeedDependant)
         eprint("[ERROR]["..modname.."]: Failed to save config file '"..filename.."': " .. err)
         return false, err
     end
-    file:write(AzimuthBasic.serialize(config, comments))
+    file:write(AzimuthBasic.serialize(config, options))
     file:close()
     return true
 end
