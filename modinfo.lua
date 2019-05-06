@@ -14,14 +14,14 @@ meta =
     title = "AzimuthLib - Library for modders",
 
     -- Description of your mod that will be displayed to players
-    description = "A resource for modders that provides functions to make mod development easier. Used in Rinart73 mods.",
+    description = "A resource for modders that provides functions to make mod development easier. Mostly used in Rinart73 mods.",
 
     -- Insert all authors into this list
     authors = {"Rinart73"},
 
     -- Version of your mod, should be in format 1.0.0 (major.minor.patch) or 1.0 (major.minor)
     -- This will be used to check for unmet dependencies or incompatibilities
-    version = "1.1",
+    version = "1.1.1",
 
     -- If your mod requires dependencies, enter them here. The game will check that all dependencies given here are met.
     -- Possible attributes:

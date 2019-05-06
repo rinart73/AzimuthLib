@@ -2,8 +2,59 @@
 Предоставляет возможности по сохранению и загрузке файлов конфигурации в AppData. Также добавляет несколько полезных ф-ий.
 ]]
 
+local format = string.format
+
 local AzimuthBasic = {}
 
+--[[ logs(modname, consoleLogLevel [, logLevel])
+Initializes logs (Инициализирует логи).
+* modname - Mod name (Название мода).
+* consoleLogLevel - Console log level (Уровень логов консоли).
+* logLevel - File log level. If not specified, consoleLogLevel will be used instead (Уровень логов файла. Если не указан, consoleLogLevel будет использован вместо него).
+Example: local Log = AzimuthBasic.logs("MyMod", 2)
+Example: local Log = AzimuthBasic.logs("MyMod", config.consoleLogLevel, config.logLevel)
+Log.Info("Some info, player name: %s", player.name) ]]
+function AzimuthBasic.logs(modname, consoleLogLevel, logLevel)
+    local log = {
+      modname = modname,
+      consoleLogLevel = consoleLogLevel,
+      logLevel = logLevel or consoleLogLevel
+    }
+    -- Code duplication because I don't want 30% function call overhead in log functions (especially debug one)
+    log.Error = function(msg, ...)
+        if 1 <= log.consoleLogLevel then
+            eprint(format("[ERROR][%s]: "..msg, log.modname, ...))
+        else
+            printlog(format("[ERROR][%s]: "..msg, log.modname, ...))
+        end
+    end
+    log.Warn = function(msg, ...)
+        if 2 <= log.consoleLogLevel then
+            print(format("[WARN][%s]: "..msg, log.modname, ...))
+        else
+            printlog(format("[WARN][%s]: "..msg, log.modname, ...))
+        end
+    end
+    log.Info = function(msg, ...)
+        if 3 <= log.consoleLogLevel then
+            print(format("[INFO][%s]: "..msg, log.modname, ...))
+        else
+            printlog(format("[INFO][%s]: "..msg, log.modname, ...))
+        end
+    end
+    log.Debug = function(msg, ...)
+        if 4 <= log.consoleLogLevel then
+            print(format("[DEBUG][%s]: "..msg, log.modname, ...))
+        else
+            printlog(format("[DEBUG][%s]: "..msg, log.modname, ...))
+        end
+    end
+    return log
+end
+
+-- for k, v in orderedPairs(myTable)
+--[[ Allows to iterate table by key in alphabetical order.
+Позволяет перебирать таблицу по ключам в алфавитном порядке. ]]
 function AzimuthBasic.orderedPairs(t, f)
     local a = {}    
     for n in pairs(t) do
@@ -24,9 +75,14 @@ function AzimuthBasic.orderedPairs(t, f)
     return iter
 end
 
--- serialize(o)
+-- serialize(o [, options])
 --[[ Serializes variable as readable multiline text.
-Сериализует переменную в мультистрочный текст. ]]
+Сериализует переменную в мультистрочный текст.
+* o - table (таблица).
+* options - Optional argument. Since this function was initially meant to aid in saving config files, you can add default value and commentary to each variable
+  (Необязательный параметр. Так как эта функция изначально предназначена для помощи в сохранении файлов конфигурации, вы можете добавить дефолтное значение и комментарий к каждой переменной).
+Example: serialize(myTable)
+Example: serialize({ myVar = 30 }, { myVar = { default = 20, comment = "This variable does stuff" } }) ]]
 function AzimuthBasic.serialize(o, options, prefix)
     if not options then options = {} end
     if not prefix then prefix = "" end
@@ -76,13 +132,14 @@ function AzimuthBasic.serialize(o, options, prefix)
     end
 end
 
--- loadConfig(modname [, default [, isSeedDependant]])
+-- loadConfig(modname, options [, isSeedDependant])
 --[[ Loads mod config from file.
 Загружает конфигурацию мода из файла.
 * modname - String with modname (Строка с названием мода).
-* options - Config options with default values and comments. (Опции конфига с дефолтными значениями и комментариями).
+* options - Config options with default values and comments. Default values are required. (Опции конфига с дефолтными значениями и комментариями. Дефолтные значения обязательны).
 * isSeedDependant - true if config is specific for this server. false otherwise (true если конфиг предназначен для конкретно этого сервера. Иначе false).
-Example: loadConfig("MyMod", { WindowWidth = { default = 300, comment = "UI window width", min = 100, max = 600 } }, true) ]]
+Example: loadConfig("MyMod", { WindowWidth = { default = 300 } })
+Example: loadConfig("MyMod", { WindowWidth = { default = 300, comment = "UI window width", min = 100, max = 600, format = "ceil" } }, true) ]]
 function AzimuthBasic.loadConfig(modname, options, isSeedDependant)
     local filename = modname .. "Config" .. (isSeedDependant and '_' .. GameSettings().seed or "")
     if onServer() then
@@ -119,6 +176,19 @@ function AzimuthBasic.loadConfig(modname, options, isSeedDependant)
             if rv == nil or type(rv) ~= type(v.default) then
                 result[k] = v.default
             else
+                if v.format then
+                    if v.format == "ceil" then
+                        result[k] = math.ceil(result[k])
+                    elseif v.format == "round" then
+                        if result[k] >= 0 then
+                            result[k] = math.floor(result[k] + 0.5)
+                        else
+                            result[k] = math.ceil(result[k] - 0.5)
+                        end
+                    elseif v.format == "floor" then
+                        result[k] = math.floor(result[k])
+                    end
+                end
                 if v.min and rv < v.min then
                     result[k] = v.min
                 elseif v.max and rv > v.max then
@@ -137,6 +207,7 @@ end
 * config - Config table (Таблица с конфигурацией мода).
 * options - Config options with default values and comments. (Опции конфига с дефолтными значениями и комментариями).
 * isSeedDependant - true if config is specific for this server. false otherwise (true если конфиг предназначен для конкретно этого сервера. Иначе false).
+Example: saveConfig("MyMod", { WindowWidth = 300 })
 Example: saveConfig("MyMod", { WindowWidth = 300 }, { default = 300, comment = "UI window width", min = 100, max = 600 }, true) ]]
 function AzimuthBasic.saveConfig(modname, config, options, isSeedDependant)
     local filename = modname .. "Config" .. (isSeedDependant and '_' .. GameSettings().seed or "")
