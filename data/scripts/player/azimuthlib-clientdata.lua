@@ -2,11 +2,7 @@
 Can be used to:
 * Store mod server settings on client so client will request them only once.
 * Store data between sectors.
-Может быть использован для:
-* Хранения серверных настроек мода на стороне клиента, чтобы не запрашивать их каждый раз.
-* Хранения данных между секторами.
 ]]
-
 if onServer() then return end
 
 local data = {}
@@ -24,7 +20,7 @@ function AzimuthClientData.getValue(key)
     return data[key]
 end
 
--- Allows to get multiple variable values at once (Позволяет получить значения нескольких переменных одновременно).
+-- Allows to get multiple variable values at once.
 -- Example: local _, val1, val2, val3 = Player():invokeFunction("azimuthlib-clientdata.lua", "getValuem", "Var1", "Var2", "Var3")
 function AzimuthClientData.getValuem(...)
     local result = {}
@@ -34,7 +30,7 @@ function AzimuthClientData.getValuem(...)
     return unpack(result)
 end
 
--- Get all saved values as table (Получает все сохраненные значения как таблицу).
+-- Get all saved values as table.
 function AzimuthClientData.getValues()
     return data
 end
