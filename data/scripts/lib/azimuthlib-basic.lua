@@ -161,7 +161,11 @@ function AzimuthBasic.loadConfig(modname, options, isSeedDependant, inModFolder)
     end
     if inModFolder then
         dir = dir .. "/" .. modname
-        createDirectory(dir)
+        --[[if onClient() then
+            createDirectory(modname)
+        else
+            createDirectory(dir)
+        end]]
     end
     local filename = dir .. "/" .. modname .. (isSeedDependant and '_' .. GameSettings().seed or "") .. ".lua"
     local file, err = io.open(filename, "rb")
@@ -247,7 +251,11 @@ function AzimuthBasic.saveConfig(modname, config, options, isSeedDependant, inMo
     end
     if inModFolder then
         dir = dir .. "/" .. modname
-        createDirectory(dir)
+        if onClient() then
+            createDirectory(modname)
+        else
+            createDirectory(dir)
+        end
     end
     local filename = dir .. "/" .. modname .. (isSeedDependant and '_' .. GameSettings().seed or "") .. ".lua"
     local file, err = io.open(filename, "wb")
