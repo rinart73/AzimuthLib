@@ -55,14 +55,18 @@ function AzimuthBasic.logs(modname, consoleLogLevel, logLevel)
     return log
 end
 
--- for k, v in orderedPairs(myTable) do
+-- for k, v in AzimuthBasic.orderedPairs(myTable) do
 --[[ Allows to iterate table by key in alphabetical order. ]]
 function AzimuthBasic.orderedPairs(t, f)
     local a = {}
     for n in pairs(t) do
         a[#a+1] = n
     end
-    table.sort(a, f)
+    if f then
+        table.sort(a, function(a, b) return f(t, a, b) end)
+    else
+        table.sort(a)
+    end
 
     local i = 0 -- iterator variable
     local iter = function () -- iterator function
