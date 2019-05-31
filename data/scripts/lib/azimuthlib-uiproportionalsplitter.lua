@@ -5,15 +5,15 @@ UIVerticalProportionalSplitter(Rect(0, 0, 600, 30), 10, 0, { 0.5, 0.3, 0.45 })
  -> Rect(0, 0, 232, 30)
  -> Rect(242, 0, 381.2, 30)
  -> Rect(391.2, 0, 600, 0)
-UIVerticalProportionalSplitter(Rect(0, 0, 700, 30), 10, 2, { 0.4, 20, 40, 0.6 }) - values > 0 treated as pixels:
- -> Rect(0, 2, 244, 28)
- -> Rect(254, 2, 274, 28)
- -> Rect(284, 2, 324, 28)
- -> Rect(334, 2, 700, 28)
+UIVerticalProportionalSplitter(Rect(0, 0, 700, 30), 10, 5, { 0.4, 20, 40, 0.6 }) - values > 0 treated as pixels:
+ -> Rect(5, 5, 245, 25)
+ -> Rect(255, 5, 275, 25)
+ -> Rect(285, 5, 325, 25)
+ -> Rect(335, 5, 695, 25)
 ]]
 function UIVerticalProportionalSplitter(rect, padding, margin, proportions)
     local count = #proportions
-    local width = rect.width - (count - 1) * padding
+    local width = rect.width - (count - 1) * padding - margin * 2
     local totalWeight = 0
     local totalAbsolute = 0
     local weight
@@ -29,7 +29,7 @@ function UIVerticalProportionalSplitter(rect, padding, margin, proportions)
     width = width - totalAbsolute
     local part = width / totalWeight
     local result = {}
-    local x = rect.lower.x
+    local x = rect.lower.x + margin
     local startY = rect.lower.y + margin
     local endY = rect.upper.y - margin
     for i = 1, count do
@@ -48,7 +48,7 @@ end
 
 function UIHorizontalProportionalSplitter(rect, padding, margin, proportions)
     local count = #proportions
-    local height = rect.height - (count - 1) * padding
+    local height = rect.height - (count - 1) * padding - margin * 2
     local totalWeight = 0
     local totalAbsolute = 0
     local weight
@@ -64,7 +64,7 @@ function UIHorizontalProportionalSplitter(rect, padding, margin, proportions)
     height = height - totalAbsolute
     local part = height / totalWeight
     local result = {}
-    local y = rect.lower.y
+    local y = rect.lower.y + margin
     local startX = rect.lower.x + margin
     local endX = rect.upper.x - margin
     for i = 1, count do
