@@ -5,23 +5,32 @@ Can be used to:
 ]]
 if onServer() then return end
 
-local data = {}
-
 -- namespace AzimuthClientData
 AzimuthClientData = {}
 
--- Example: Player():invokeFunction("azimuthlib-clientdata.lua", "setValue", "MyMod", { myModSettingsVar = 5 })
+local data = {}
+
+-- API --
+-- setValue(key, value)
+--[[ Set variable.
+Example: Player():invokeFunction("azimuthlib-clientdata.lua", "setValue", "MyMod", { myModSettingsVar = 5 })
+]]
 function AzimuthClientData.setValue(key, value)
     data[key] = value
 end
 
--- Example: local _, value = Player():invokeFunction("azimuthlib-clientdata.lua", "getValue", "MyMod")
+-- getValue(key)
+--[[ Get single variable.
+Example: local _, value = Player():invokeFunction("azimuthlib-clientdata.lua", "getValue", "MyMod")
+]]
 function AzimuthClientData.getValue(key)
     return data[key]
 end
 
--- Allows to get multiple variable values at once.
--- Example: local _, val1, val2, val3 = Player():invokeFunction("azimuthlib-clientdata.lua", "getValuem", "Var1", "Var2", "Var3")
+-- getValuem(key1, key2, ..)
+--[[ Allows to get multiple variable values at once.
+Example: local _, val1, val2, val3 = Player():invokeFunction("azimuthlib-clientdata.lua", "getValuem", "Var1", "Var2", "Var3")
+]]
 function AzimuthClientData.getValuem(...)
     local result = {}
     for _, key in pairs({...}) do

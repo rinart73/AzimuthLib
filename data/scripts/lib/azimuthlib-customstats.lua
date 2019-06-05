@@ -1,7 +1,7 @@
 -- Allows to turn certain script variables into stats that can be boosted.
 -- result = (baseValue * (1 + sum(baseMultiplier)) + sum(multiplyableBias)) * (1 * multiplier1 * multiplier2 ...) + sum(absoluteBias)
 --[[ Example - altering Factory `timeToProduce` variable:
-local CustomStats = include("azimuthlib-customstats.lua")
+local CustomStats = include("azimuthlib-customstats")
 CustomStats.addCustomStats(Factory)
 Factory.setCustomStat("timeToProduce")
 Factory.addBaseMultiplier("timeToProduce", "MyBuff", -0.1) -- will make factory produce things 10% faster.

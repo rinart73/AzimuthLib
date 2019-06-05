@@ -1,20 +1,24 @@
--- Provides an easy way of saving and loading config files. Also adds other useful functions.
+--[[ Provides an easy way of saving and loading config files. Also adds other useful functions, such as logging functions.
+To use it you'll need to include it first: local Azimuth = include("azimuthlib-basic")
+]]
+
+local Azimuth = {}
 
 local format = string.format
 
-local AzimuthBasic = {}
-
--- logs(modname, consoleLogLevel [, logLevel])
+-- API --
+-- logs(modName, consoleLogLevel [, logLevel])
 --[[ Initializes logs.
-* modname - Mod name.
-* consoleLogLevel - Console log level.
-* logLevel - File log level. If not specified, consoleLogLevel will be used instead.
-Example: local Log = AzimuthBasic.logs("MyMod", 2)
-Example: local Log = AzimuthBasic.logs("MyMod", config.consoleLogLevel, config.logLevel)
-Log.Info("Some info, player name: %s", player.name) ]]
-function AzimuthBasic.logs(modname, consoleLogLevel, logLevel)
+* modName (string) - The name of your mod.
+* consoleLogLevel (number) - Console log level.
+* logLevel (number) - File log level. If not specified, consoleLogLevel will be used instead.
+Example: local Log = Azimuth.logs("MyMod", 2)
+Example: local Log = Azimuth.logs("MyMod", config.consoleLogLevel, config.logLevel)
+  Log.Info("Some info, player name: %s", Player().name) -- Will result in: [INFO][MyMod]: player name: Jeff
+]]
+function Azimuth.logs(modName, consoleLogLevel, logLevel)
     local log = {
-      modname = modname,
+      modName = modName,
       consoleLogLevel = consoleLogLevel,
       logLevel = consoleLogLevel or logLevel
     }
@@ -26,82 +30,85 @@ function AzimuthBasic.logs(modname, consoleLogLevel, logLevel)
     -- Code duplication because I don't want 30% function call overhead in log functions (especially debug one)
     log.Error = function(msg, ...)
         if 1 <= log.consoleLogLevel then
-            eprint(format("[ERROR][%s]: "..msg, log.modname, ...))
+            eprint(format("[ERROR][%s]: "..msg, log.modName, ...))
         elseif 1 <= log.logLevel then
-            printlog(format("[ERROR][%s]: "..msg, log.modname, ...))
+            printlog(format("[ERROR][%s]: "..msg, log.modName, ...))
         end
     end
     log.Warn = function(msg, ...)
         if 2 <= log.consoleLogLevel then
-            print(format("[WARN][%s]: "..msg, log.modname, ...))
+            print(format("[WARN][%s]: "..msg, log.modName, ...))
         elseif 2 <= log.logLevel then
-            printlog(format("[WARN][%s]: "..msg, log.modname, ...))
+            printlog(format("[WARN][%s]: "..msg, log.modName, ...))
         end
     end
     log.Info = function(msg, ...)
         if 3 <= log.consoleLogLevel then
-            print(format("[INFO][%s]: "..msg, log.modname, ...))
+            print(format("[INFO][%s]: "..msg, log.modName, ...))
         elseif 3 <= log.logLevel then
-            printlog(format("[INFO][%s]: "..msg, log.modname, ...))
+            printlog(format("[INFO][%s]: "..msg, log.modName, ...))
         end
     end
     log.Debug = function(msg, ...)
         if 4 <= log.consoleLogLevel then
-            print(format("[DEBUG][%s]: "..msg, log.modname, ...))
+            print(format("[DEBUG][%s]: "..msg, log.modName, ...))
         elseif 4 <= log.logLevel then
-            printlog(format("[DEBUG][%s]: "..msg, log.modname, ...))
+            printlog(format("[DEBUG][%s]: "..msg, log.modName, ...))
         end
     end
     return log
 end
 
--- for k, v in AzimuthBasic.orderedPairs(myTable) do
---[[ Allows to iterate table by key in alphabetical order. ]]
-function AzimuthBasic.orderedPairs(t, f)
+-- orderedPairs(tbl [, sort])
+--[[ Allows to iterate table by key in alphabetical order.
+* tbl (table) - Table.
+* sort (function) - Sorting function for keys.
+Example: for k, v in Azimuth.orderedPairs(myTable, function(tbl, firstKey, secondKey) return tbl[firstKey] < tbl[secondKey] end) do
+]]
+function Azimuth.orderedPairs(tbl, sort)
     local a = {}
-    for n in pairs(t) do
+    for n in pairs(tbl) do
         a[#a+1] = n
     end
-    if f then
-        table.sort(a, function(a, b) return f(t, a, b) end)
+    if sort then
+        table.sort(a, function(a, b) return sort(tbl, a, b) end)
     else
         table.sort(a)
     end
-
     local i = 0 -- iterator variable
     local iter = function () -- iterator function
         i = i + 1
         if a[i] == nil then
             return nil
         else
-            return a[i], t[a[i]]
+            return a[i], tbl[a[i]]
         end
     end
-
     return iter
 end
 
 -- serialize(o [, options [, prefix [, addCarriageReturn ]]])
---[[ Serializes variable as readable multiline text.
-* o - Table for serialization.
-* options - Optional argument. Since this function was initially meant to aid in saving config files, you can add default value and commentary to each variable.
-* prefix - Default: "". Line prefix, used by the function itself.
-* addCarriageReturn - If true, function uses "\r\n" as new line instead of "\n". False by default because it messes up Avorion file logs.
-Example: serialize(myTable)
-Example: serialize({ myVar = 30 }, { myVar = { default = 20, comment = "This variable does stuff" } }) ]]
-function AzimuthBasic.serialize(o, options, prefix, addCarriageReturn)
-    if not options then options = {} end
-    if not prefix then prefix = "" end
-
+--[[ Serializes table as readable multi-line text.
+* o (table) - Table for serialization.
+* options (table) - Optional argument. Since this function was initially meant to aid in saving config files, you can add default value and commentary to each variable.
+* prefix (string) - Default: "". Line prefix, used by the function itself.
+* addCarriageReturn (boolean) - If true, function uses "\r\n" as new line instead of "\n". False by default because "\r\n" messes up Avorion file logs.
+Example: print(Azimuth.serialize(myTable))
+Example: print(Azimuth.serialize({ myVar = 30 }, { myVar = { default = 20, comment = "This variable does stuff" } }))
+]]
+function Azimuth.serialize(o, options, prefix, addCarriageReturn)
     if type(o) == 'table' then
-        local s = addCarriageReturn and "{\r\n" or "{\n"
+        if not options then options = {} end
+        if not prefix then prefix = "" end
+        local newLine = addCarriageReturn and "\r\n" or "\n"
+        local s = "{" .. newLine
         local newprefix = prefix .. "  "
         -- check if it's a list
         local isList = true
         local minKey = math.huge
         local maxKey = 0
         local numVars = 0
-        for k,_ in pairs(o) do
+        for k, _ in pairs(o) do
             if type(k) ~= 'number' then
                 isList = false
                 break
@@ -112,23 +119,23 @@ function AzimuthBasic.serialize(o, options, prefix, addCarriageReturn)
         end
         if isList and minKey == 1 and maxKey == numVars then -- write as list
             for k = 1, numVars do
-                s = s .. newprefix .. AzimuthBasic.serialize(o[k], options, newprefix, addCarriageReturn) .. (addCarriageReturn and ",\r\n" or ",\n")
+                s = s .. newprefix .. Azimuth.serialize(o[k], nil, newprefix, addCarriageReturn) .. "," .. newLine
             end
         else -- write as usual table
             local ov
-            for k,v in AzimuthBasic.orderedPairs(o) do
+            for k,v in Azimuth.orderedPairs(o) do
                 ov = options[k]
                 if ov then
                     if ov.default ~= nil and type(ov.default) ~= "table" then
-                        s = s .. newprefix .. "-- Default: " .. tostring(ov.default) .. (ov.comment and ". " .. ov.comment or "") .. (addCarriageReturn and "\r\n" or "\n")
+                        s = s .. newprefix .. "-- Default: " .. tostring(ov.default) .. (ov.comment and ". " .. ov.comment or "") .. newLine
                     elseif ov.comment then
-                        s = s .. newprefix .. "-- " .. ov.comment .. (addCarriageReturn and "\r\n" or "\n")
+                        s = s .. newprefix .. "-- " .. ov.comment .. newLine
                     end
                 end
                 if type(k) ~= 'number' then
                     k = '"' .. k .. '"'
                 end
-                s = s .. newprefix .. '[' .. k .. '] = ' .. AzimuthBasic.serialize(v, options, newprefix, addCarriageReturn) .. (addCarriageReturn and ",\r\n" or ",\n")
+                s = s .. newprefix .. '[' .. k .. '] = ' .. Azimuth.serialize(v, nil, newprefix, addCarriageReturn) .. "," .. newLine
             end
         end
         s = s .. prefix .. "}"
@@ -138,44 +145,42 @@ function AzimuthBasic.serialize(o, options, prefix, addCarriageReturn)
     end
 end
 
--- loadConfig(modname, options [, isSeedDependant])
+-- loadConfig(modName, options [, isSeedDependant [, inModFolder]])
 --[[ Loads mod config from file.
-* modname - String with modname.
-* options - Config options with default values and comments. Default values are required.
-* isSeedDependant - true if config is specific for this server. false otherwise (useful only on client side).
-* inModFolder - if true, then config will be loaded from "moddata/ModName/ModName.lua".
+* modName (string) - Mod name.
+* options (table) - Config options with default values and comments. Each element of the table can have following properties:
+  default - Required. Default value of a variable.
+  min/max (number) - Optional. Minimum and maximum value of a variable, if it's a number.
+  format (string) - Optional. Can be 'floor', 'round' or 'ceil', selected way of rounding will be applied for loaded variable.
+* isSeedDependant (boolean) - True if config is specific for this server. false otherwise (useful only on client side).
+* inModFolder (boolean) - If true, then config will be loaded from "moddata/ModName/ModName.lua".
 Returns:
 1. Config table.
 2. Error/status. Can be one of the following:
   * String, it's an error message.
-  * Number, 1 - means that file wasn't found.
-  * Number, 0 - config was successfully loaded, but was modified by `options`. You'll probably want to resave it.
+  * Number, 1 - means that file wasn't found. Hint: re-save the config.
+  * Number, 0 - config was successfully loaded, but was modified by `options`. Hint: re-save the config.
   * Nil, config was successfully loaded, no modifications were made.
-Example: loadConfig("MyMod", { WindowWidth = { default = 300 } })
-Example: loadConfig("MyMod", { WindowWidth = { default = 300, comment = "UI window width", min = 100, max = 600, format = "ceil" } }, true) ]]
-function AzimuthBasic.loadConfig(modname, options, isSeedDependant, inModFolder)
+Example: local tbl = Azimuth.loadConfig("MyMod", { WindowWidth = { default = 300 } })
+Example: local tbl = Azimuth.loadConfig("MyMod", { WindowWidth = { default = 300, comment = "UI window width", min = 100, max = 600, format = "ceil" } }, true)
+]]
+function Azimuth.loadConfig(modName, options, isSeedDependant, inModFolder)
     local defaultValues = {}
     for k, v in pairs(options) do
         defaultValues[k] = v.default
     end
-
     local dir = "moddata"
     if onServer() then
         dir = Server().folder .. "/" .. dir
     end
     if inModFolder then
-        dir = dir .. "/" .. modname
-        --[[if onClient() then
-            createDirectory(modname)
-        else
-            createDirectory(dir)
-        end]]
+        dir = dir .. "/" .. modName
     end
-    local filename = dir .. "/" .. modname .. (isSeedDependant and '_' .. GameSettings().seed or "") .. ".lua"
+    local filename = dir .. "/" .. modName .. (isSeedDependant and '_' .. GameSettings().seed or "") .. ".lua"
     local file, err = io.open(filename, "rb")
     if err then
         if not err:find("No such file or directory", 1, true) then
-            eprint("[ERROR]["..modname.."]: Failed to load config file '"..filename.."': " .. err)
+            eprint("[ERROR]["..modName.."]: Failed to load config file '"..filename.."': " .. err)
             return defaultValues, err
         else
             return defaultValues, 1 -- file wasn't found
@@ -185,7 +190,7 @@ function AzimuthBasic.loadConfig(modname, options, isSeedDependant, inModFolder)
     local result, err = loadstring("return " .. fileContents)
     file:close()
     if not result then
-        eprint("[ERROR]["..modname.."]: Failed to load config file '"..filename.."': " .. err .. "; File contents: "..fileContents)
+        eprint("[ERROR]["..modName.."]: Failed to load config file '"..filename.."': " .. err .. "; File contents: "..fileContents)
         return defaultValues, err
     end
     result = result()
@@ -239,37 +244,41 @@ function AzimuthBasic.loadConfig(modname, options, isSeedDependant, inModFolder)
     return result, isModified
 end
 
--- saveConfig(modname, config [, options [, isSeedDependant,]])
+-- saveConfig(modName, config [, options [, isSeedDependant [, inModFolder]]])
 --[[ Saves mod config to file.
-* modname - String with modname.
-* config - Config table.
-* options - Config options with default values and comments.
-* isSeedDependant - true if config is specific for this server. false otherwise.
-* inModFolder - if true, then config will be saved to "moddata/ModName/ModName.lua".
-Example: saveConfig("MyMod", { WindowWidth = 300 })
-Example: saveConfig("MyMod", { WindowWidth = 300 }, { default = 300, comment = "UI window width", min = 100, max = 600 }, true) ]]
-function AzimuthBasic.saveConfig(modname, config, options, isSeedDependant, inModFolder)
+* modName (string) - String with modname.
+* config (table) - Config table.
+* options(table) - Config options with default values and comments. Each element of the table can have following properties:
+  default - Default value of a variable. Will be added to a commentary unless it's a table.
+  comment (string) - Variable commentary.
+* isSeedDependant (boolean) - True if config is specific for this server, false otherwise.
+* inModFolder(boolean) - If true, then config will be saved to "moddata/ModName/ModName.lua".
+Example: Azimuth.saveConfig("MyMod", { WindowWidth = 300 })
+Example: Azimuth.saveConfig("MyMod", { WindowWidth = 300 }, { WindowWidth = { default = 300, comment = "UI window width", min = 100, max = 600 }}, true)
+]]
+function Azimuth.saveConfig(modName, config, options, isSeedDependant, inModFolder)
     local dir = "moddata"
     if onServer() then
         dir = Server().folder .. "/" .. dir
     end
     if inModFolder then
-        dir = dir .. "/" .. modname
+        dir = dir .. "/" .. modName
         if onClient() then
-            createDirectory(modname)
+            createDirectory(modName)
         else
             createDirectory(dir)
         end
     end
-    local filename = dir .. "/" .. modname .. (isSeedDependant and '_' .. GameSettings().seed or "") .. ".lua"
+    local filename = dir .. "/" .. modName .. (isSeedDependant and '_' .. GameSettings().seed or "") .. ".lua"
     local file, err = io.open(filename, "wb")
     if err then
-        eprint("[ERROR]["..modname.."]: Failed to save config file '"..filename.."': " .. err)
+        eprint("[ERROR]["..modName.."]: Failed to save config file '"..filename.."': " .. err)
         return false, err
     end
-    file:write(AzimuthBasic.serialize(config, options, "", true))
+    file:write(Azimuth.serialize(config, options, "", true))
     file:close()
     return true
 end
 
-return AzimuthBasic
+
+return Azimuth
