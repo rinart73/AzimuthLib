@@ -4,24 +4,24 @@ meta =
     -- ID of your mod; Make sure this is unique!
     -- Will be used for identifying the mod in dependency lists
     -- Will be changed to workshop ID (ensuring uniqueness) when you upload the mod to the workshop
-    id = "1722652757",
+    id = "AzimuthLibExample",
 
     -- Name of your mod; You may want this to be unique, but it's not absolutely necessary.
     -- This is an additional helper attribute for you to easily identify your mod in the Mods() list
-    name = "AzimuthLib",
+    name = "AzimuthLibExample",
 
     -- Title of your mod that will be displayed to players
-    title = "AzimuthLib - Library for modders",
+    title = "AzimuthLib Example",
 
     -- Description of your mod that will be displayed to players
-    description = "A resource for modders that provides functions to make mod development easier. Mostly used in Rinart73 mods.",
+    description = "Usage example of AzimuthLib mod.",
 
     -- Insert all authors into this list
     authors = {"Rinart73"},
 
     -- Version of your mod, should be in format 1.0.0 (major.minor.patch) or 1.0 (major.minor)
     -- This will be used to check for unmet dependencies or incompatibilities
-    version = "1.2.4",
+    version = "1.0",
 
     -- If your mod requires dependencies, enter them here. The game will check that all dependencies given here are met.
     -- Possible attributes:
@@ -39,6 +39,7 @@ meta =
     --      {id = "OptionalMod", min = "0.2", optional = true}, -- we support OptionalMod optionally, starting at version 0.2
     -- },
     dependencies = {
+        {id = "1722652757", min = "1.2.4"},
         {id = "Avorion", min = "0.23", min = "0.23.1"}
     },
 
