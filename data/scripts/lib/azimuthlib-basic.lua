@@ -153,7 +153,7 @@ end
   min/max (number) - Optional. Minimum and maximum value of a variable, if it's a number.
   format (string) - Optional. Can be 'floor', 'round' or 'ceil', selected way of rounding will be applied for loaded variable.
 * isSeedDependant (boolean) - True if config is specific for this server. false otherwise (useful only on client side).
-* inModFolder (boolean) - If true, then config will be loaded from "moddata/ModName/ModName.lua".
+* modFolder (boolean/string) - If true, then config will be loaded from "moddata/ModName/ModName.lua". Or you can specify different folder name.
 Returns:
 1. Config table.
 2. Error/status. Can be one of the following:
@@ -164,7 +164,7 @@ Returns:
 Example: local tbl = Azimuth.loadConfig("MyMod", { WindowWidth = { default = 300 } })
 Example: local tbl = Azimuth.loadConfig("MyMod", { WindowWidth = { default = 300, comment = "UI window width", min = 100, max = 600, format = "ceil" } }, true)
 ]]
-function Azimuth.loadConfig(modName, options, isSeedDependant, inModFolder)
+function Azimuth.loadConfig(modName, options, isSeedDependant, modFolder)
     local defaultValues = {}
     for k, v in pairs(options) do
         defaultValues[k] = v.default
@@ -173,8 +173,11 @@ function Azimuth.loadConfig(modName, options, isSeedDependant, inModFolder)
     if onServer() then
         dir = Server().folder .. "/" .. dir
     end
-    if inModFolder then
-        dir = dir .. "/" .. modName
+    if modFolder then
+        if modFolder == true then
+            modFolder = modName
+        end
+        dir = dir .. "/" .. modFolder
     end
     local filename = dir .. "/" .. modName .. (isSeedDependant and '_' .. GameSettings().seed or "") .. ".lua"
     local file, err = io.open(filename, "rb")
@@ -252,19 +255,22 @@ end
   default - Default value of a variable. Will be added to a commentary unless it's a table.
   comment (string) - Variable commentary.
 * isSeedDependant (boolean) - True if config is specific for this server, false otherwise.
-* inModFolder(boolean) - If true, then config will be saved to "moddata/ModName/ModName.lua".
+* modFolder(boolean/string) - If true, then config will be saved to "moddata/ModName/ModName.lua". Or you can specify different folder name.
 Example: Azimuth.saveConfig("MyMod", { WindowWidth = 300 })
 Example: Azimuth.saveConfig("MyMod", { WindowWidth = 300 }, { WindowWidth = { default = 300, comment = "UI window width", min = 100, max = 600 }}, true)
 ]]
-function Azimuth.saveConfig(modName, config, options, isSeedDependant, inModFolder)
+function Azimuth.saveConfig(modName, config, options, isSeedDependant, modFolder)
     local dir = "moddata"
     if onServer() then
         dir = Server().folder .. "/" .. dir
     end
-    if inModFolder then
-        dir = dir .. "/" .. modName
+    if modFolder then
+        if modFolder == true then
+            modFolder = modName
+        end
+        dir = dir .. "/" .. modFolder
         if onClient() then
-            createDirectory(modName)
+            createDirectory(modFolder)
         else
             createDirectory(dir)
         end
