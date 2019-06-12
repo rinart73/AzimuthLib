@@ -1,0 +1,6 @@
+# ========== mods\AzimuthLib\data\scripts\lib\azimuthlib-uicolorpicker.lua ==========
+#: mods\AzimuthLib\data\scripts\lib\azimuthlib-uicolorpicker.lua:
+msgid "Pick a color"
+msgstr "Выберите цвет"
+
+
