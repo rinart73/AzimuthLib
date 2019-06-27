@@ -10,18 +10,21 @@ Properties:
 * mode (int) - Color mode
 * noActionsTimer (float) - Used to prevent sliders and buttons from working for a short period of time after user entered color hexcode and clicked away
 * window (Window) - Color picker window
-* colorsPalette (UIContainer) - Container for color palette
+* colorsPaletteBackground (Picture) - Color palette background (white or black)
+* colorsPalette (Picture) - Color palette picture
 * colorsOuterBorder (UIRectangle) - Outer border for color palette
 * colorsInnerBorder (UIRectangle) - Inner border for color palette
-* colorsPosition (UIContainer) - Container that is used to display palette color position
-* valueGradient (UIContainer) - Container for 'value' gradient (used to adjust value in HSxx mode or saturation in HVxx mode)
+* colorsPosition (UIContainer) - Container with two rects, used to display palette color position
+* valueGradientBackground (Picture) - Value/Saturation background (black or white)
+* valueGradient (Picture) - 'value' gradient picture (used to adjust value in HSxx mode or saturation in HVxx mode)
 * valueOuterBorder (UIRectangle) - Outer border for value gradient
 * valueInnerBorder (UIRectangle) - Inner border for value gradient
-* valuePosition (UIContainer) - Container that is used to display 'value' position
-* alphaGradient (UIContainer) - Container for alpha gradient
+* valuePosition (UIContainer) - Container with two rects, used to display 'value' position
+* alphaGradientBackground (Picture) - Alpha gradient background
+* alphaGradient (Picture) - Alpha gradient picture
 * alphaOuterBorder (UIRectangle) - Outer border for alpha gradient
 * alphaInnerBorder (UIRectangle) - Inner border for alpha gradient
-* alphaPosition (UIContainer) - Container that is used to display alpha position
+* alphaPosition (UIContainer) - Container with two rects, used to display alpha position
 * colorDisplay (Picture) - Displays resulting color
 * colorOuterBorder (UIRectangle) - Outer border for color display
 * colorInnerBorder (UIRectangle) - Inner border for color display
@@ -78,9 +81,6 @@ end
 function MyModNamespace.onShowColorPickerBtnPressed()
     uiColorPicker:show(vec2(400, 300), "Pick a color"%_t, "HSVA", ColorRGB(1, 0, 0), "onColorPickerApply", "onColorPickerCancel")
 end
-
-Important info:
-Please make sure to call 'yourColorPicker:hide()' in the 'onCloseWindow' function.
 ]]
 
 package.path = package.path .. ";data/scripts/lib/?.lua"
@@ -88,7 +88,6 @@ include("utility")
 include("azimuthlib-uiproportionalsplitter")
 include("azimuthlib-uirectangle")
 
-local colorPickerShown = false -- at least one color picker is shown
 local elements = {}
 local ColorMode = { HS = 1, HSA = 2, HSV = 3, HSVA = 4, HV = 5, HVA = 6, HVS = 7, HVSA = 8 }
 
@@ -101,15 +100,25 @@ local function renderBorder(renderer, lower, upper, color, layer)
     renderer:renderLine(vec2(lower.x, upper.y - 1), vec2(upper.x, upper.y - 1), color, layer)
 end
 
-local function updateColor(e)
-    local color = ColorHSV(e.hue, e.saturation, e.value)
-    color.a = e.alpha
-    e.colorDisplay.color = color
+local function updateColor(self)
+    local isSecondSaturation = self.mode <= 4
+    local hasValueSlider = self.mode == 3 or self.mode == 4 or self.mode == 7 or self.mode == 8
+    local hasAlpha = self.mode % 2 == 0
+
+    if hasValueSlider then
+        self.valueGradient.color = isSecondSaturation and ColorHSV(self.hue, self.saturation, 1) or ColorHSV(self.hue, 1, self.value)
+    end
+    local color = ColorHSV(self.hue, self.saturation, self.value)
+    if hasAlpha then
+        self.alphaGradient.color = color
+    end
+    color.a = self.alpha
+    self.colorDisplay.color = color
     -- update textbox
-    if e.mode % 2 == 0 then -- alpha
-        e.colorTextBox.text = string.upper(string.format('%02x%02x%02x%02x', round(color.a * 255), round(color.r * 255), round(color.g * 255), round(color.b * 255)))
+    if self.mode % 2 == 0 then -- alpha
+        self.colorTextBox.text = string.upper(string.format('%02x%02x%02x%02x', round(color.a * 255), round(color.r * 255), round(color.g * 255), round(color.b * 255)))
     else
-        e.colorTextBox.text = string.upper(string.format('%02x%02x%02x', round(color.r * 255), round(color.g * 255), round(color.b * 255)))
+        self.colorTextBox.text = string.upper(string.format('%02x%02x%02x', round(color.r * 255), round(color.g * 255), round(color.b * 255)))
     end
 end
 
@@ -119,20 +128,39 @@ function UIColorPicker(namespace, parent)
     window.moveable = 1
     window.visible = false
 
-    local colorsPalette = window:createContainer(Rect())
+    local colorsPaletteBackground = window:createPicture(Rect(), "data/textures/ui/azimuthlib/fill.png")
+    local colorsPalette = window:createPicture(Rect(), "data/textures/ui/azimuthlib/palette.png")
+    colorsPalette.flipped = true
+    colorsPalette.layer = 1
     local colorsOuterBorder = UIRectangle(window, Rect(), ColorRGB(0.6, 0.6, 0.6))
     local colorsInnerBorder = UIRectangle(window, Rect(), ColorRGB(0, 0, 0))
     local colorsPosition = window:createContainer(Rect(0, 0, 11, 11))
+    colorsPosition.layer = 2
+    UIRectangle(colorsPosition, Rect(0, 0, 11, 11), ColorRGB(1, 1, 1))
+    UIRectangle(colorsPosition, Rect(1, 1, 10, 10), ColorRGB(0, 0, 0))
 
-    local valueGradient = window:createContainer(Rect())
+    local valueGradientBackground = window:createPicture(Rect(), "data/textures/ui/azimuthlib/fill.png")
+    local valueGradient = window:createPicture(Rect(), "data/textures/ui/azimuthlib/gradient.png")
+    valueGradient.flipped = true
+    valueGradient.layer = 1
     local valueOuterBorder = UIRectangle(window, Rect(), ColorRGB(0.6, 0.6, 0.6))
     local valueInnerBorder = UIRectangle(window, Rect(), ColorRGB(0, 0, 0))
     local valuePosition = window:createContainer(Rect(0, 0, 30, 7))
+    valuePosition.layer = 2
+    UIRectangle(valuePosition, Rect(0, 0, 30, 7), ColorRGB(1, 1, 1))
+    UIRectangle(valuePosition, Rect(1, 1, 29, 6), ColorRGB(0, 0, 0))
 
-    local alphaGradient = window:createContainer(Rect())
+    local alphaGradientBackground = window:createPicture(Rect(), "data/textures/ui/azimuthlib/transparent-h240.png")
+    alphaGradientBackground.isIcon = true
+    local alphaGradient = window:createPicture(Rect(), "data/textures/ui/azimuthlib/gradient.png")
+    alphaGradient.flipped = true
+    alphaGradient.layer = 1
     local alphaOuterBorder = UIRectangle(window, Rect(), ColorRGB(0.6, 0.6, 0.6))
     local alphaInnerBorder = UIRectangle(window, Rect(), ColorRGB(0, 0, 0))
     local alphaPosition = window:createContainer(Rect(0, 0, 30, 7))
+    alphaPosition.layer = 2
+    UIRectangle(alphaPosition, Rect(0, 0, 30, 7), ColorRGB(1, 1, 1))
+    UIRectangle(alphaPosition, Rect(1, 1, 29, 6), ColorRGB(0, 0, 0))
 
     local colorDisplay = window:createPicture(Rect(), "data/textures/ui/azimuthlib/fill.png")
     local colorOuterBorder = UIRectangle(window, Rect(), ColorRGB(0.6, 0.6, 0.6))
@@ -154,14 +182,17 @@ function UIColorPicker(namespace, parent)
       valueSliderMax = 1,
       alphaSliderMin = 0,
       alphaSliderMax = 1,
+      colorsPaletteBackground = colorsPaletteBackground,
       colorsPalette = colorsPalette,
       colorsOuterBorder = colorsOuterBorder,
       colorsInnerBorder = colorsInnerBorder,
       colorsPosition = colorsPosition,
+      valueGradientBackground = valueGradientBackground,
       valueGradient = valueGradient,
       valueOuterBorder = valueOuterBorder,
       valueInnerBorder = valueInnerBorder,
       valuePosition = valuePosition,
+      alphaGradientBackground = alphaGradientBackground,
       alphaGradient = alphaGradient,
       alphaOuterBorder = alphaOuterBorder,
       alphaInnerBorder = alphaInnerBorder,
@@ -212,6 +243,8 @@ function UIColorPicker(namespace, parent)
           end
           local partition = vPartitions[1]
           self.colorsPalette.rect = Rect(partition.lower + vec2(2, 2), partition.upper - vec2(2, 2))
+          self.colorsPaletteBackground.rect = self.colorsPalette.rect
+          self.colorsPaletteBackground.color = isSecondSaturation and ColorRGB(1, 1, 1) or ColorRGB(0, 0, 0)
           self.colorsOuterBorder.rect = partition
           self.colorsInnerBorder.rect = Rect(partition.lower + vec2(1, 1), partition.upper - vec2(1, 1))
           self.colorsPosition.position = self.colorsPalette.lower - vec2(5, 5)
@@ -219,10 +252,13 @@ function UIColorPicker(namespace, parent)
           if hasValueSlider then
               partition = vPartitions[valueIndex]
               self.valueGradient.rect = Rect(partition.lower + vec2(2, 2), partition.upper - vec2(2, 2))
+              self.valueGradientBackground.rect = self.valueGradient.rect
+              self.valueGradientBackground.color = isSecondSaturation and ColorRGB(0, 0, 0) or ColorRGB(1, 1, 1)
               self.valueOuterBorder.rect = partition
               self.valueInnerBorder.rect = Rect(partition.lower + vec2(1, 1), partition.upper - vec2(1, 1))
               self.valuePosition.position = partition.lower - vec2(5, 1)
           end
+          self.valueGradientBackground.visible = hasValueSlider
           self.valueGradient.visible = hasValueSlider
           self.valueOuterBorder.visible = hasValueSlider
           self.valueInnerBorder.visible = hasValueSlider
@@ -231,10 +267,12 @@ function UIColorPicker(namespace, parent)
           if hasAlpha then
               partition = vPartitions[alphaIndex]
               self.alphaGradient.rect = Rect(partition.lower + vec2(2, 2), partition.upper - vec2(2, 2))
+              self.alphaGradientBackground.rect = self.alphaGradient.rect
               self.alphaOuterBorder.rect = partition
               self.alphaInnerBorder.rect = Rect(partition.lower + vec2(1, 1), partition.upper - vec2(1, 1))
               self.alphaPosition.position = partition.lower - vec2(5, 1)
           end
+          self.alphaGradientBackground.visible = hasAlpha
           self.alphaGradient.visible = hasAlpha
           self.alphaOuterBorder.visible = hasAlpha
           self.alphaInnerBorder.visible = hasAlpha
@@ -269,24 +307,17 @@ function UIColorPicker(namespace, parent)
           end
           self:setHue(defaultColor.hue)
 
+          -- reset stats
+          self.isMouseDownPalette = false
+          self.isMouseDownValue = false
+          self.isMouseDownAlpha = false
+          self.noActionsTimer = 0
+          self.plannedTextBoxUpdate = false
+
           self.window.visible = true
-          colorPickerShown = true
       end,
       hide = function(self)
-          if self.window.visible then
-              self.isMouseDownPalette = false
-              self.isMouseDownValue = false
-              self.isMouseDownAlpha = false
-              self.noActionsTimer = 0
-              self.plannedTextBoxUpdate = false
-              self.window.visible = false
-              for _, e in ipairs(elements) do
-                  if e.window.visible then
-                      return
-                  end
-              end
-              colorPickerShown = false
-          end
+          self.window.visible = false
       end,
       update = function(self, timeStep)
           if not self.window.visible then return end
@@ -422,71 +453,9 @@ function UIColorPicker(namespace, parent)
       end
     }
     elements[#elements+1] = e
-    
+
     -- namespace functions
-    if not namespace.azimuthLib_uiColorPicker_onRender then
-        namespace.azimuthLib_uiColorPicker_onRender = function(isGalaxyMap)
-            local layer1 = UIRenderer()
-            local layer2 = UIRenderer()
-            local layer3 = UIRenderer()
-            local hasAlpha, hasValueSlider, isSecondSaturation
-            for _, e in ipairs(elements) do
-                if ((isGalaxyMap and e.isGalaxyMap) or (not isGalaxyMap and not e.isGalaxyMap)) and e.window.visible then
-                    hasAlpha = e.mode % 2 == 0
-                    hasValueSlider = e.mode == 3 or e.mode == 4 or e.mode == 7 or e.mode == 8
-                    isSecondSaturation = e.mode <= 4
-                    -- palette
-                    layer1:renderRect(e.colorsPalette.lower, e.colorsPalette.upper, isSecondSaturation and ColorRGB(1, 1, 1) or ColorRGB(0, 0, 0), 0)
-                    layer1:renderIcon(e.colorsPalette.lower, e.colorsPalette.upper, ColorRGB(1, 1, 1), "data/textures/ui/azimuthlib/palette.png")
-                    -- value gradient
-                    if hasValueSlider then
-                        layer1:renderRect(e.valueGradient.lower, e.valueGradient.upper, isSecondSaturation and ColorRGB(0, 0, 0) or ColorRGB(1, 1, 1), 0)
-                        if isSecondSaturation then
-                            layer1:renderIcon(e.valueGradient.lower, e.valueGradient.upper, ColorHSV(e.hue, e.saturation, 1), "data/textures/ui/azimuthlib/gradient.png")
-                        else
-                            layer1:renderIcon(e.valueGradient.lower, e.valueGradient.upper, ColorHSV(e.hue, 1, e.value), "data/textures/ui/azimuthlib/gradient.png")
-                        end
-                    end
-                    -- alpha gradient
-                    if hasAlpha then
-                        layer1:renderIcon(e.alphaGradient.lower, e.alphaGradient.upper, ColorRGB(1, 1, 1), "data/textures/ui/azimuthlib/transparent.png", vec2(1, e.alphaGradient.height / 16))
-                        layer2:renderIcon(e.alphaGradient.lower, e.alphaGradient.upper, ColorHSV(e.hue, e.saturation, e.value), "data/textures/ui/azimuthlib/gradient.png")
-                    end
-                    -- palette position
-                    renderBorder(layer3, e.colorsPosition.lower, e.colorsPosition.upper, ColorRGB(1, 1, 1), 1)
-                    renderBorder(layer3, e.colorsPosition.lower + vec2(1, 1), e.colorsPosition.upper - vec2(1, 1), ColorRGB(0, 0, 0), 1)
-                    -- value position
-                    if hasValueSlider then
-                        renderBorder(layer3, e.valuePosition.lower, e.valuePosition.upper, ColorRGB(1, 1, 1), 1)
-                        renderBorder(layer3, e.valuePosition.lower + vec2(1, 1), e.valuePosition.upper - vec2(1, 1), ColorRGB(0, 0, 0), 1)
-                    end
-                    -- alpha position
-                    if hasAlpha then
-                        renderBorder(layer3, e.alphaPosition.lower, e.alphaPosition.upper, ColorRGB(1, 1, 1), 1)
-                        renderBorder(layer3, e.alphaPosition.lower + vec2(1, 1), e.alphaPosition.upper - vec2(1, 1), ColorRGB(0, 0, 0), 1)
-                    end
-                end
-            end
-            layer1:display()
-            layer2:display()
-            layer3:display()
-        end
-    end
-    if not namespace.azimuthLib_uiColorPicker_onPostRenderHud then
-        namespace.azimuthLib_uiColorPicker_onPostRenderHud = function()
-            if colorPickerShown then
-                namespace.azimuthLib_uiColorPicker_onRender()
-            end
-        end
-    end
     if e.isGalaxyMap then
-        if not namespace.azimuthLib_uiColorPicker_onMapRenderAfterUI then
-            namespace.azimuthLib_uiColorPicker_onMapRenderAfterUI = function()
-                if colorPickerShown then
-                    namespace.azimuthLib_uiColorPicker_onRender(true)
-                end
-            end
-        end
         if not namespace.azimuthLib_uiColorPicker_onHideGalaxyMap then
             namespace.azimuthLib_uiColorPicker_onHideGalaxyMap = function()
                 for _, e in ipairs(elements) do
@@ -559,11 +528,8 @@ function UIColorPicker(namespace, parent)
             eprint("[ERROR][AzimuthLib]: Can't get color picker from 'Cancel' button")
         end
     end
-    local player = Player()
-    player:registerCallback("onPostRenderHud", "azimuthLib_uiColorPicker_onPostRenderHud")
     if e.isGalaxyMap then
-        player:registerCallback("onMapRenderAfterUI", "azimuthLib_uiColorPicker_onMapRenderAfterUI")
-        player:registerCallback("onHideGalaxyMap", "azimuthLib_uiColorPicker_onHideGalaxyMap")
+        Player():registerCallback("onHideGalaxyMap", "azimuthLib_uiColorPicker_onHideGalaxyMap")
     end
 
     return setmetatable(e, {

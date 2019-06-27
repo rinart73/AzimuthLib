@@ -19,13 +19,13 @@ function UIRectangle(parent, rect, color, thickness)
     if not thickness then
         e.thickness = 1
         e.topLine = c:createLine(vec2(0, 0), vec2(rect.width, 0))
-        e.leftLine = c:createLine(vec2(0, 1), vec2(0, rect.width - 1))
+        e.leftLine = c:createLine(vec2(0, 1), vec2(0, rect.height - 1))
         e.rightLine = c:createLine(vec2(rect.width - 1, 1), vec2(rect.width - 1, rect.height - 1))
         e.bottomLine = c:createLine(vec2(0, rect.height - 1), vec2(rect.width, rect.height - 1))
     else
         e._thickness = thickness
         e.topLine = c:createPicture(Rect(0, 0, rect.width, thickness), "data/textures/ui/azimuthlib/fill.png")
-        e.leftLine = c:createPicture(Rect(0, thickness, thickness, rect.width - thickness), "data/textures/ui/azimuthlib/fill.png")
+        e.leftLine = c:createPicture(Rect(0, thickness, thickness, rect.height - thickness), "data/textures/ui/azimuthlib/fill.png")
         e.rightLine = c:createPicture(Rect(rect.width - thickness, thickness, rect.width, rect.height - thickness), "data/textures/ui/azimuthlib/fill.png")
         e.bottomLine = c:createPicture(Rect(0, rect.height - thickness, rect.width, rect.height), "data/textures/ui/azimuthlib/fill.png")
     end
