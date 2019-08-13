@@ -270,7 +270,8 @@ function Azimuth.saveConfig(modName, config, options, isSeedDependant, modFolder
         end
         dir = dir .. "/" .. modFolder
         if onClient() then
-            createDirectory(modFolder)
+            --createDirectory(modFolder)
+            createDirectory(dir)
         else
             createDirectory(dir)
         end
