@@ -6,6 +6,11 @@ local Azimuth = {}
 
 local format = string.format
 
+local moddata = "moddata"
+if onServer() then
+    moddata = Server().folder .. "/" .. moddata
+end
+
 -- API --
 -- logs(modName, consoleLogLevel [, logLevel])
 --[[ Initializes logs.
@@ -169,10 +174,7 @@ function Azimuth.loadConfig(modName, options, isSeedDependant, modFolder)
     for k, v in pairs(options) do
         defaultValues[k] = v.default
     end
-    local dir = "moddata"
-    if onServer() then
-        dir = Server().folder .. "/" .. dir
-    end
+    local dir = moddata
     if modFolder then
         if modFolder == true then
             modFolder = modName
@@ -260,10 +262,7 @@ Example: Azimuth.saveConfig("MyMod", { WindowWidth = 300 })
 Example: Azimuth.saveConfig("MyMod", { WindowWidth = 300 }, { WindowWidth = { default = 300, comment = "UI window width", min = 100, max = 600 }}, true)
 ]]
 function Azimuth.saveConfig(modName, config, options, isSeedDependant, modFolder)
-    local dir = "moddata"
-    if onServer() then
-        dir = Server().folder .. "/" .. dir
-    end
+    local dir = moddata
     if modFolder then
         if modFolder == true then
             modFolder = modName
