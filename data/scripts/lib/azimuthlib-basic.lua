@@ -25,7 +25,7 @@ function Azimuth.logs(modName, consoleLogLevel, logLevel)
     local log = {
       modName = modName,
       consoleLogLevel = consoleLogLevel,
-      logLevel = consoleLogLevel or logLevel
+      logLevel = logLevel or consoleLogLevel
     }
     local logMax = math.max(log.consoleLogLevel, log.logLevel)
     log.isError = logMax >= 1
