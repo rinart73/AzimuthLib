@@ -95,13 +95,17 @@ end
 -- orderedPairs(tbl [, sort])
 --[[ Allows to iterate table by key in alphabetical order.
 * tbl (table) - Table.
-* sort (function) - Sorting function for keys.
+* sort (function) - Optional sorting function for keys.
+* ref (table) - Optional table. orderedPairs will add the 'len' attrute to it
 Example: for k, v in Azimuth.orderedPairs(myTable, function(tbl, firstKey, secondKey) return tbl[firstKey] < tbl[secondKey] end) do
 ]]
-function Azimuth.orderedPairs(tbl, sort)
+function Azimuth.orderedPairs(tbl, sort, ref)
     local a = {}
     for n in pairs(tbl) do
         a[#a+1] = n
+    end
+    if ref then
+        ref.len = #a
     end
     if sort then
         table.sort(a, function(a, b) return sort(tbl, a, b) end)
@@ -120,22 +124,26 @@ function Azimuth.orderedPairs(tbl, sort)
     return iter
 end
 
--- serialize(o [, options [, prefix [, addCarriageReturn ]]])
+-- serialize(o [, options [, prefix [, addCarriageReturn [, minify ]]]])
 --[[ Serializes table as readable multi-line text.
 * o (table) - Table for serialization.
 * options (table) - Optional argument. Since this function was initially meant to aid in saving config files, you can add default value and commentary to each variable.
 * prefix (string) - Default: "". Line prefix, used by the function itself.
 * addCarriageReturn (boolean) - If true, function uses "\r\n" as new line instead of "\n". False by default because "\r\n" messes up Avorion file logs.
+* minify (boolean) - If true, the resulting string won't have spaces and line breaks. Disables 'prefix' and 'options'.
 Example: print(Azimuth.serialize(myTable))
 Example: print(Azimuth.serialize({ myVar = 30 }, { myVar = { default = 20, comment = "This variable does stuff" } }))
 ]]
-function Azimuth.serialize(o, options, prefix, addCarriageReturn)
+function Azimuth.serialize(o, options, prefix, addCarriageReturn, minify)
     if type(o) == 'table' then
-        if not options then options = {} end
-        if not prefix then prefix = "" end
-        local newLine = addCarriageReturn and "\r\n" or "\n"
-        local s = "{" .. newLine
-        local newprefix = prefix .. "  "
+        if minify then options = nil end
+        if not prefix or minify then prefix = "" end
+        local newLine = ""
+        if not minify then
+            newLine = addCarriageReturn and "\r\n" or "\n"
+        end
+        local s = "{"
+        local newprefix = minify and "" or prefix .. "  "
         -- check if it's a list
         local isList = true
         local minKey = math.huge
@@ -152,12 +160,18 @@ function Azimuth.serialize(o, options, prefix, addCarriageReturn)
         end
         if isList and minKey == 1 and maxKey == numVars then -- write as list
             for k = 1, numVars do
-                s = s .. newprefix .. Azimuth.serialize(o[k], nil, newprefix, addCarriageReturn) .. "," .. newLine
+                s = s .. (k == 1 and newLine or "," .. newLine) .. newprefix .. Azimuth.serialize(o[k], nil, newprefix, addCarriageReturn, minify)
             end
         else -- write as usual table
             local ov
-            for k,v in Azimuth.orderedPairs(o) do
-                ov = options[k]
+            local i = 0
+            local ref = {} -- table length
+            for k, v in Azimuth.orderedPairs(o, nil, ref) do
+                i = i + 1
+                if i == 1 and not minify then
+                    s = s .. newLine
+                end
+                ov = options and options[k]
                 if ov then
                     if ov.default ~= nil and type(ov.default) ~= "table" then
                         s = s .. newprefix .. "-- Default: " .. tostring(ov.default) .. (ov.comment and ". " .. ov.comment or "") .. newLine
@@ -166,12 +180,23 @@ function Azimuth.serialize(o, options, prefix, addCarriageReturn)
                     end
                 end
                 if type(k) ~= 'number' then
-                    k = '"' .. k .. '"'
+                    k = '"' .. k:gsub("([\"\\])", "\\%1") .. '"'
                 end
-                s = s .. newprefix .. '[' .. k .. '] = ' .. Azimuth.serialize(v, nil, newprefix, addCarriageReturn) .. "," .. newLine
+                if minify then
+                    s = s .. (i == 1 and '[' or ',[') .. k .. ']=' .. Azimuth.serialize(v, nil, newprefix, addCarriageReturn, minify)
+                else
+                    s = s .. newprefix .. '[' .. k .. '] = ' .. Azimuth.serialize(v, nil, newprefix, addCarriageReturn, minify)
+                    if i < ref.len then
+                        s = s .. "," .. newLine
+                    end
+                end
             end
         end
-        s = s .. prefix .. "}"
+        if isList and numVars == 0 then -- empty
+            s = s .. "}"
+        else
+            s = s .. newLine .. prefix .. "}"
+        end
         return s
     else
         return type(o) == "string" and '"'..o:gsub("([\"\\])", "\\%1")..'"' or tostring(o)
