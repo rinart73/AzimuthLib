@@ -34,31 +34,59 @@ function Azimuth.logs(modName, consoleLogLevel, logLevel)
     log.isDebug = logMax >= 4
     -- Code duplication because I don't want 30% function call overhead in log functions (especially debug one)
     log.Error = function(msg, ...)
+        if 1 > log.consoleLogLevel and 1 > log.logLevel then return end
+        local arg = table.pack(...)
+        for i = 1, arg.n do
+            if type(arg[i]) == "table" then
+                arg[i] = Azimuth.serialize(arg[i])
+            end
+        end
         if 1 <= log.consoleLogLevel then
-            eprint(format("[ERROR][%s]: "..msg, log.modName, ...))
-        elseif 1 <= log.logLevel then
-            printlog(format("[ERROR][%s]: "..msg, log.modName, ...))
+            eprint(format("[ERROR][%s]: "..msg, log.modName, unpack(arg)))
+        else
+            printlog(format("[ERROR][%s]: "..msg, log.modName, unpack(arg)))
         end
     end
     log.Warn = function(msg, ...)
+        if 2 > log.consoleLogLevel and 2 > log.logLevel then return end
+        local arg = table.pack(...)
+        for i = 1, arg.n do
+            if type(arg[i]) == "table" then
+                arg[i] = Azimuth.serialize(arg[i])
+            end
+        end
         if 2 <= log.consoleLogLevel then
-            print(format("[WARN][%s]: "..msg, log.modName, ...))
-        elseif 2 <= log.logLevel then
-            printlog(format("[WARN][%s]: "..msg, log.modName, ...))
+            print(format("[WARN][%s]: "..msg, log.modName, unpack(arg)))
+        else
+            printlog(format("[WARN][%s]: "..msg, log.modName, unpack(arg)))
         end
     end
     log.Info = function(msg, ...)
+        if 3 > log.consoleLogLevel and 3 > log.logLevel then return end
+        local arg = table.pack(...)
+        for i = 1, arg.n do
+            if type(arg[i]) == "table" then
+                arg[i] = Azimuth.serialize(arg[i])
+            end
+        end
         if 3 <= log.consoleLogLevel then
-            print(format("[INFO][%s]: "..msg, log.modName, ...))
-        elseif 3 <= log.logLevel then
-            printlog(format("[INFO][%s]: "..msg, log.modName, ...))
+            print(format("[INFO][%s]: "..msg, log.modName, unpack(arg)))
+        else
+            printlog(format("[INFO][%s]: "..msg, log.modName, unpack(arg)))
         end
     end
     log.Debug = function(msg, ...)
+        if 4 > log.consoleLogLevel and 4 > log.logLevel then return end
+        local arg = table.pack(...)
+        for i = 1, arg.n do
+            if type(arg[i]) == "table" then
+                arg[i] = Azimuth.serialize(arg[i])
+            end
+        end
         if 4 <= log.consoleLogLevel then
-            print(format("[DEBUG][%s]: "..msg, log.modName, ...))
-        elseif 4 <= log.logLevel then
-            printlog(format("[DEBUG][%s]: "..msg, log.modName, ...))
+            print(format("[DEBUG][%s]: "..msg, log.modName, unpack(arg)))
+        else
+            printlog(format("[DEBUG][%s]: "..msg, log.modName, unpack(arg)))
         end
     end
     return log
