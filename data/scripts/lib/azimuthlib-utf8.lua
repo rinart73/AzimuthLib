@@ -413,4 +413,52 @@ function utf8.compare(a, b, sensitive)
     return #a < #b
 end
 
+-- validation function
+-- getString(value, default [, minLen [, maxLen [, allowedChars [, forbiddenChars]]]])
+--[[ Performs checks on a potential string and returns it.
+* value - Any variable for checking.
+* default (string) - Default value. Will be returned if value is incorrect or too short.
+* minLen (number) - Min length.
+* maxLen (number) - Max length.
+* allowedChars (string) - Similar to TextBox allowedCharacters.
+* forbiddenChars (string) - Similar to TextBox forbiddenCharacters.
+]]
+function utf8.getString(value, default, minLen, maxLen, allowedChars, forbiddenChars)
+    value = tostring(value)
+    if not value then return default end
+    local valueArray = utf8.table(value)
+    if allowedChars then
+        allowedChars = utf8.table(allowedChars)
+        local arr = {}
+        for _, v in ipairs(allowedChars) do
+            arr[v] = true
+        end
+        local newArray = {}
+        for _, v in ipairs(valueArray) do
+            if arr[v] then
+                newArray[#newArray+1] = v
+            end
+        end
+        valueArray = newArray
+    end
+    if forbiddenChars then
+        forbiddenChars = utf8.table(forbiddenChars)
+        local arr = {}
+        for _, v in ipairs(forbiddenChars) do
+            arr[v] = true
+        end
+        local newArray = {}
+        for _, v in ipairs(valueArray) do
+            if not arr[v] then
+                newArray[#newArray+1] = v
+            end
+        end
+        valueArray = newArray
+    end
+    local length = #valueArray
+    if minLen and length < minLen then return default end
+    if maxLen and length > maxLen then return table.concat(valueArray, nil, 1, maxLen) end
+    return table.concat(valueArray)
+end
+
 return utf8

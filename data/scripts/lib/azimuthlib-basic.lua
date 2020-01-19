@@ -6,11 +6,6 @@ local Azimuth = {}
 
 local format = string.format
 
-local moddata = "moddata"
-if onServer() then
-    moddata = Server().folder .. "/" .. moddata
-end
-
 -- API --
 -- logs(modName, consoleLogLevel [, logLevel])
 --[[ Initializes logs.
@@ -36,9 +31,13 @@ function Azimuth.logs(modName, consoleLogLevel, logLevel)
     log.Error = function(msg, ...)
         if 1 > log.consoleLogLevel and 1 > log.logLevel then return end
         local arg = table.pack(...)
+        local argType
         for i = 1, arg.n do
-            if type(arg[i]) == "table" then
+            argType = type(arg[i])
+            if argType == "table" then
                 arg[i] = Azimuth.serialize(arg[i])
+            elseif argType == "boolean" or argType == "nil" then
+                arg[i] = tostring(arg[i])
             end
         end
         if 1 <= log.consoleLogLevel then
@@ -50,9 +49,13 @@ function Azimuth.logs(modName, consoleLogLevel, logLevel)
     log.Warn = function(msg, ...)
         if 2 > log.consoleLogLevel and 2 > log.logLevel then return end
         local arg = table.pack(...)
+        local argType
         for i = 1, arg.n do
-            if type(arg[i]) == "table" then
+            argType = type(arg[i])
+            if argType == "table" then
                 arg[i] = Azimuth.serialize(arg[i])
+            elseif argType == "boolean" or argType == "nil" then
+                arg[i] = tostring(arg[i])
             end
         end
         if 2 <= log.consoleLogLevel then
@@ -64,9 +67,13 @@ function Azimuth.logs(modName, consoleLogLevel, logLevel)
     log.Info = function(msg, ...)
         if 3 > log.consoleLogLevel and 3 > log.logLevel then return end
         local arg = table.pack(...)
+        local argType
         for i = 1, arg.n do
-            if type(arg[i]) == "table" then
+            argType = type(arg[i])
+            if argType == "table" then
                 arg[i] = Azimuth.serialize(arg[i])
+            elseif argType == "boolean" or argType == "nil" then
+                arg[i] = tostring(arg[i])
             end
         end
         if 3 <= log.consoleLogLevel then
@@ -78,9 +85,13 @@ function Azimuth.logs(modName, consoleLogLevel, logLevel)
     log.Debug = function(msg, ...)
         if 4 > log.consoleLogLevel and 4 > log.logLevel then return end
         local arg = table.pack(...)
+        local argType
         for i = 1, arg.n do
-            if type(arg[i]) == "table" then
+            argType = type(arg[i])
+            if argType == "table" then
                 arg[i] = Azimuth.serialize(arg[i])
+            elseif argType == "boolean" or argType == "nil" then
+                arg[i] = tostring(arg[i])
             end
         end
         if 4 <= log.consoleLogLevel then
@@ -227,7 +238,10 @@ function Azimuth.loadConfig(modName, options, isSeedDependant, modFolder)
     for k, v in pairs(options) do
         defaultValues[k] = v.default
     end
-    local dir = moddata
+    local dir = "moddata"
+    if onServer() then
+        dir = Server().folder .. "/" .. dir
+    end
     if modFolder then
         if modFolder == true then
             modFolder = modName
@@ -311,11 +325,15 @@ end
   comment (string) - Variable commentary.
 * isSeedDependant (boolean) - True if config is specific for this server, false otherwise.
 * modFolder(boolean/string) - If true, then config will be saved to "moddata/ModName/ModName.lua". Or you can specify different folder name.
+* minify (boolean) - If true, strips saved config of all spaces and new lines
 Example: Azimuth.saveConfig("MyMod", { WindowWidth = 300 })
 Example: Azimuth.saveConfig("MyMod", { WindowWidth = 300 }, { WindowWidth = { default = 300, comment = "UI window width", min = 100, max = 600 }}, true)
 ]]
-function Azimuth.saveConfig(modName, config, options, isSeedDependant, modFolder)
-    local dir = moddata
+function Azimuth.saveConfig(modName, config, options, isSeedDependant, modFolder, minify)
+    local dir = "moddata"
+    if onServer() then
+        dir = Server().folder .. "/" .. dir
+    end
     if modFolder then
         if modFolder == true then
             modFolder = modName
@@ -334,10 +352,54 @@ function Azimuth.saveConfig(modName, config, options, isSeedDependant, modFolder
         eprint("[ERROR]["..modName.."]: Failed to save config file '"..filename.."': " .. err)
         return false, err
     end
-    file:write(Azimuth.serialize(config, options, "", true))
+    file:write(Azimuth.serialize(config, options, "", true, minify))
     file:close()
     return true
 end
 
+-- validation functions that check if value is empty, correct type and within borders
+-- getFloat(value, bounds [, default [, isBoundsEnum]])
+--[[ Peforms checks for float and returns it.
+* value - Any variable for checking.
+* bounds (table) - 2-element table with lower and upper bounds. If isBoundsEnum is true however, it should be a table that contains all allowed values.
+* default (number/boolean) - If nil, incorrect value with result in nil. If number, incorrect value will return specified default value. If true, the closest boundary will be returned.
+* isBoundsEnum (boolean) - Signals that bounds is a enum of allowed values.
+Examples:
+* getFloat(value, {4.4, 15}) - if incorrect/outside of bounds value, returns nil
+* getFloat(value, {4.4, 15}, 5.3) -- if incorrect/outside of bounds, returns default (5.3)
+* getFloat(value, {4.4, 15}, true) -- if outside of bounds, returns closest value from bounds (4.4 if lower, 15 if higher). if empty returns low border
+* getFloat(value, {4.4, 5.3, 9.9}, true, true) -- bounds are treated like enum instead
+]]
+function Azimuth.getFloat(value, bounds, default, isBoundsEnum)
+    local defaultValue = default == true and bounds[1] or default
+    value = tonumber(value)
+    if not value then return defaultValue end
+    if isBoundsEnum then
+        local found = false
+        for _, v in ipairs(bounds) do
+            if v == value then
+                found = true
+                break
+            end
+        end
+        return found and value or defaultValue
+    else
+        if value < bounds[1] then
+            return default == true and bounds[1] or defaultValue
+        elseif value > bounds[2] then
+            return default == true and bounds[2] or defaultValue
+        end
+        return value
+    end
+end
+
+-- getInt(value, bounds [, default [, isBoundsEnum]])
+function Azimuth.getInt(value, bounds, default, isBoundsEnum)
+    value = tonumber(value)
+    if not value then
+        return default == true and bounds[1] or default
+    end
+    return Azimuth.getFloat(math.floor(value), bounds, default, isBoundsEnum)
+end
 
 return Azimuth
