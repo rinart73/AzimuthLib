@@ -191,7 +191,7 @@ function Azimuth.serialize(o, options, prefix, addCarriageReturn, minify)
                     end
                 end
                 if type(k) ~= 'number' then
-                    k = '"' .. k:gsub("([\"\\])", "\\%1") .. '"'
+                    k = '"' .. tostring(k):gsub("([\"\\])", "\\%1") .. '"'
                 end
                 if minify then
                     s = s .. (i == 1 and '[' or ',[') .. k .. ']=' .. Azimuth.serialize(v, nil, newprefix, addCarriageReturn, minify)
