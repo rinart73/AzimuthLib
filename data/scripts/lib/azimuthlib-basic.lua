@@ -121,7 +121,12 @@ function Azimuth.orderedPairs(tbl, sort, ref)
     if sort then
         table.sort(a, function(a, b) return sort(tbl, a, b) end)
     else
-        table.sort(a)
+        table.sort(a, function(a, b)
+            if type(a) == type(b) then
+                return a < b
+            end
+            return tostring(a) < tostring(b)
+        end)
     end
     local i = 0 -- iterator variable
     local iter = function () -- iterator function
