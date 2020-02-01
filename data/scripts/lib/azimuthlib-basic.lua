@@ -20,7 +20,9 @@ function Azimuth.logs(modName, consoleLogLevel, logLevel)
     local log = {
       modName = modName,
       consoleLogLevel = consoleLogLevel,
-      logLevel = logLevel or consoleLogLevel
+      logLevel = logLevel or consoleLogLevel,
+      minifyTables = false,
+      showTableAddress = false
     }
     local logMax = math.max(log.consoleLogLevel, log.logLevel)
     log.isError = logMax >= 1
@@ -35,7 +37,7 @@ function Azimuth.logs(modName, consoleLogLevel, logLevel)
         for i = 1, arg.n do
             argType = type(arg[i])
             if argType == "table" then
-                arg[i] = Azimuth.serialize(arg[i])
+                arg[i] = Azimuth.serialize(arg[i], nil, nil, nil, minifyTables, showTableAddress)
             elseif argType == "boolean" or argType == "nil" then
                 arg[i] = tostring(arg[i])
             end
@@ -53,7 +55,7 @@ function Azimuth.logs(modName, consoleLogLevel, logLevel)
         for i = 1, arg.n do
             argType = type(arg[i])
             if argType == "table" then
-                arg[i] = Azimuth.serialize(arg[i])
+                arg[i] = Azimuth.serialize(arg[i], nil, nil, nil, minifyTables, showTableAddress)
             elseif argType == "boolean" or argType == "nil" then
                 arg[i] = tostring(arg[i])
             end
@@ -71,7 +73,7 @@ function Azimuth.logs(modName, consoleLogLevel, logLevel)
         for i = 1, arg.n do
             argType = type(arg[i])
             if argType == "table" then
-                arg[i] = Azimuth.serialize(arg[i])
+                arg[i] = Azimuth.serialize(arg[i], nil, nil, nil, minifyTables, showTableAddress)
             elseif argType == "boolean" or argType == "nil" then
                 arg[i] = tostring(arg[i])
             end
@@ -89,7 +91,7 @@ function Azimuth.logs(modName, consoleLogLevel, logLevel)
         for i = 1, arg.n do
             argType = type(arg[i])
             if argType == "table" then
-                arg[i] = Azimuth.serialize(arg[i])
+                arg[i] = Azimuth.serialize(arg[i], nil, nil, nil, minifyTables, showTableAddress)
             elseif argType == "boolean" or argType == "nil" then
                 arg[i] = tostring(arg[i])
             end
@@ -147,16 +149,24 @@ end
 * prefix (string) - Default: "". Line prefix, used by the function itself.
 * addCarriageReturn (boolean) - If true, function uses "\r\n" as new line instead of "\n". False by default because "\r\n" messes up Avorion file logs.
 * minify (boolean) - If true, the resulting string won't have spaces and line breaks. Disables 'prefix' and 'options'.
+* recursive (boolean) - If true, the resulting table dump will have "__address" field for each non-empty table, containing its address.
 Example: print(Azimuth.serialize(myTable))
 Example: print(Azimuth.serialize({ myVar = 30 }, { myVar = { default = 20, comment = "This variable does stuff" } }))
 ]]
-function Azimuth.serialize(o, options, prefix, addCarriageReturn, minify)
+function Azimuth.serialize(o, options, prefix, addCarriageReturn, minify, recursive)
     if type(o) == 'table' then
         if minify then options = nil end
         if not prefix or minify then prefix = "" end
         local newLine = ""
         if not minify then
             newLine = addCarriageReturn and "\r\n" or "\n"
+        end
+        if recursive == true or not recursive then
+            recursive = { isDebug = recursive == true, tables = {} }
+        end
+        local tblString = tostring(o)
+        if recursive.tables[tblString] then -- recursion
+            return minify and '{["__recursion"]="'..tblString..'"}' or '{["__recursion"] = "'..tblString..'"}'
         end
         local s = "{"
         local newprefix = minify and "" or prefix .. "  "
@@ -174,9 +184,15 @@ function Azimuth.serialize(o, options, prefix, addCarriageReturn, minify)
             if k > maxKey then maxKey = k end
             numVars = numVars + 1
         end
+        local hasTableAsChild = false
         if isList and minKey == 1 and maxKey == numVars then -- write as list
             for k = 1, numVars do
-                s = s .. (k == 1 and newLine or "," .. newLine) .. newprefix .. Azimuth.serialize(o[k], nil, newprefix, addCarriageReturn, minify)
+                local v = o[k]
+                if not hasTableAsChild and type(v) == "table" then
+                    recursive.tables[tblString] = true
+                    hasTableAsChild = true
+                end
+                s = s .. (k == 1 and newLine or "," .. newLine) .. newprefix .. Azimuth.serialize(v, nil, newprefix, addCarriageReturn, minify, recursive)
             end
         else -- write as usual table
             local ov
@@ -198,15 +214,23 @@ function Azimuth.serialize(o, options, prefix, addCarriageReturn, minify)
                 if type(k) ~= 'number' then
                     k = '"' .. tostring(k):gsub("([\"\\])", "\\%1") .. '"'
                 end
+                if not hasTableAsChild and type(v) == "table" then
+                    recursive.tables[tblString] = true
+                    hasTableAsChild = true
+                end
                 if minify then
-                    s = s .. (i == 1 and '[' or ',[') .. k .. ']=' .. Azimuth.serialize(v, nil, newprefix, addCarriageReturn, minify)
+                    s = s .. (i == 1 and '[' or ',[') .. k .. ']=' .. Azimuth.serialize(v, nil, newprefix, addCarriageReturn, minify, recursive)
                 else
-                    s = s .. newprefix .. '[' .. k .. '] = ' .. Azimuth.serialize(v, nil, newprefix, addCarriageReturn, minify)
+                    s = s .. newprefix .. '[' .. k .. '] = ' .. Azimuth.serialize(v, nil, newprefix, addCarriageReturn, minify, recursive)
                     if i < ref.len then
                         s = s .. "," .. newLine
                     end
                 end
             end
+        end
+        -- write table address
+        if recursive.isDebug and not (isList and numVars == 0) then
+            s = s .. ',' .. newLine .. newprefix .. (minify and '["__address"]="' or '["__address"] = "')..tblString..'"'
         end
         if isList and numVars == 0 then -- empty
             s = s .. "}"
