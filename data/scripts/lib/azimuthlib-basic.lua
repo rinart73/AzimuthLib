@@ -37,7 +37,7 @@ function Azimuth.logs(modName, consoleLogLevel, logLevel)
         for i = 1, arg.n do
             argType = type(arg[i])
             if argType == "table" then
-                arg[i] = Azimuth.serialize(arg[i], nil, nil, nil, minifyTables, showTableAddress)
+                arg[i] = Azimuth.serialize(arg[i], nil, nil, nil, log.minifyTables, log.showTableAddress)
             elseif argType == "boolean" or argType == "nil" then
                 arg[i] = tostring(arg[i])
             end
@@ -55,7 +55,7 @@ function Azimuth.logs(modName, consoleLogLevel, logLevel)
         for i = 1, arg.n do
             argType = type(arg[i])
             if argType == "table" then
-                arg[i] = Azimuth.serialize(arg[i], nil, nil, nil, minifyTables, showTableAddress)
+                arg[i] = Azimuth.serialize(arg[i], nil, nil, nil, log.minifyTables, log.showTableAddress)
             elseif argType == "boolean" or argType == "nil" then
                 arg[i] = tostring(arg[i])
             end
@@ -73,7 +73,7 @@ function Azimuth.logs(modName, consoleLogLevel, logLevel)
         for i = 1, arg.n do
             argType = type(arg[i])
             if argType == "table" then
-                arg[i] = Azimuth.serialize(arg[i], nil, nil, nil, minifyTables, showTableAddress)
+                arg[i] = Azimuth.serialize(arg[i], nil, nil, nil, log.minifyTables, log.showTableAddress)
             elseif argType == "boolean" or argType == "nil" then
                 arg[i] = tostring(arg[i])
             end
@@ -91,7 +91,7 @@ function Azimuth.logs(modName, consoleLogLevel, logLevel)
         for i = 1, arg.n do
             argType = type(arg[i])
             if argType == "table" then
-                arg[i] = Azimuth.serialize(arg[i], nil, nil, nil, minifyTables, showTableAddress)
+                arg[i] = Azimuth.serialize(arg[i], nil, nil, nil, log.minifyTables, log.showTableAddress)
             elseif argType == "boolean" or argType == "nil" then
                 arg[i] = tostring(arg[i])
             end
