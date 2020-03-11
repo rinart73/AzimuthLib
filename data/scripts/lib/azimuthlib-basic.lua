@@ -1,4 +1,10 @@
---[[ Provides an easy way of saving and loading config files. Also adds other useful functions, such as logging functions.
+--[[ This file provides:
+* Saving & loading config files
+* Logging functions with separate console and file log levels
+* Ordered 'pairs' function
+* 'serialize' function for debugging tables and serializing data
+* Validation functions for int & float values
+
 To use it you'll need to include it first: local Azimuth = include("azimuthlib-basic")
 ]]
 
@@ -6,111 +12,221 @@ local Azimuth = {}
 
 local format = string.format
 
--- API --
--- logs(modName, consoleLogLevel [, logLevel])
---[[ Initializes logs.
-* modName (string) - The name of your mod.
-* consoleLogLevel (number) - Console log level.
-* logLevel (number) - File log level. If not specified, consoleLogLevel will be used instead.
-Example: local Log = Azimuth.logs("MyMod", 2)
-Example: local Log = Azimuth.logs("MyMod", config.consoleLogLevel, config.logLevel)
-  Log.Info("Some info, player name: %s", Player().name) -- Will result in: [INFO][MyMod]: player name: Jeff
-]]
-function Azimuth.logs(modName, consoleLogLevel, logLevel)
-    local log = {
-      modName = modName,
-      consoleLogLevel = consoleLogLevel,
-      logLevel = logLevel or consoleLogLevel,
-      minifyTables = false,
-      showTableAddress = false
-    }
-    local logMax = math.max(log.consoleLogLevel, log.logLevel)
-    log.isError = logMax >= 1
-    log.isWarning = logMax >= 2
-    log.isInfo = logMax >= 3
-    log.isDebug = logMax >= 4
-    -- Code duplication because I don't want 30% function call overhead in log functions (especially debug one)
-    log.Error = function(msg, ...)
-        if 1 > log.consoleLogLevel and 1 > log.logLevel then return end
-        local arg = table.pack(...)
-        local argType
-        for i = 1, arg.n do
-            argType = type(arg[i])
-            if argType == "table" then
-                arg[i] = Azimuth.serialize(arg[i], nil, nil, nil, log.minifyTables, log.showTableAddress)
-            elseif argType == "boolean" or argType == "nil" then
-                arg[i] = tostring(arg[i])
-            end
-        end
-        if 1 <= log.consoleLogLevel then
-            eprint(format("[ERROR][%s]: "..msg, log.modName, unpack(arg)))
-        else
-            printlog(format("[ERROR][%s]: "..msg, log.modName, unpack(arg)))
+local Log = {}
+Log.__index = Log
+
+-- Logs use this function to serialize tables, boolean and nil values
+function Log:_transformArgs(...)
+    local argType
+    local arg = table.pack(...)
+    for i = 1, arg.n do
+        argType = type(arg[i])
+        if argType == "table" then
+            arg[i] = Azimuth.serialize(arg[i], nil, nil, nil, self.minifyTables, self.showTableAddress)
+        elseif argType == "boolean" or argType == "nil" then
+            arg[i] = tostring(arg[i])
         end
     end
-    log.Warn = function(msg, ...)
-        if 2 > log.consoleLogLevel and 2 > log.logLevel then return end
-        local arg = table.pack(...)
-        local argType
-        for i = 1, arg.n do
-            argType = type(arg[i])
-            if argType == "table" then
-                arg[i] = Azimuth.serialize(arg[i], nil, nil, nil, log.minifyTables, log.showTableAddress)
-            elseif argType == "boolean" or argType == "nil" then
-                arg[i] = tostring(arg[i])
-            end
-        end
-        if 2 <= log.consoleLogLevel then
-            print(format("[WARN][%s]: "..msg, log.modName, unpack(arg)))
-        else
-            printlog(format("[WARN][%s]: "..msg, log.modName, unpack(arg)))
-        end
-    end
-    log.Info = function(msg, ...)
-        if 3 > log.consoleLogLevel and 3 > log.logLevel then return end
-        local arg = table.pack(...)
-        local argType
-        for i = 1, arg.n do
-            argType = type(arg[i])
-            if argType == "table" then
-                arg[i] = Azimuth.serialize(arg[i], nil, nil, nil, log.minifyTables, log.showTableAddress)
-            elseif argType == "boolean" or argType == "nil" then
-                arg[i] = tostring(arg[i])
-            end
-        end
-        if 3 <= log.consoleLogLevel then
-            print(format("[INFO][%s]: "..msg, log.modName, unpack(arg)))
-        else
-            printlog(format("[INFO][%s]: "..msg, log.modName, unpack(arg)))
-        end
-    end
-    log.Debug = function(msg, ...)
-        if 4 > log.consoleLogLevel and 4 > log.logLevel then return end
-        local arg = table.pack(...)
-        local argType
-        for i = 1, arg.n do
-            argType = type(arg[i])
-            if argType == "table" then
-                arg[i] = Azimuth.serialize(arg[i], nil, nil, nil, log.minifyTables, log.showTableAddress)
-            elseif argType == "boolean" or argType == "nil" then
-                arg[i] = tostring(arg[i])
-            end
-        end
-        if 4 <= log.consoleLogLevel then
-            print(format("[DEBUG][%s]: "..msg, log.modName, unpack(arg)))
-        else
-            printlog(format("[DEBUG][%s]: "..msg, log.modName, unpack(arg)))
-        end
-    end
-    return log
+    return arg
 end
 
--- orderedPairs(tbl [, sort])
---[[ Allows to iterate table by key in alphabetical order.
-* tbl (table) - Table.
-* sort (function) - Optional sorting function for keys.
-* ref (table) - Optional table. orderedPairs will add the 'len' attrute to it
-Example: for k, v in Azimuth.orderedPairs(myTable, function(tbl, firstKey, secondKey) return tbl[firstKey] < tbl[secondKey] end) do
+-- API --
+
+-- Error(string msg, var ...)
+--[[ Examples:
+logs:Error("Something went wrong")
+logs:Error("Function returned error code: %i", errorCode)
+logs:Error("Ship '%s' got error code '%i' at coordinates: %s", Entity().name, errorCode, {x = 15, y = 28})
+]]
+function Log:Error(msg, ...)
+    -- temporary backwards compatibility
+    local oldMsg
+    if type(self) ~= 'table' then
+        if not Azimuth._logWarning then
+            Azimuth._logWarning = true
+            print(format("[WARN][AzimuthLib]: One of the mods in the file '%s' uses the old way to calling log functions via dot (eg '.Debug'). Use colons now (eg ':Debug'). Right now it will still work but can result in log mix-ups, but in the future versions backwards compatibility will be removed and this will result in an error instead.", getScriptPath()))
+        end
+        oldMsg = msg
+        msg = self
+        self = Azimuth._log
+    end
+    if 1 > self.consoleLogLevel and 1 > self.logLevel then return end
+    local args
+    if oldMsg then -- old .
+        args = self:_transformArgs(oldMsg, ...)
+    else -- new :
+        args = self:_transformArgs(...)
+    end
+    if 1 <= self.consoleLogLevel then
+        eprint(format("[ERROR][%s]: "..msg, self.modName, unpack(args)))
+    else
+        printlog(format("[ERROR][%s]: "..msg, self.modName, unpack(args)))
+    end
+end
+
+-- Warn(string msg, var ...)
+--[[ Examples:
+logs:Warn("Warning message")
+logs:Warn("A deprecated method '%s' was used", methodName)
+logs:Warn("Ship '%s' got unusal function result '%s' at coordinates: (%i:%i)", Entity().name, tblResult, sx, sy)
+]]
+function Log:Warn(msg, ...)
+    -- temporary backwards compatibility
+    local oldMsg
+    if type(self) ~= 'table' then
+        if not Azimuth._logWarning then
+            Azimuth._logWarning = true
+            print(format("[WARN][AzimuthLib]: One of the mods in the file '%s' uses the old way to calling log functions via dot (eg '.Debug'). Use colons now (eg ':Debug'). Right now it will still work but can result in log mix-ups, but in the future versions backwards compatibility will be removed and this will result in an error instead.", getScriptPath()))
+        end
+        oldMsg = msg
+        msg = self
+        self = Azimuth._log
+    end
+    if 2 > self.consoleLogLevel and 2 > self.logLevel then return end
+    local args
+    if oldMsg then -- old .
+        args = self:_transformArgs(oldMsg, ...)
+    else -- new :
+        args = self:_transformArgs(...)
+    end
+    if 2 <= self.consoleLogLevel then
+        print(format("[WARN][%s]: "..msg, self.modName, unpack(args)))
+    else
+        printlog(format("[WARN][%s]: "..msg, self.modName, unpack(args)))
+    end
+end
+
+-- Info(string msg, var ...)
+--[[ Examples:
+logs:Info("That stuff happened")
+logs:Info("Ship name is '%s'", Entity().name)
+]]
+function Log:Info(msg, ...)
+    -- temporary backwards compatibility
+    local oldMsg
+    if type(self) ~= 'table' then
+        if not Azimuth._logWarning then
+            Azimuth._logWarning = true
+            print(format("[WARN][AzimuthLib]: One of the mods in the file '%s' uses the old way to calling log functions via dot (eg '.Debug'). Use colons now (eg ':Debug'). Right now it will still work but can result in log mix-ups, but in the future versions backwards compatibility will be removed and this will result in an error instead.", getScriptPath()))
+        end
+        oldMsg = msg
+        msg = self
+        self = Azimuth._log
+    end
+    if 3 > self.consoleLogLevel and 3 > self.logLevel then return end
+    local args
+    if oldMsg then -- old .
+        args = self:_transformArgs(oldMsg, ...)
+    else -- new :
+        args = self:_transformArgs(...)
+    end
+    if 3 <= self.consoleLogLevel then
+        print(format("[INFO][%s]: "..msg, self.modName, unpack(args)))
+    else
+        printlog(format("[INFO][%s]: "..msg, self.modName, unpack(args)))
+    end
+end
+
+-- Debug(string msg, var ...)
+--[[ Examples:
+logs:Debug("Step 5")
+logs:Debug("Function '%s', passed arguments: %i, %s", 'myFunctionName', rarity.value, {...})
+]]
+function Log:Debug(msg, ...)
+    -- temporary backwards compatibility
+    local oldMsg
+    if type(self) ~= 'table' then
+        if not Azimuth._logWarning then
+            Azimuth._logWarning = true
+            print(format("[WARN][AzimuthLib]: One of the mods in the file '%s' uses the old way to calling log functions via dot (eg '.Debug'). Use colons now (eg ':Debug'). Right now it will still work but can result in log mix-ups, but in the future versions backwards compatibility will be removed and this will result in an error instead.", getScriptPath()))
+        end
+        oldMsg = msg
+        msg = self
+        self = Azimuth._log
+    end
+    if 4 > self.consoleLogLevel and 4 > self.logLevel then return end
+    local args
+    if oldMsg then -- old .
+        args = self:_transformArgs(oldMsg, ...)
+    else -- new :
+        args = self:_transformArgs(...)
+    end
+    if 4 <= self.consoleLogLevel then
+        print(format("[DEBUG][%s]: "..msg, self.modName, unpack(args)))
+    else
+        printlog(format("[DEBUG][%s]: "..msg, self.modName, unpack(args)))
+    end
+end
+
+-- setLevel(int consoleLogLevel, int logLevel)
+-- Changes log level
+function Log:setLevel(consoleLogLevel, logLevel)
+    logLevel = logLevel or consoleLogLevel
+    local logMax = math.max(consoleLogLevel, logLevel)
+    self.consoleLogLevel = consoleLogLevel
+    self.logLevel = logLevel
+    self.isError = logMax >= 1
+    self.isWarning = logMax >= 2
+    self.isInfo = logMax >= 3
+    self.isDebug = logMax >= 4
+end
+
+-- Log logs(string modName, int consoleLogLevel [, int logLevel])
+-- Creates a new instance of Log object
+--[[ Arguments:
+* string modName - Your mod name
+* int consoleLogLevel - Log level that determines which data will be displayed in console. 1 - Errors, 2 - Errors & Warnings, 3 - E & W & Info, 4 - E & W & I & Debug
+* int logLevel - (optional) Same as consoleLogLevel, but stuff will be written only in log file, not console
+]]
+--[[ Object properties:
+* string modName - mod name
+* bool minifyTables - when auto-serializing tables should they be minified (one string without spaces)?
+* bool showTableAddress - when auto-serializing tables should tables display their address?
+* int consoleLogLevel - log level for console output
+* int logLevel - log level for file output
+* bool isError - (read-only) used to understand if any of the log levels are big enough to write error in console/file
+* bool isWarning - (read-only) if true, using :Warn will definetely print data in console or file
+* bool isInfo - (read-only) if true, using :Info will definetely print data in console or file
+* bool isDebug - (read-only) if true, using :Debug will definetely print data in console or file
+]]
+--[[ Object methods:
+:Error(var msg, var ...) - Print error message
+:Warn(var msg, var ...) - Print warning message
+:Info(var msg, var ...) - Print info message
+:Debug(var msg, var ...) - Print debug message
+]]
+--[[ Example:
+local Logs = Azimuth.logs("MyModName", 2)
+local Logs = Azimuth.logs("MyModName", 2, 4)
+]]
+function Azimuth.logs(modName, consoleLogLevel, logLevel)
+    local newLog = setmetatable({
+      modName = modName,
+      minifyTables = false,
+      showTableAddress = false
+    }, Log)
+    newLog:setLevel(consoleLogLevel, logLevel)
+
+    -- temporary backwards compatibility
+    Azimuth._log = newLog
+
+    return newLog
+end
+
+
+-- orderedPairs(table tbl [, function sort [, table ref]])
+-- Allows to iterate table by key in alphabetical order.
+--[[ Args:
+* table tbl - Table.
+* function sort - Optional sorting function for keys.
+* table ref - Optional table. orderedPairs will add the 'len' attrute to it
+]]
+--[[ Example:
+for k, v in Azimuth.orderedPairs(myTable, function(tbl, firstKey, secondKey)
+  return tbl[firstKey] < tbl[secondKey]
+end) do
+    print(k, v)
+end
 ]]
 function Azimuth.orderedPairs(tbl, sort, ref)
     local a = {}
@@ -142,16 +258,19 @@ function Azimuth.orderedPairs(tbl, sort, ref)
     return iter
 end
 
--- serialize(o [, options [, prefix [, addCarriageReturn [, minify ]]]])
---[[ Serializes table as readable multi-line text.
-* o (table) - Table for serialization.
-* options (table) - Optional argument. Since this function was initially meant to aid in saving config files, you can add default value and commentary to each variable.
-* prefix (string) - Default: "". Line prefix, used by the function itself.
-* addCarriageReturn (boolean) - If true, function uses "\r\n" as new line instead of "\n". False by default because "\r\n" messes up Avorion file logs.
-* minify (boolean) - If true, the resulting string won't have spaces and line breaks. Disables 'prefix' and 'options'.
-* recursive (boolean) - If true, the resulting table dump will have "__address" field for each non-empty table, containing its address.
-Example: print(Azimuth.serialize(myTable))
-Example: print(Azimuth.serialize({ myVar = 30 }, { myVar = { default = 20, comment = "This variable does stuff" } }))
+-- serialize(table o [, table options [, string prefix [, bool addCarriageReturn [, bool minify [, bool recursive]]]]])
+-- Serializes table as readable multi-line text.
+--[[ Args:
+* table o - Table for serialization.
+* table options - Optional argument. Since this function was initially meant to aid in saving config files, you can add default value and commentary to each variable.
+* string prefix - Default: "". Line prefix, used by the function itself.
+* bool addCarriageReturn - If true, function uses "\r\n" as new line instead of "\n". False by default because "\r\n" messes up Avorion file logs.
+* bool minify - If true, the resulting string won't have spaces and line breaks. Disables 'prefix' and 'options'.
+* bool recursive - If true, the resulting table dump will have "__address" field for each non-empty table, containing its address.
+]]
+--[[ Examples:
+print(Azimuth.serialize(myTable))
+print(Azimuth.serialize({ myVar = 30 }, { myVar = { default = 20, comment = "This variable does stuff" } }))
 ]]
 function Azimuth.serialize(o, options, prefix, addCarriageReturn, minify, recursive)
     if type(o) == 'table' then
@@ -243,24 +362,28 @@ function Azimuth.serialize(o, options, prefix, addCarriageReturn, minify, recurs
     end
 end
 
--- loadConfig(modName, options [, isSeedDependant [, inModFolder]])
---[[ Loads mod config from file.
-* modName (string) - Mod name.
-* options (table) - Config options with default values and comments. Each element of the table can have following properties:
+-- table, var loadConfig(string modName, table options [, bool isSeedDependant [, var inModFolder]])
+-- Loads mod config from file
+--[[ Args:
+* string modName - Mod name.
+* table options - Config options with default values and comments. Each element of the table can have following properties:
   default - Required. Default value of a variable.
   min/max (number) - Optional. Minimum and maximum value of a variable, if it's a number.
   format (string) - Optional. Can be 'floor', 'round' or 'ceil', selected way of rounding will be applied for loaded variable.
-* isSeedDependant (boolean) - True if config is specific for this server. false otherwise (useful only on client side).
-* modFolder (boolean/string) - If true, then config will be loaded from "moddata/ModName/ModName.lua". Or you can specify different folder name.
-Returns:
+* bool isSeedDependant - True if config is specific for this server. false otherwise (useful only on client side).
+* bool/string modFolder - If true, then config will be loaded from "moddata/ModName/ModName.lua". Or you can specify different folder name.
+]]
+--[[ Returns:
 1. Config table.
 2. Error/status. Can be one of the following:
   * String, it's an error message.
   * Number, 1 - means that file wasn't found. Hint: re-save the config.
   * Number, 0 - config was successfully loaded, but was modified by `options`. Hint: re-save the config.
   * Nil, config was successfully loaded, no modifications were made.
-Example: local tbl = Azimuth.loadConfig("MyMod", { WindowWidth = { default = 300 } })
-Example: local tbl = Azimuth.loadConfig("MyMod", { WindowWidth = { default = 300, comment = "UI window width", min = 100, max = 600, format = "ceil" } }, true)
+]]
+--[[ Examples:
+local tbl = Azimuth.loadConfig("MyMod", { WindowWidth = { default = 300 } })
+local tbl = Azimuth.loadConfig("MyMod", { WindowWidth = { default = 300, comment = "UI window width", min = 100, max = 600, format = "ceil" } }, true)
 ]]
 function Azimuth.loadConfig(modName, options, isSeedDependant, modFolder)
     local defaultValues = {}
@@ -345,18 +468,24 @@ function Azimuth.loadConfig(modName, options, isSeedDependant, modFolder)
     return result, isModified
 end
 
--- saveConfig(modName, config [, options [, isSeedDependant [, inModFolder]]])
+-- bool, var saveConfig(string modName, table config [, table options [, bool isSeedDependant [, var inModFolder [, bool minify]]]])
 --[[ Saves mod config to file.
-* modName (string) - String with modname.
-* config (table) - Config table.
-* options(table) - Config options with default values and comments. Each element of the table can have following properties:
+* modName - Modname
+* table config - Config table
+* table options - Config options with default values and comments. Each element of the table can have following properties:
   default - Default value of a variable. Will be added to a commentary unless it's a table.
   comment (string) - Variable commentary.
-* isSeedDependant (boolean) - True if config is specific for this server, false otherwise.
-* modFolder(boolean/string) - If true, then config will be saved to "moddata/ModName/ModName.lua". Or you can specify different folder name.
-* minify (boolean) - If true, strips saved config of all spaces and new lines
-Example: Azimuth.saveConfig("MyMod", { WindowWidth = 300 })
-Example: Azimuth.saveConfig("MyMod", { WindowWidth = 300 }, { WindowWidth = { default = 300, comment = "UI window width", min = 100, max = 600 }}, true)
+* bool isSeedDependant - True if config is specific for this server, false otherwise.
+* boolean/string modFolder - If true, then config will be saved to "moddata/ModName/ModName.lua". Or you can specify different folder name.
+* bool minify - If true, strips saved config of all spaces and new lines
+]]
+--[[ Returns:
+1. true/false - Success or not
+2. string error - String that explains what went wrong
+]]
+--[[ Examples:
+Azimuth.saveConfig("MyMod", { WindowWidth = 300 })
+Azimuth.saveConfig("MyMod", { WindowWidth = 300 }, { WindowWidth = { default = 300, comment = "UI window width", min = 100, max = 600 }}, true)
 ]]
 function Azimuth.saveConfig(modName, config, options, isSeedDependant, modFolder, minify)
     local dir = "moddata"
@@ -387,22 +516,24 @@ function Azimuth.saveConfig(modName, config, options, isSeedDependant, modFolder
 end
 
 -- validation functions that check if value is empty, correct type and within borders
--- getFloat(value, bounds [, default [, isBoundsEnum]])
+-- var, bool getFloat(value, table bounds [, var default [, bool isBoundsEnum]])
+--[[ Returns:
+var/float result
+bool isModified - if true, value was incorrect in some way
+]]
 --[[ Peforms checks for float and returns it.
 * value - Any variable for checking.
-* bounds (table) - 2-element table with lower and upper bounds. If isBoundsEnum is true however, it should be a table that contains all allowed values.
-* default (number/boolean) - If nil, incorrect value with result in nil. If number, incorrect value will return specified default value. If true, the closest boundary will be returned.
-* isBoundsEnum (boolean) - Signals that bounds is a enum of allowed values.
+* table bounds - 2-element table with lower and upper bounds. If isBoundsEnum is true however, it will be considered a table that contains all allowed values.
+* (optional) number default - If nil, incorrect value with result in nil. If number, incorrect value will return specified default value.
+* (optional) bool isBoundsEnum - Signals that bounds is a enum of allowed values.
 Examples:
-* getFloat(value, {4.4, 15}) - if incorrect/outside of bounds value, returns nil
-* getFloat(value, {4.4, 15}, 5.3) -- if incorrect/outside of bounds, returns default (5.3)
-* getFloat(value, {4.4, 15}, true) -- if outside of bounds, returns closest value from bounds (4.4 if lower, 15 if higher). if empty returns low border
-* getFloat(value, {4.4, 5.3, 9.9}, true, true) -- bounds are treated like enum instead
+* getFloat(value, {4.4, 15}) - if incorrect returns nil. if outside of bounds returns closes bound
+* getFloat(value, {4.4, 15}, 5.3) -- if incorrect returns default (5.3). if outside of bounds, returns closes bound
+* getFloat(value, {4.4, 5.3, 9.9}, 5.3, true) -- bounds are treated like enum instead. if incorrect/doesn't match enum, returns default (5.3)
 ]]
 function Azimuth.getFloat(value, bounds, default, isBoundsEnum)
-    local defaultValue = default == true and bounds[1] or default
     value = tonumber(value)
-    if not value then return defaultValue end
+    if not value then return default, true end
     if isBoundsEnum then
         local found = false
         for _, v in ipairs(bounds) do
@@ -411,23 +542,24 @@ function Azimuth.getFloat(value, bounds, default, isBoundsEnum)
                 break
             end
         end
-        return found and value or defaultValue
+        if found then
+            return value, false
+        end
+        return default, true
     else
         if value < bounds[1] then
-            return default == true and bounds[1] or defaultValue
+            return bounds[1], true
         elseif value > bounds[2] then
-            return default == true and bounds[2] or defaultValue
+            return bounds[2], true
         end
-        return value
+        return value, false
     end
 end
 
--- getInt(value, bounds [, default [, isBoundsEnum]])
+-- int, bool getInt(value, table bounds [, var default [, bool isBoundsEnum]])
 function Azimuth.getInt(value, bounds, default, isBoundsEnum)
     value = tonumber(value)
-    if not value then
-        return default == true and bounds[1] or default
-    end
+    if not value then return default, true end
     return Azimuth.getFloat(math.floor(value), bounds, default, isBoundsEnum)
 end
 

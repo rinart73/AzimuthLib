@@ -1,3 +1,5 @@
+-- This is WIP, never was tested
+
 -- Allows to turn certain script variables into stats that can be boosted.
 -- result = (baseValue * (1 + sum(baseMultiplier)) + sum(multiplyableBias)) * (1 * multiplier1 * multiplier2 ...) + sum(absoluteBias)
 --[[ Example - altering Factory `timeToProduce` variable:
