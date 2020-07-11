@@ -1,0 +1,965 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>UTF8 - AzimuthLib API Docs</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>AzimuthLib</h1>
+
+<ul>
+  <li><a href="../AzimuthLib.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Fields">Fields</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/Azimuth.html">Azimuth</a></li>
+  <li><a href="../modules/UICollection.html">UICollection</a></li>
+  <li><a href="../modules/UIColorPicker.html">UIColorPicker</a></li>
+  <li><a href="../modules/UIProportionalSplitter.html">UIProportionalSplitter</a></li>
+  <li><a href="../modules/UIRectangle.html">UIRectangle</a></li>
+  <li><strong>UTF8</strong></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>UTF8</code></h1>
+<p>UTF-8 library for Avorion to help modders and to show devs that we need native UTF-8 support in Lua.</p>
+<p>
+
+
+<p> I tried to collect and construct the best implementations of functions with a goal of achieving max performance while keeping input and output relatively close to the native Lua 5.2/5.3 functions.</p>
+
+<p> These functions will assume that you will pass correct utf-8 strings and arguments (no checks made).</p>
+
+<p> Thanks to:</p>
+
+<ul>
+    <li>https://gist.github.com/Stepets/3b4dbaf5e6e6a60f3862</li>
+    <li>https://stackoverflow.com/a/29217368/3768314</li>
+</ul>
+</p>
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <pre class="example"><span class="keyword">local</span> UTF8 = include(<span class="string">"azimuthlib-utf8"</span>)</pre>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#byte">byte (s, i[, j=i])</a></td>
+	<td class="summary">Returns numerical codes of UTF-8 characters in a range (similarly to string.byte)</p>
+
+<p> For getting code of a single character it's advised UTF8.singlebyte (performance-wise)</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#char">char (codes)</a></td>
+	<td class="summary">Returns UTF-8 string made of the passed numerical codes (similarly to string.char)</p>
+
+<p> For getting char from a single character it's advised UTF8.singlechar (performance-wise)</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#codepoint">codepoint (s, i[, j=i])</a></td>
+	<td class="summary">Returns the numerical codes (as numbers) from all characters in the given string that start between byte position i and j</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#codes">codes (s)</a></td>
+	<td class="summary">Returns an iterator (like string.gmatch) which returns both the position and codepoint of each utf8 character in the string</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#compare">compare (a, b[, sensitive=false])</a></td>
+	<td class="summary">Compares two strings</p>
+
+<p> Uses 'azimuthlib-utf8-compare' file as a helper</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#comparesensitive">comparesensitive (a, b)</a></td>
+	<td class="summary">Compares two strings case-sensitively.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#find">find (s, pattern[, init=1[, plain=true[, simple=false]]])</a></td>
+	<td class="summary">Finds the first occurrence of the pattern in the string passed.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#getString">getString (value, default[, minLen[, maxLen[, allowedChars[, forbiddenChars]]]])</a></td>
+	<td class="summary">Performs checks on a potential string and returns it</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#len">len (s)</a></td>
+	<td class="summary">Returns the length of the string passed</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#lower">lower (s[, asTable=false])</a></td>
+	<td class="summary">Converts UTF-8 uppercase characters into lower case</p>
+
+<p> Uses 'azimuthlib-utf8-lower' file as a helper</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#offset">offset (s, n[, i])</a></td>
+	<td class="summary">Returns the byte-index of the n'th UTF-8 character after the given byte position i</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#reverse">reverse (s)</a></td>
+	<td class="summary">Reverses a string</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#singlebyte">singlebyte (c)</a></td>
+	<td class="summary">Returns numerical code of a single UTF-8 character</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#singlechar">singlechar (code)</a></td>
+	<td class="summary">Returns UTF-8 character that matches passed numerical code</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#sub">sub (s, i[, j])</a></td>
+	<td class="summary">Returns a substring of the string passed</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#table">table (s)</a></td>
+	<td class="summary">Returns string as UTF-8 char table</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#upper">upper (s[, asTable=false])</a></td>
+	<td class="summary">Converts UTF-8 lowercase characters into upper case</p>
+
+<p> Uses 'azimuthlib-utf8-lower' file as a helper</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#charpattern">charpattern</a></td>
+	<td class="summary">Pattern that is used to find UTF-8 characters</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "byte"></a>
+    <strong>byte (s, i[, j=i])</strong>
+    </dt>
+
+    <dd>
+
+    Returns numerical codes of UTF-8 characters in a range (similarly to string.byte)</p>
+
+<p> For getting code of a single character it's advised UTF8.singlebyte (performance-wise)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">s</span>
+           — Input string
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">i</span>
+           — Starting position
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">j</span>
+           (<em>default</em>: i)
+           — Ending position (default: equals i)
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int..</span></span>
+        — Character codes
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <li><a href="https://www.lua.org/manual/5.1/manual.html#pdf-string.byte">string.byte</a></li>
+         <li><a href="../modules/UTF8.html#singlebyte">UTF8.singlebyte</a></li>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "char"></a>
+    <strong>char (codes)</strong>
+    </dt>
+
+    <dd>
+
+    Returns UTF-8 string made of the passed numerical codes (similarly to string.char)</p>
+
+<p> For getting char from a single character it's advised UTF8.singlechar (performance-wise)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">int..</span></span>
+          <span class="parameter">codes</span>
+           — Input character codes
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">string</span></span>
+        — UTF-8 string
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <li><a href="https://www.lua.org/manual/5.1/manual.html#pdf-string.char">string.char</a></li>
+         <li><a href="../modules/UTF8.html#singlechar">UTF8.singlechar</a></li>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "codepoint"></a>
+    <strong>codepoint (s, i[, j=i])</strong>
+    </dt>
+
+    <dd>
+
+    Returns the numerical codes (as numbers) from all characters in the given string that start between byte position i and j
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">s</span>
+           — Input string
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">i</span>
+           — Starting byte position
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">j</span>
+           (<em>default</em>: i)
+           — Ending byte position (default: equals i)
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int..</span></span>
+        — Character codes
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="https://www.lua.org/manual/5.1/manual.html#pdf-string.byte">string.byte</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "codes"></a>
+    <strong>codes (s)</strong>
+    </dt>
+
+    <dd>
+
+    Returns an iterator (like string.gmatch) which returns both the position and codepoint of each utf8 character in the string
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">s</span>
+           — Input string
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">function</span></span>
+        iterator
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="https://www.lua.org/manual/5.1/manual.html#pdf-string.gmatch">string.gmatch</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "compare"></a>
+    <strong>compare (a, b[, sensitive=false])</strong>
+    </dt>
+
+    <dd>
+
+    Compares two strings</p>
+
+<p> Uses 'azimuthlib-utf8-compare' file as a helper
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">a</span>
+           — Input string a
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">b</span>
+           — Input string b
+          </li>
+          <li>
+              <span class="types"><span class="type">bool</span></span>
+          <span class="parameter">sensitive</span>
+           (<em>default</em>: false)
+           — If true, function will be case-sensitive (default: false)
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        — 'true' if string a should be placed before b and 'false' otherwise
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../modules/UTF8.html#comparesensitive">UTF8.comparesensitive</a>
+    </ul>
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <li><pre class="example"><span class="global">table</span>.sort(mytable, UTF8.compare)</pre></li>
+        <li><pre class="example"><span class="global">table</span>.sort(mytable, <span class="keyword">function</span>(a, b) <span class="keyword">return</span> UTF8.compare(a, b, <span class="keyword">true</span>) <span class="keyword">end</span>)</pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "comparesensitive"></a>
+    <strong>comparesensitive (a, b)</strong>
+    </dt>
+
+    <dd>
+
+    Compares two strings case-sensitively.  It's just a shortcut that passes 'sensitive = true'</p>
+
+<p> Uses 'azimuthlib-utf8-compare' file as a helper
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">a</span>
+           — Input string a
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">b</span>
+           — Input string b
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        — 'true' if string a should be placed before b and 'false' otherwise
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../modules/UTF8.html#compare">UTF8.compare</a>
+    </ul>
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <pre class="example"><span class="global">table</span>.sort(mytable, UTF8.comparesensitive)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "find"></a>
+    <strong>find (s, pattern[, init=1[, plain=true[, simple=false]]])</strong>
+    </dt>
+
+    <dd>
+
+    Finds the first occurrence of the pattern in the string passed.  If an instance of the pattern is found:</p>
+
+<ul>
+    <li>If simple = false (default) — a pair of values representing the start and end of the string is returned</li>
+    <li>If simple = true — 'true' is returned (performance-friendly option if you don't need start and end positions)</li>
+</ul>
+
+<p> If the pattern cannot be found nil is returned.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">s</span>
+           — Input string
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">pattern</span>
+           — Plain substring (<strong>Patterns are currently not supported</strong>)
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">init</span>
+           (<em>default</em>: 1)
+           — Start search from specified position (default: 1)
+          </li>
+          <li>
+              <span class="types"><span class="type">bool</span></span>
+          <span class="parameter">plain</span>
+           (<em>default</em>: true)
+           — True if patterns aren't used (<strong>Currently always true no matter what you pass</strong>)
+          </li>
+          <li>
+              <span class="types"><span class="type">bool</span></span>
+          <span class="parameter">simple</span>
+           (<em>default</em>: false)
+           — True if function shouldn't return start and end position of a found substring (default: false)
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">nil/true/int</span></span>
+
+<p> start:</p>
+
+<ul>
+    <li>nil — nothing found</li>
+    <li>true — substring found, but 'simple = true'</li>
+    <li>number — start position ('simple = false')</li>
+</ul>
+</li>
+        <li>
+           <span class="types"><span class="type">nil/int</span></span>
+
+<p> end:</p>
+
+<ul>
+    <li>nil — nothing found or 'simple = true'</li>
+    <li>number — end position ('simple = false')</li>
+</ul>
+</li>
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="https://www.lua.org/manual/5.1/manual.html#pdf-string.find">string.find</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "getString"></a>
+    <strong>getString (value, default[, minLen[, maxLen[, allowedChars[, forbiddenChars]]]])</strong>
+    </dt>
+
+    <dd>
+
+    Performs checks on a potential string and returns it
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">var</span></span>
+          <span class="parameter">value</span>
+           — Variable for validation
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">default</span>
+           — Default value, will be returned if value is incorrect or too short
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">minLen</span>
+           (<em>optional</em>)
+           — If present, string length should be at least minLen characters
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">maxLen</span>
+           (<em>optional</em>)
+           — If present, string length should be no longer than maxLen characters, excess will be removed
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">allowedChars</span>
+           (<em>optional</em>)
+           — If present, string should contain only specified characters, others will be removed
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">forbiddenChars</span>
+           (<em>optional</em>)
+           — If present, string should not contain specified characters, they will be removed
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">string</span></span>
+        — Resulting string</li>
+        <li>
+           <span class="types"><span class="type">bool</span></span>
+        isModified — If true, value was changed in some way</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "len"></a>
+    <strong>len (s)</strong>
+    </dt>
+
+    <dd>
+
+    Returns the length of the string passed
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">s</span>
+           — Input string
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        — String length
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="https://www.lua.org/manual/5.1/manual.html#pdf-string.len">string.len</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "lower"></a>
+    <strong>lower (s[, asTable=false])</strong>
+    </dt>
+
+    <dd>
+
+    Converts UTF-8 uppercase characters into lower case</p>
+
+<p> Uses 'azimuthlib-utf8-lower' file as a helper
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">s</span>
+           — Input string
+          </li>
+          <li>
+              <span class="types"><span class="type">bool</span></span>
+          <span class="parameter">asTable</span>
+           (<em>default</em>: false)
+           — If true, will return result as a char table (default: false)
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">string/table</span></span>
+
+<p> result:</p>
+
+<ul>
+    <li>string — if 'asTable = false'</li>
+    <li>table — if 'asTable = true'</li>
+</ul>
+
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="https://www.lua.org/manual/5.1/manual.html#pdf-string.lower">string.lower</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "offset"></a>
+    <strong>offset (s, n[, i])</strong>
+    </dt>
+
+    <dd>
+
+    Returns the byte-index of the n'th UTF-8 character after the given byte position i
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">s</span>
+           — Input string
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">n</span>
+           — Character index
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">i</span>
+           (<em>optional</em>)
+
+<p> — Starting byte position:</p>
+
+<ul>
+    <li>default: 1 — If n is positive</li>
+    <li>default: -1 — If n is negative</li>
+</ul>
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+
+
+
+<ul>
+    <li>byte-index of the n'th UTF-8 character after the given byte position i — If n != 0</li>
+    <li>byte-index of the UTF-8 character byte position i lies within — If n == 0</li>
+</ul>
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "reverse"></a>
+    <strong>reverse (s)</strong>
+    </dt>
+
+    <dd>
+
+    Reverses a string
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">s</span>
+           — Input string
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">string</span></span>
+        — Reversed string
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="https://www.lua.org/manual/5.1/manual.html#pdf-string.reverse">string.reverse</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "singlebyte"></a>
+    <strong>singlebyte (c)</strong>
+    </dt>
+
+    <dd>
+
+    Returns numerical code of a single UTF-8 character
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">c</span>
+           — Input character
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        — Character code
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "singlechar"></a>
+    <strong>singlechar (code)</strong>
+    </dt>
+
+    <dd>
+
+    Returns UTF-8 character that matches passed numerical code
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">code</span>
+           — Input character code
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">string</span></span>
+        — Character
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "sub"></a>
+    <strong>sub (s, i[, j])</strong>
+    </dt>
+
+    <dd>
+
+    Returns a substring of the string passed
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">s</span>
+           — Input string
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">i</span>
+           — Starting character position (<strong>not</strong> byte position)
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">j</span>
+           (<em>optional</em>)
+           — Ending character position. If not specified the substring will end at the end of the string
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">string</span></span>
+        — Substring
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="https://www.lua.org/manual/5.1/manual.html#pdf-string.sub">string.sub</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "table"></a>
+    <strong>table (s)</strong>
+    </dt>
+
+    <dd>
+
+    Returns string as UTF-8 char table
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">s</span>
+           — Input string
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../modules/UTF8.html#table">table</a></span>
+        — UTF-8 char table
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "upper"></a>
+    <strong>upper (s[, asTable=false])</strong>
+    </dt>
+
+    <dd>
+
+    Converts UTF-8 lowercase characters into upper case</p>
+
+<p> Uses 'azimuthlib-utf8-lower' file as a helper
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">s</span>
+           — Input string
+          </li>
+          <li>
+              <span class="types"><span class="type">bool</span></span>
+          <span class="parameter">asTable</span>
+           (<em>default</em>: false)
+           — If true, will return result as a char table (default: false)
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">string/table</span></span>
+
+<p> result:</p>
+
+<ul>
+    <li>string — if 'asTable = false'</li>
+    <li>table — if 'asTable = true'</li>
+</ul>
+
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="https://www.lua.org/manual/5.1/manual.html#pdf-string.upper">string.upper</a>
+    </ul>
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Fields"></a>Fields</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "charpattern"></a>
+    <strong><span class="type">string</span> charpattern</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Pattern that is used to find UTF-8 characters
+
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2020-07-11 17:14:24 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

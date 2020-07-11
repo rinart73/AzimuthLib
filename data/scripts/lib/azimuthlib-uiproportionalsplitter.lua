@@ -1,43 +1,30 @@
---[[
-UIVerticalProportionalSplitter(Rect rect, int paddingInside, int margin, table proportions)
-UIVerticalProportionalSplitter(Rect rect, int paddingInside, table margin, table proportions)
-* rect - The rect to split
-* paddingInside - Distance between elements
-* margin - Each side of passed rect will be shrinked by 'margin'.
-* proportions - Table with partitions proportions:
-  * {0.7, 0.3} - 70% and 30%
-  * {0.75, 0.5} - 60% and 40%
-  * {30, 0.4, 0.6} - Values >= 1 will be treated as pixels => 30pixels and the rest is divided in 40% and 60%
-Returns: Table
-* int paddingLeft
-* int paddingRight
-* int paddingTop
-* int paddingBottom
-* int marginLeft
-* int marginRight
-* int marginTop
-* int marginBottom
-* int paddingInside
-* int padding (write-only)
-* int margin (write-only)
-* Rect inner (read-only)
-* Rect rect
-* table proportions
-* table[Rect] partitions
-* function setPadding(int left, int right, int top, int bottom)
-* function setMargin(int left, int right, int top, int bottom)
+--- Proportional UI splitters that allow to mix absolute pixel values with relative weights
+-- @usage include("azimuthlib-uiproportionalsplitter")
+-- @module UIProportionalSplitter
 
-Examples:
-local splitter = UIVerticalProportionalSplitter(Rect(0, 0, 600, 30), 10, 0, {0.5, 0.3, 0.45})
-print(splitter.partitions[1]) -- Rect(0, 0, 232, 30)
-print(splitter.partitions[2]) -- Rect(242, 0, 381.2, 30)
-print(splitter.partitions[3]) -- Rect(391.2, 0, 600, 0)
-local splitter = UIVerticalProportionalSplitter(Rect(0, 0, 700, 30), 10, 5, {0.4, 20, 40, 0.6}) - values > 1 treated as pixels:
-print(splitter[1]) -- Rect(5, 5, 245, 25)
-print(splitter[2]) -- Rect(255, 5, 275, 25)
-print(splitter[3]) -- Rect(285, 5, 325, 25)
-print(splitter[4]) -- Rect(335, 5, 695, 25)
-]]
+--- Creates new UIVerticalProportionalSplitter
+-- @within Constructors
+-- @function UIVerticalProportionalSplitter
+-- @tparam Rect rect — The rect to split
+-- @tparam int paddingInside — Padding between partitions
+-- @tparam int/table margin — Splitter margin:
+-- 
+-- * int — One margin for all sides
+-- * table — Margin for left, right, top and bottom sides
+-- @tparam table proportions — Proportions, each values can be:
+--
+-- * a number >= 1 — will be treated as an absolute pixel value
+-- * a number < 1 — will be treated as a relative weight
+-- @treturn table — UIVerticalProportionalSplitter instance
+-- @usage local splitter = UIVerticalProportionalSplitter(Rect(0, 0, 600, 30), 10, 0, {0.5, 0.3, 0.45})
+-- print(splitter.partitions[1]) -- Rect(0, 0, 232, 30)
+-- print(splitter.partitions[2]) -- Rect(242, 0, 381.2, 30)
+-- print(splitter.partitions[3]) -- Rect(391.2, 0, 600, 0)
+-- @usage local splitter = UIVerticalProportionalSplitter(Rect(0, 0, 700, 30), 10, 5, {0.4, 20, 40, 0.6}) -- values > 1 treated as pixels:
+-- print(splitter[1]) -- Rect(5, 5, 245, 25)
+-- print(splitter[2]) -- Rect(255, 5, 275, 25)
+-- print(splitter[3]) -- Rect(285, 5, 325, 25)
+-- print(splitter[4]) -- Rect(335, 5, 695, 25)
 function UIVerticalProportionalSplitter(rect, paddingInside, margin, proportions)
     if type(margin) ~= "table" then
         margin = {margin, margin, margin, margin}
@@ -134,6 +121,122 @@ function UIVerticalProportionalSplitter(rect, paddingInside, margin, proportions
     })
 end
 
+--- Sets partitions paddings (**not** paddingInside)
+-- @within UIVerticalProportionalSplitter: Methods
+-- @function UIVerticalProportionalSplitter:setPadding
+-- @tparam int left
+-- @tparam int right
+-- @tparam int top
+-- @tparam int bottom
+-- @usage splitter:setPadding(10, 5, 10, 10)
+-- @usage -- You can also use direct assignment
+--splitter.padding = 5
+
+--- Sets global splitter margins
+-- @within UIVerticalProportionalSplitter: Methods
+-- @function UIVerticalProportionalSplitter:setMargin
+-- @tparam int left
+-- @tparam int right
+-- @tparam int top
+-- @tparam int bottom
+-- @usage splitter:setMargin(10, 5, 10, 10)
+-- @usage -- You can also use direct assignment
+--splitter.margin = 5
+
+--- Set padding for all partitions
+-- @within UIVerticalProportionalSplitter: Properties
+-- @tparam[writeonly] int padding
+-- @see UIVerticalProportionalSplitter:setPadding
+
+--- 
+-- @within UIVerticalProportionalSplitter: Properties
+-- @tparam int paddingLeft
+-- @see UIVerticalProportionalSplitter:setPadding
+
+--- 
+-- @within UIVerticalProportionalSplitter: Properties
+-- @tparam int paddingRight
+-- @see UIVerticalProportionalSplitter:setPadding
+
+--- 
+-- @within UIVerticalProportionalSplitter: Properties
+-- @tparam int paddingTop
+-- @see UIVerticalProportionalSplitter:setPadding
+
+--- 
+-- @within UIVerticalProportionalSplitter: Properties
+-- @tparam int paddingBottom
+-- @see UIVerticalProportionalSplitter:setPadding
+
+--- Set splitter margin for all sides
+-- @within UIVerticalProportionalSplitter: Properties
+-- @tparam[writeonly] int margin
+-- @see UIVerticalProportionalSplitter:setMargin
+
+--- 
+-- @within UIVerticalProportionalSplitter: Properties
+-- @tparam int marginLeft
+-- @see UIVerticalProportionalSplitter:setMargin
+
+--- 
+-- @within UIVerticalProportionalSplitter: Properties
+-- @tparam int marginRight
+-- @see UIVerticalProportionalSplitter:setMargin
+
+--- 
+-- @within UIVerticalProportionalSplitter: Properties
+-- @tparam int marginTop
+-- @see UIVerticalProportionalSplitter:setMargin
+
+--- 
+-- @within UIVerticalProportionalSplitter: Properties
+-- @tparam int marginBottom
+-- @see UIVerticalProportionalSplitter:setMargin
+
+--- Padding between partitions
+-- @within UIVerticalProportionalSplitter: Properties
+-- @tparam int paddingInside
+
+--- Returns input rect after applying margin
+-- @within UIVerticalProportionalSplitter: Properties
+-- @tparam[readonly] Rect inner
+
+--- 
+-- @within UIVerticalProportionalSplitter: Properties
+-- @tparam Rect rect
+
+--- Table of proportions that can either be absolute pixels or relative weights
+-- @within UIVerticalProportionalSplitter: Properties
+-- @tparam table[number] proportions
+
+--- Calculated partitions
+-- @within UIVerticalProportionalSplitter: Properties
+-- @tparam[readonly] table[Rect] partitions
+
+
+--- Creates new UIHorizontalProportionalSplitter
+-- @within Constructors
+-- @function UIHorizontalProportionalSplitter
+-- @tparam Rect rect — The rect to split
+-- @tparam int paddingInside — Padding between partitions
+-- @tparam int/table margin — Splitter margin:
+-- 
+-- * int — One margin for all sides
+-- * table — Margin for left, right, top and bottom sides
+-- @tparam table proportions — Proportions, each values can be:
+--
+-- * a number >= 1 — will be treated as an absolute pixel value
+-- * a number < 1 — will be treated as a relative weight
+-- @treturn table — UIHorizontalProportionalSplitter instance
+-- @usage local splitter = UIHorizontalProportionalSplitter(Rect(0, 0, 30, 600), 10, 0, {0.5, 0.3, 0.45})
+-- print(splitter.partitions[1]) -- Rect(0, 0, 30, 232)
+-- print(splitter.partitions[2]) -- Rect(0, 242, 30, 381.2)
+-- print(splitter.partitions[3]) -- Rect(0, 391.2, 0, 600)
+-- @usage local splitter = UIHorizontalProportionalSplitter(Rect(0, 0, 700, 30), 10, 5, {0.4, 20, 40, 0.6}) -- values > 1 treated as pixels:
+-- print(splitter[1]) -- Rect(5, 5, 25, 245)
+-- print(splitter[2]) -- Rect(5, 255, 25, 275)
+-- print(splitter[3]) -- Rect(5, 285, 25, 325)
+-- print(splitter[4]) -- Rect(5, 335, 25, 695)
 function UIHorizontalProportionalSplitter(rect, paddingInside, margin, proportions)
     if type(margin) ~= "table" then
         margin = {margin, margin, margin, margin}
@@ -229,3 +332,95 @@ function UIHorizontalProportionalSplitter(rect, paddingInside, margin, proportio
       end
     })
 end
+
+--- Sets partitions paddings (**not** paddingInside)
+-- @within UIHorizontalProportionalSplitter: Methods
+-- @function UIHorizontalProportionalSplitter:setPadding
+-- @tparam int left
+-- @tparam int right
+-- @tparam int top
+-- @tparam int bottom
+-- @usage splitter:setPadding(10, 5, 10, 10)
+-- @usage -- You can also use direct assignment
+--splitter.padding = 5
+
+--- Sets global splitter margins
+-- @within UIHorizontalProportionalSplitter: Methods
+-- @function UIHorizontalProportionalSplitter:setMargin
+-- @tparam int left
+-- @tparam int right
+-- @tparam int top
+-- @tparam int bottom
+-- @usage splitter:setMargin(10, 5, 10, 10)
+-- @usage -- You can also use direct assignment
+--splitter.margin = 5
+
+--- Set padding for all partitions
+-- @within UIHorizontalProportionalSplitter: Properties
+-- @tparam[writeonly] int padding
+-- @see UIHorizontalProportionalSplitter:setPadding
+
+--- 
+-- @within UIHorizontalProportionalSplitter: Properties
+-- @tparam int paddingLeft
+-- @see UIHorizontalProportionalSplitter:setPadding
+
+--- 
+-- @within UIHorizontalProportionalSplitter: Properties
+-- @tparam int paddingRight
+-- @see UIHorizontalProportionalSplitter:setPadding
+
+--- 
+-- @within UIHorizontalProportionalSplitter: Properties
+-- @tparam int paddingTop
+-- @see UIHorizontalProportionalSplitter:setPadding
+
+--- 
+-- @within UIHorizontalProportionalSplitter: Properties
+-- @tparam int paddingBottom
+-- @see UIHorizontalProportionalSplitter:setPadding
+
+--- Set splitter margin for all sides
+-- @within UIHorizontalProportionalSplitter: Properties
+-- @tparam[writeonly] int margin
+-- @see UIHorizontalProportionalSplitter:setMargin
+
+--- 
+-- @within UIHorizontalProportionalSplitter: Properties
+-- @tparam int marginLeft
+-- @see UIHorizontalProportionalSplitter:setMargin
+
+--- 
+-- @within UIHorizontalProportionalSplitter: Properties
+-- @tparam int marginRight
+-- @see UIHorizontalProportionalSplitter:setMargin
+
+--- 
+-- @within UIHorizontalProportionalSplitter: Properties
+-- @tparam int marginTop
+-- @see UIHorizontalProportionalSplitter:setMargin
+
+--- 
+-- @within UIHorizontalProportionalSplitter: Properties
+-- @tparam int marginBottom
+-- @see UIHorizontalProportionalSplitter:setMargin
+
+--- Padding between partitions
+-- @within UIHorizontalProportionalSplitter: Properties
+-- @tparam int paddingInside
+
+--- Returns input rect after applying margin
+-- @within UIHorizontalProportionalSplitter: Properties
+-- @tparam[readonly] Rect inner
+
+--- 
+-- @within UIHorizontalProportionalSplitter: Properties
+-- @tparam Rect rect
+
+--- Table of proportions that can either be absolute pixels or relative weights
+-- @within UIHorizontalProportionalSplitter: Properties
+-- @tparam table[number] proportions
+
+--- Calculated partitions
+-- @within UIHorizontalProportionalSplitter: Properties
+-- @tparam[readonly] table[Rect] partitions

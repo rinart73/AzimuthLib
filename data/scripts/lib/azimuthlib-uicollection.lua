@@ -1,8 +1,26 @@
+--- Improved vanilla UICollection
+-- @usage local UICollection = include("azimuthlib-uicollection")
+-- @usage -- You can access UICollection metatable to alter the class
+-- UICollection.meta.show = function()
+--     for _, element in pairs(self) do
+--         if someCondition(element) then
+--             element.visible = true
+--         end
+--     end
+-- end
+-- @module UICollection
 local UICollection = {}
 UICollection.__index = UICollection
 
---[[ You can pass elements on collection creation - example: local collection = UICollection(label1, button1, label2)
-They will be accessible as 'collection.Label1', 'collection.Button1', 'collection.Label2' ]]
+--- Creates new instance of the UICollection class. You can already add elements to collection here
+-- @within Constructors
+-- @function UICollection
+-- @tparam[opt] UIElement.. ... — Starting elements
+-- @usage local collection = UICollection(labelOne, button1, labelTwo)
+-- -- They will be accessible as 'UIElement class name' + 'number'
+-- collection.Label1.caption = "Label one"
+-- collection.Label2.caption = "Label two"
+-- collection.Button1.onPressedFunction = "onButton1PressedFunction"
 local function new(...)
     local collection = setmetatable({}, UICollection)
     local elements = {...}
@@ -12,9 +30,16 @@ local function new(...)
     return collection
 end
 
--- collection:insert(label) -> collection.Label1
--- collection:insert(label1, label2) -> collection.Label1, collection.Label2
--- Also you can just directly assign stuff: collection.myComboBox = comboBox1
+--- Adds elements to collection
+-- @within UICollection: Methods
+-- @tparam UIElement.. ... — Various elements
+-- @usage -- You can add multiple elements at once
+-- collection:insert(textField1, textField2)
+-- -- And access them
+-- collection.TextField1.text = "meh!"
+-- collection.TextField2.text = "meh?"
+-- @usage -- Or you can assign elements directly to collection
+-- collection.cancelButton = window:createButton(rect, "Cancel"%_t, "onCancelButtonPressed")
 function UICollection:insert(...)
     for _, element in pairs({...}) do
         local vartype = element.__avoriontype
@@ -33,12 +58,16 @@ function UICollection:insert(...)
     end
 end
 
+--- Shows collection elements
+-- @within UICollection: Methods
 function UICollection:show()
     for _, element in pairs(self) do
         element.visible = true
     end
 end
 
+--- Hides collection elements
+-- @within UICollection: Methods
 function UICollection:hide()
     for _, element in pairs(self) do
         element.visible = false

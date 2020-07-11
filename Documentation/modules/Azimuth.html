@@ -1,0 +1,953 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Azimuth - AzimuthLib API Docs</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>AzimuthLib</h1>
+
+<ul>
+  <li><a href="../AzimuthLib.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Log__Properties">Log: Properties</a></li>
+<li><a href="#Log__Methods">Log: Methods</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><strong>Azimuth</strong></li>
+  <li><a href="../modules/UICollection.html">UICollection</a></li>
+  <li><a href="../modules/UIColorPicker.html">UIColorPicker</a></li>
+  <li><a href="../modules/UIProportionalSplitter.html">UIProportionalSplitter</a></li>
+  <li><a href="../modules/UIRectangle.html">UIRectangle</a></li>
+  <li><a href="../modules/UTF8.html">UTF8</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>Azimuth</code></h1>
+<p>Basic module</p>
+<p>
+<ul>
+    <li>Saving &amp; loading config files</li>
+    <li>Logging functions with separate console and file log levels</li>
+    <li>Ordered 'pairs' function</li>
+    <li>'serialize' function for debugging tables and serializing data</li>
+    <li>Validation functions for int &amp; float values</li>
+</ul>
+</p>
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <pre class="example"><span class="keyword">local</span> Azimuth = include(<span class="string">"azimuthlib-basic"</span>)</pre>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#getFloat">getFloat (value, bounds[, default[, isBoundsEnum=false]])</a></td>
+	<td class="summary">Validation function that checks if a value is not empty, correct type and within borders</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#getInt">getInt (value, bounds[, default[, isBoundsEnum=false]])</a></td>
+	<td class="summary">Validation function that checks if a value is not empty, correct type and within borders</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#loadConfig">loadConfig (modName, options[, isSeedDependant=false[, modFolder=false]])</a></td>
+	<td class="summary">Loads mod config from file</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#logs">logs (modName, consoleLogLevel[, logLevel=consoleLogLevel])</a></td>
+	<td class="summary">Creates a new instance of the Log object</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#orderedPairs">orderedPairs (tbl[, sort[, ref]])</a></td>
+	<td class="summary">Allows to iterate a table by key in alphabetical order</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#saveConfig">saveConfig (modName, config[, options[, isSeedDependant=false[, modFolder=false[, minify=false]]]])</a></td>
+	<td class="summary">Saves mod config to file</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#serialize">serialize (o[, options[, prefix=""[, addCarriageReturn=false[, minify=false[, recursive=false]]]]])</a></td>
+	<td class="summary">Serializes table as readable multi-line text</td>
+	</tr>
+</table>
+<h2><a href="#Log__Properties">Log: Properties</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#consoleLogLevel">consoleLogLevel</a></td>
+	<td class="summary">Log level for console output
+ Use Log:setLevel for changing log level</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#isDebug">isDebug</a></td>
+	<td class="summary">If true, using :Debug will definetely print data in console or file</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#isError">isError</a></td>
+	<td class="summary">Used to understand if any of the log levels are big enough to write an error message in console/file</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#isInfo">isInfo</a></td>
+	<td class="summary">If true, using :Info will definetely print data in console or file</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#isWarning">isWarning</a></td>
+	<td class="summary">If true, using :Warn will definetely print data in console or file</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#logLevel">logLevel</a></td>
+	<td class="summary">Log level for file output
+ Use Log:setLevel for changing log level</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#minifyTables">minifyTables</a></td>
+	<td class="summary">When auto-serializing tables, should they be minified (one string without spaces)?</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#modName">modName</a></td>
+	<td class="summary">Mod name</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#showTableAddress">showTableAddress</a></td>
+	<td class="summary">When auto-serializing tables should tables display their address?</td>
+	</tr>
+</table>
+<h2><a href="#Log__Methods">Log: Methods</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#Debug">Debug (msg, ...)</a></td>
+	<td class="summary">Logs a debug message if specified consoleLogLevel &amp; logLevel allow that</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#Error">Error (msg, ...)</a></td>
+	<td class="summary">Logs an error if specified consoleLogLevel &amp; logLevel allow that</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#Info">Info (msg, ...)</a></td>
+	<td class="summary">Logs an info message if specified consoleLogLevel &amp; logLevel allow that</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#Warn">Warn (msg, ...)</a></td>
+	<td class="summary">Logs a warning if specified consoleLogLevel &amp; logLevel allow that</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#setLevel">setLevel (consoleLogLevel[, logLevel=consoleLogLevel])</a></td>
+	<td class="summary">Changes log level</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "getFloat"></a>
+    <strong>getFloat (value, bounds[, default[, isBoundsEnum=false]])</strong>
+    </dt>
+
+    <dd>
+
+    Validation function that checks if a value is not empty, correct type and within borders
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">var</span></span>
+          <span class="parameter">value</span>
+           — Any variable for checking
+          </li>
+          <li>
+              <span class="types"><span class="type">table</span></span>
+          <span class="parameter">bounds</span>
+           — 2-element table with lower and upper bounds. If isBoundsEnum is true however, it will be considered a table that contains all allowed values
+          </li>
+          <li>
+              <span class="types"><span class="type">number</span></span>
+          <span class="parameter">default</span>
+           (<em>optional</em>)
+           — If nil, incorrect value with result in nil. If number, incorrect value will return specified default value
+          </li>
+          <li>
+              <span class="types"><span class="type">number</span></span>
+          <span class="parameter">isBoundsEnum</span>
+           (<em>default</em>: false)
+           — Signals that bounds is a enum of allowed values
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">nil/float</span></span>
+        result</li>
+        <li>
+           <span class="types"><span class="type">bool</span></span>
+        isModified — If true, value was incorrect in some way</li>
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <li><pre class="example"><span class="comment">-- if incorrect returns nil. if outside of bounds returns closes bound
+</span><span class="keyword">local</span> result = Azimuth.getFloat(value, {<span class="number">4.4</span>, <span class="number">15</span>})</pre></li>
+        <li><pre class="example"><span class="comment">-- if incorrect returns default value (5.3). if outside of bounds, returns closest bound
+</span><span class="keyword">local</span> result = Azimuth.getFloat(value, {<span class="number">4.4</span>, <span class="number">15</span>}, <span class="number">5.3</span>)</pre></li>
+        <li><pre class="example"><span class="comment">-- bounds are treated like enum instead. if incorrect/doesn't match enum, returns default (5.3)
+</span><span class="keyword">local</span> result, isModified = Azimuth.getFloat(value, {<span class="number">4.4</span>, <span class="number">5.3</span>, <span class="number">9.9</span>}, <span class="number">5.3</span>, <span class="keyword">true</span>)
+<span class="keyword">if</span> isModified <span class="keyword">then</span>
+    <span class="global">print</span>(<span class="string">"passed value was originally invalid"</span>)
+<span class="keyword">end</span></pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "getInt"></a>
+    <strong>getInt (value, bounds[, default[, isBoundsEnum=false]])</strong>
+    </dt>
+
+    <dd>
+
+    Validation function that checks if a value is not empty, correct type and within borders
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">var</span></span>
+          <span class="parameter">value</span>
+           — Any variable for checking
+          </li>
+          <li>
+              <span class="types"><span class="type">table</span></span>
+          <span class="parameter">bounds</span>
+           — 2-element table with lower and upper bounds. If isBoundsEnum is true however, it will be considered a table that contains all allowed values
+          </li>
+          <li>
+              <span class="types"><span class="type">number</span></span>
+          <span class="parameter">default</span>
+           (<em>optional</em>)
+           — If nil, incorrect value with result in nil. If number, incorrect value will return specified default value
+          </li>
+          <li>
+              <span class="types"><span class="type">number</span></span>
+          <span class="parameter">isBoundsEnum</span>
+           (<em>default</em>: false)
+           — Signals that bounds is a enum of allowed values
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">nil/int</span></span>
+        result</li>
+        <li>
+           <span class="types"><span class="type">bool</span></span>
+        isModified — If true, value was incorrect in some way</li>
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <li><pre class="example"><span class="comment">-- if incorrect returns nil. if outside of bounds returns closes bound
+</span><span class="keyword">local</span> result = Azimuth.getInt(value, {<span class="number">4</span>, <span class="number">15</span>})</pre></li>
+        <li><pre class="example"><span class="comment">-- if incorrect returns default value (5). if outside of bounds, returns closest bound
+</span><span class="keyword">local</span> result = Azimuth.getInt(value, {<span class="number">4</span>, <span class="number">15</span>}, <span class="number">5</span>)</pre></li>
+        <li><pre class="example"><span class="comment">-- bounds are treated like enum instead. if incorrect/doesn't match enum, returns default (5)
+</span><span class="keyword">local</span> result, isModified = Azimuth.getInt(value, {<span class="number">4</span>, <span class="number">5</span>, <span class="number">9</span>}, <span class="number">5</span>, <span class="keyword">true</span>)</pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "loadConfig"></a>
+    <strong>loadConfig (modName, options[, isSeedDependant=false[, modFolder=false]])</strong>
+    </dt>
+
+    <dd>
+
+    Loads mod config from file
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">modName</span>
+           — Mod name (file name)
+          </li>
+          <li>
+              <span class="types"><span class="type">table</span></span>
+          <span class="parameter">options</span>
+
+<p> — Config options with default values and comments. Each element of the table can have following propertiesː</p>
+
+<ul>
+    <li>var default — Default value of a variable</li>
+    <li>number min/max <em>(optional)</em> — Minimum and maximum values of a variable (if it's a number)</li>
+    <li>string format <em>(optional)</em> — Selected way of rounding will be applied for loaded numeric variable (can be 'floor', 'round' or 'ceil')</li>
+</ul>
+
+          </li>
+          <li>
+              <span class="types"><span class="type">bool</span></span>
+          <span class="parameter">isSeedDependant</span>
+           (<em>default</em>: false)
+           — Set to true if config is specific for this server (it's useful only on client side)
+          </li>
+          <li>
+              <span class="types"><span class="type">bool/string</span></span>
+          <span class="parameter">modFolder</span>
+           (<em>default</em>: false)
+           — If true, then config will be loaded from "moddata/ModName/ModName.lua". Or you can specify different folder name
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">table</span></span>
+        modConfig — Loaded mod config table</li>
+        <li>
+           <span class="types"><span class="type">var</span></span>
+
+<p> status — Error/status Can be one of the followingː</p>
+
+<ul>
+    <li>string — It's an error message.</li>
+    <li>number, 1 — File wasn't found. It's a hint that you should re-save the config.</li>
+    <li>number, 0 — Config was successfully loaded, but was modified by <code>options</code> (maybe some variable didn't fit in the boundaries). It's a hint that you should re-save the config.</li>
+    <li>nil — Config was successfully loaded, no modifications were made.</li>
+</ul>
+</li>
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <li><pre class="example"><span class="keyword">local</span> tbl = Azimuth.loadConfig(<span class="string">"MyMod"</span>, { WindowWidth = { default = <span class="number">300</span> } })</pre></li>
+        <li><pre class="example"><span class="keyword">local</span> configOptions = {
+  WindowWidth = { default = <span class="number">300</span>, comment = <span class="string">"UI window width"</span>, min = <span class="number">100</span>, max = <span class="number">600</span>, format = <span class="string">"ceil"</span> }
+}
+<span class="keyword">local</span> modConfig, isModified = Azimuth.loadConfig(<span class="string">"MainConfigFile"</span>, configOptions, <span class="keyword">true</span>, <span class="string">"MyMod"</span>)
+<span class="keyword">if</span> isModified <span class="keyword">then</span>
+    Azimuth.saveConfig(<span class="string">"MainConfigFile"</span>, modConfig, configOptions, <span class="keyword">true</span>, <span class="string">"MyMod"</span>)
+<span class="keyword">end</span></pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "logs"></a>
+    <strong>logs (modName, consoleLogLevel[, logLevel=consoleLogLevel])</strong>
+    </dt>
+
+    <dd>
+
+    Creates a new instance of the Log object
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">modName</span>
+           — Your mod name
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">consoleLogLevel</span>
+
+<p> — Determines which level messages will be displayed in a console:</p>
+
+<ul>
+    <li>1 - Errors</li>
+    <li>2 - Errors &amp; Warnings</li>
+    <li>3 - Errors &amp; Warnings &amp; Info</li>
+    <li>4 - Errors &amp; Warnings &amp; Info &amp; Debug</li>
+</ul>
+
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">logLevel</span>
+           (<em>default</em>: consoleLogLevel)
+           — Same as consoleLogLevel, but messages will be written only in log file, not console
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Log</span></span>
+        log — an instance of the Log class
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <li><pre class="example"><span class="keyword">local</span> Logs = Azimuth.logs(<span class="string">"MyModName"</span>, <span class="number">2</span>)</pre></li>
+        <li><pre class="example"><span class="keyword">local</span> Logs = Azimuth.logs(<span class="string">"MyModName"</span>, <span class="number">2</span>, <span class="number">4</span>)</pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "orderedPairs"></a>
+    <strong>orderedPairs (tbl[, sort[, ref]])</strong>
+    </dt>
+
+    <dd>
+
+    Allows to iterate a table by key in alphabetical order
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">table</span></span>
+          <span class="parameter">tbl</span>
+           — Table
+          </li>
+          <li>
+              <span class="types"><span class="type">function</span></span>
+          <span class="parameter">sort</span>
+           (<em>optional</em>)
+            — Sorting function for keys
+          </li>
+          <li>
+              <span class="types"><span class="type">table</span></span>
+          <span class="parameter">ref</span>
+           (<em>optional</em>)
+           — A reference table, orderedPairs will add the 'len' attrute to it
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">function</span></span>
+        iterator
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <pre class="example"><span class="keyword">for</span> k, v <span class="keyword">in</span> Azimuth.orderedPairs(myTable, <span class="keyword">function</span>(tbl, firstKey, secondKey) <span class="keyword">return</span> tbl[firstKey] &lt; tbl[secondKey] <span class="keyword">end</span>) <span class="keyword">do</span>
+    <span class="global">print</span>(k, v)
+<span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "saveConfig"></a>
+    <strong>saveConfig (modName, config[, options[, isSeedDependant=false[, modFolder=false[, minify=false]]]])</strong>
+    </dt>
+
+    <dd>
+
+    Saves mod config to file
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">modName</span>
+           — Mod name (file name)
+          </li>
+          <li>
+              <span class="types"><span class="type">table</span></span>
+          <span class="parameter">config</span>
+           — Mod config table
+          </li>
+          <li>
+              <span class="types"><span class="type">table</span></span>
+          <span class="parameter">options</span>
+           (<em>optional</em>)
+
+<p> — Config options with default values and comments. Each element of the table can have following propertiesː</p>
+
+<ul>
+    <li>var default <em>(optional)</em> — Default value of a variable. Will be added to a commentary unless it's a table</li>
+    <li>string comment <em>(optional)</em> — Variable description </li>
+</ul>
+
+          </li>
+          <li>
+              <span class="types"><span class="type">bool</span></span>
+          <span class="parameter">isSeedDependant</span>
+           (<em>default</em>: false)
+           — Set to true if config is specific for this server (it's useful only on client side)
+          </li>
+          <li>
+              <span class="types"><span class="type">bool/string</span></span>
+          <span class="parameter">modFolder</span>
+           (<em>default</em>: false)
+           — If true, then config will be loaded from "moddata/ModName/ModName.lua". Or you can specify different folder name
+          </li>
+          <li>
+              <span class="types"><span class="type">bool</span></span>
+          <span class="parameter">minify</span>
+           (<em>default</em>: false)
+           — If true, strips saved config of all spaces and new lines
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">bool</span></span>
+        success</li>
+        <li>
+           <span class="types"><span class="type">string/nil</span></span>
+        error — Explains what went wrong</li>
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <pre class="example"><span class="keyword">local</span> configOptions = {
+  WindowWidth = { default = <span class="number">300</span>, comment = <span class="string">"UI window width"</span>, min = <span class="number">100</span>, max = <span class="number">600</span>, format = <span class="string">"ceil"</span> }
+}
+Azimuth.saveConfig(<span class="string">"MainConfigFile"</span>, modConfig, configOptions, <span class="keyword">false</span>, <span class="string">"MyMod"</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "serialize"></a>
+    <strong>serialize (o[, options[, prefix=""[, addCarriageReturn=false[, minify=false[, recursive=false]]]]])</strong>
+    </dt>
+
+    <dd>
+
+    Serializes table as readable multi-line text
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">table</span></span>
+          <span class="parameter">o</span>
+           — Table for serialization
+          </li>
+          <li>
+              <span class="types"><span class="type">table</span></span>
+          <span class="parameter">options</span>
+           (<em>optional</em>)
+           — Since this function was initially meant to aid in saving config files, you can add default value and commentary to the each top-level variable
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">prefix</span>
+           (<em>default</em>: "")
+           — Line prefix, used by the function itself (default: "")
+          </li>
+          <li>
+              <span class="types"><span class="type">bool</span></span>
+          <span class="parameter">addCarriageReturn</span>
+           (<em>default</em>: false)
+           — If true, function will use "\r\n" as new line instead of "\n". False by default because "\r\n" messes up Avorion file logs
+          </li>
+          <li>
+              <span class="types"><span class="type">bool</span></span>
+          <span class="parameter">minify</span>
+           (<em>default</em>: false)
+           — If true, the resulting string won't have spaces and line breaks. Disables 'prefix' and 'options'
+          </li>
+          <li>
+              <span class="types"><span class="type">bool</span></span>
+          <span class="parameter">recursive</span>
+           (<em>default</em>: false)
+           — If true, the resulting table dump will have "__address" field for each non-empty table, containing its address
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">string</span></span>
+        result — Serialized table
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <li><pre class="example"><span class="global">print</span>(Azimuth.serialize(myTable))</pre></li>
+        <li><pre class="example"><span class="global">print</span>(Azimuth.serialize({ myVar = <span class="number">30</span> }, { myVar = { default = <span class="number">20</span>, comment = <span class="string">"This variable does stuff"</span> } }))</pre></li>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Log__Properties"></a>Log: Properties</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "consoleLogLevel"></a>
+    <strong><span class="type">int</span> consoleLogLevel</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Log level for console output
+ Use Log:setLevel for changing log level
+
+
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../modules/Azimuth.html#setLevel">setLevel</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "isDebug"></a>
+    <strong><span class="type">bool</span> isDebug</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    If true, using :Debug will definetely print data in console or file
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isError"></a>
+    <strong><span class="type">bool</span> isError</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Used to understand if any of the log levels are big enough to write an error message in console/file
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isInfo"></a>
+    <strong><span class="type">bool</span> isInfo</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    If true, using :Info will definetely print data in console or file
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isWarning"></a>
+    <strong><span class="type">bool</span> isWarning</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    If true, using :Warn will definetely print data in console or file
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "logLevel"></a>
+    <strong><span class="type">int</span> logLevel</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Log level for file output
+ Use Log:setLevel for changing log level
+
+
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../modules/Azimuth.html#setLevel">setLevel</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "minifyTables"></a>
+    <strong><span class="type">bool</span> minifyTables</strong>
+    </dt>
+
+    <dd>
+
+    When auto-serializing tables, should they be minified (one string without spaces)?
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "modName"></a>
+    <strong><span class="type">string</span> modName</strong>
+    </dt>
+
+    <dd>
+
+    Mod name
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "showTableAddress"></a>
+    <strong><span class="type">bool</span> showTableAddress</strong>
+    </dt>
+
+    <dd>
+
+    When auto-serializing tables should tables display their address?
+
+
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Log__Methods"></a>Log: Methods</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Debug"></a>
+    <strong>Debug (msg, ...)</strong>
+    </dt>
+
+    <dd>
+
+    Logs a debug message if specified consoleLogLevel &amp; logLevel allow that
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">msg</span>
+           — Log message. May include %s, %d and other parameters similarly to the string.format
+          </li>
+          <li>
+              <span class="types"><span class="type">var..</span></span>
+          <span class="parameter">...</span>
+           — Various arguments
+          </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Error"></a>
+    <strong>Error (msg, ...)</strong>
+    </dt>
+
+    <dd>
+
+    Logs an error if specified consoleLogLevel &amp; logLevel allow that
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">msg</span>
+           — Log message. May include %s, %d and other parameters similarly to the string.format
+          </li>
+          <li>
+              <span class="types"><span class="type">var..</span></span>
+          <span class="parameter">...</span>
+           — Various arguments
+          </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <li><pre class="example">logs:Error(<span class="string">"Something went wrong"</span>)</pre></li>
+        <li><pre class="example">mylogs:Error(<span class="string">"Ship '%s' got error code '%i' at coordinates: %s"</span>, Entity().name, errorCode, {x = <span class="number">15</span>, y = <span class="number">28</span>})</pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Info"></a>
+    <strong>Info (msg, ...)</strong>
+    </dt>
+
+    <dd>
+
+    Logs an info message if specified consoleLogLevel &amp; logLevel allow that
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">msg</span>
+           — Log message. May include %s, %d and other parameters similarly to the string.format
+          </li>
+          <li>
+              <span class="types"><span class="type">var..</span></span>
+          <span class="parameter">...</span>
+           — Various arguments
+          </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Warn"></a>
+    <strong>Warn (msg, ...)</strong>
+    </dt>
+
+    <dd>
+
+    Logs a warning if specified consoleLogLevel &amp; logLevel allow that
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">msg</span>
+           — Log message. May include %s, %d and other parameters similarly to the string.format
+          </li>
+          <li>
+              <span class="types"><span class="type">var..</span></span>
+          <span class="parameter">...</span>
+           — Various arguments
+          </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <li><pre class="example">logs:Warn(<span class="string">"Warning message"</span>)</pre></li>
+        <li><pre class="example">mylogs:Warn(<span class="string">"A deprecated method '%s' was used"</span>, methodName)</pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "setLevel"></a>
+    <strong>setLevel (consoleLogLevel[, logLevel=consoleLogLevel])</strong>
+    </dt>
+
+    <dd>
+
+    Changes log level
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">consoleLogLevel</span>
+           — Determines which level messages will be displayed in a console. 1 - Errors, 2 - Errors &amp; Warnings, 3 - E &amp; W &amp; Info, 4 - E &amp; W &amp; I &amp; Debug
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">logLevel</span>
+           (<em>default</em>: consoleLogLevel)
+           — Same as consoleLogLevel, but messages will be written only in log file, not console
+          </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2020-07-11 17:14:24 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

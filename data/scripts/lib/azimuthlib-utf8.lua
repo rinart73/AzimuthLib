@@ -1,42 +1,16 @@
---[[
-This UTF-8 lib was made specifically for Avorion to help modders and to show devs that we need native UTF-8 support in Lua.
-I tried to collect and construct the best implementations of functions with a goal of achieving max performance while keeping input and output relatively close to the native Lua 5.2/5.3 functions.
-These functions will assume that you will pass correct utf-8 strings and arguments (no checks made).
-
-While this lib can be used in other projects, some functions (such as `utf8.compare`) may produce wrong results because they depend on specific language data that only exists for languages that Avorion has translation for.
-
-TODO List:
-+ string.byte
-+ string.char
-~ string.find (only `plain = true`)
-- string.gmatch
-- string.gsub
-+ string.len
-+ string.lower - Depends on 'utf8-lower.lua'
-- string.match
-+ string.reverse
-+ string.sub
-+ string.upper - Depends on 'utf8-lower.lua'
-+ utf8.offset
-+ utf8.codepoint
-+ utf8.codes
-
-New functions:
-+ utf8.singlebyte (c)
-    Returns codepoint for a single utf8 character. Basically equal to utf8.byte(char), but faster
-+ utf8.table (s)
-    Returns string as char table
-+ utf8.compare(a, b, sensitive)
-    Returns 'true' if string `a` should be placed before `b` and 'false' otherwise. You can pass 'sensitive=true' to not ignore case
-    Depends on 'utf8-compare.lua'
-
-Thanks to:
-* https://gist.github.com/Stepets/3b4dbaf5e6e6a60f3862
-* https://stackoverflow.com/a/29217368/3768314
-
-]]
-
-local utf8 = {}
+--- UTF-8 library for Avorion to help modders and to show devs that we need native UTF-8 support in Lua.
+---
+--- I tried to collect and construct the best implementations of functions with a goal of achieving max performance while keeping input and output relatively close to the native Lua 5.2/5.3 functions.
+---
+--- These functions will assume that you will pass correct utf-8 strings and arguments (no checks made).
+---
+--- Thanks to:
+---
+--- * https://gist.github.com/Stepets/3b4dbaf5e6e6a60f3862
+--- * https://stackoverflow.com/a/29217368/3768314
+-- @usage local UTF8 = include("azimuthlib-utf8")
+-- @module UTF8
+local UTF8 = {}
 
 local gmatch = string.gmatch
 local len = string.len
@@ -58,24 +32,37 @@ local alphabetSort
 
 local lang = getCurrentLanguage ~= nil and getCurrentLanguage() or "en" -- use english for console server
 
-
-utf8.charpattern = "([%z\1-\127\194-\244][\128-\191]*)"
-
---[[
-Returns string as utf8 char table
-]]
-function utf8.table(s)
+local function str_bytes(s, l)
+    if not l then l = 0 end
     local r = {}
-    for chr in gmatch(s, utf8.charpattern) do
+    local bytes = 1
+    for chr in gmatch(s, UTF8.charpattern) do
+        r[#r+1] = bytes
+        if #r == l then return r end
+        bytes = bytes + len(chr)
+    end
+    return r
+end
+
+--- Pattern that is used to find UTF-8 characters
+-- @tparam[readonly] string charpattern
+UTF8.charpattern = "([%z\1-\127\194-\244][\128-\191]*)"
+
+--- Returns string as UTF-8 char table
+--- @tparam string s — Input string
+--- @treturn table — UTF-8 char table
+function UTF8.table(s)
+    local r = {}
+    for chr in gmatch(s, UTF8.charpattern) do
         r[#r+1] = chr
     end
     return r
 end
 
---[[
-Returns codepoint for a single utf8 character. Basically equal to utf8.byte(char), but faster
-]]
-function utf8.singlebyte(c)
+--- Returns numerical code of a single UTF-8 character
+-- @tparam string c — Input character
+-- @treturn int — Character code
+function UTF8.singlebyte(c)
     local bytes = len(c)
     if bytes == 1 then return byte(c) end
     if bytes == 2 then
@@ -90,16 +77,25 @@ function utf8.singlebyte(c)
     return (byte0 - 0xF0) * 0x40000 + (byte1 - 0x80) * 0x1000 + (byte2 - 0x80) * 0x40 + (byte3 - 0x80) 
 end
 
-function utf8.byte(s, i, j) -- string.byte (s [, i [, j]])
+--- Returns numerical codes of UTF-8 characters in a range (similarly to string.byte)
+--- 
+--- For getting code of a single character it's advised UTF8.singlebyte (performance-wise)
+-- @tparam string s — Input string
+-- @tparam int i — Starting position
+-- @tparam[opt=i] int j — Ending position (default: equals i)
+-- @treturn int.. — Character codes
+-- @see string.byte
+-- @see UTF8.singlebyte
+function UTF8.byte(s, i, j)
     if not i then i = 1 end
     if not j then j = i end
     j = j - i + 1
     
     local r = {}
-    for chr in gmatch(s, utf8.charpattern) do
+    for chr in gmatch(s, UTF8.charpattern) do
         if i == 1 then
             if j ~= 0 then
-                r[#r+1] = utf8.singlebyte(chr)
+                r[#r+1] = UTF8.singlebyte(chr)
                 j = j - 1
             else
                 return unpack(r)
@@ -111,10 +107,10 @@ function utf8.byte(s, i, j) -- string.byte (s [, i [, j]])
     return unpack(r)
 end
 
---[[
-The same as utf8.char but for a single code. For performance reasons, because calling utf8.char for 1 codepoint is SLOW
-]]
-function utf8.singlechar(code)
+--- Returns UTF-8 character that matches passed numerical code
+-- @tparam int code — Input character code
+-- @treturn string — Character
+function UTF8.singlechar(code)
     if code < 0x80 then
         return char(code)
     end
@@ -133,31 +129,44 @@ function utf8.singlechar(code)
     return char(byte0, byte1, floor(code / 0x40) + 0x80, code % 0x40 + 0x80)
 end
 
-function utf8.char(...) -- string.char (...)
+--- Returns UTF-8 string made of the passed numerical codes (similarly to string.char)
+--- 
+--- For getting char from a single character it's advised UTF8.singlechar (performance-wise)
+-- @tparam int.. codes — Input character codes
+-- @treturn string — UTF-8 string
+-- @see string.char
+-- @see UTF8.singlechar
+function UTF8.char(...)
     local r = {...}
     local code
     for i = 1, #r do
-        r[i] = utf8.singlechar(r[i])
+        r[i] = UTF8.singlechar(r[i])
     end
     return concat(r)
 end
 
-local function str_bytes(s, l)
-    if not l then l = 0 end
-    local r = {}
-    local bytes = 1
-    for chr in gmatch(s, utf8.charpattern) do
-        r[#r+1] = bytes
-        if #r == l then return r end
-        bytes = bytes + len(chr)
-    end
-    return r
-end
-
---[[
-Currently only supports `plain` = true (no patterns)
-]]
-function utf8.find(s, pattern, init, plain, simple) -- string.find (s, pattern [, init [, plain]])
+--- Finds the first occurrence of the pattern in the string passed. If an instance of the pattern is found:
+---
+--- * If simple = false (default) — a pair of values representing the start and end of the string is returned
+--- * If simple = true — 'true' is returned (performance-friendly option if you don't need start and end positions)
+--- 
+--- If the pattern cannot be found nil is returned.
+-- @tparam string s — Input string
+-- @tparam string pattern — Plain substring (**Patterns are currently not supported**)
+-- @tparam[opt=1] int init — Start search from specified position (default: 1)
+-- @tparam[opt=true] bool plain — True if patterns aren't used (**Currently always true no matter what you pass**)
+-- @tparam[opt=false] bool simple — True if function shouldn't return start and end position of a found substring (default: false)
+-- @treturn nil/true/int start:
+--
+-- * nil — nothing found
+-- * true — substring found, but 'simple = true'
+-- * number — start position ('simple = false')
+-- @treturn nil/int end:
+--
+-- * nil — nothing found or 'simple = true'
+-- * number — end position ('simple = false')
+-- @see string.find
+function UTF8.find(s, pattern, init, plain, simple)
     plain = true
     if init == nil then init = 1
     elseif init > 1 then
@@ -181,7 +190,7 @@ function utf8.find(s, pattern, init, plain, simple) -- string.find (s, pattern [
     local posEnd = 0
     local bytes = 1
     local pos = 0
-    for chr in gmatch(s, utf8.charpattern) do
+    for chr in gmatch(s, UTF8.charpattern) do
         pos = pos + 1
         if posBegin == 0 and r[1] == bytes then
             posBegin = pos
@@ -201,18 +210,29 @@ function utf8.find(s, pattern, init, plain, simple) -- string.find (s, pattern [
     return unpack(r)
 end
 
-function utf8.len(s) -- string.len (s)
+--- Returns the length of the string passed
+-- @tparam string s — Input string
+-- @treturn int — String length
+-- @see string.len
+function UTF8.len(s)
     local r = 0
-    for _ in gmatch(s, utf8.charpattern) do
+    for _ in gmatch(s, UTF8.charpattern) do
         r = r + 1
     end
     return r
 end
 
---[[
-Optional argument `asTable` - return as char table
-]]
-function utf8.lower(s, asTable) -- string.lower (s)
+--- Converts UTF-8 uppercase characters into lower case
+--- 
+--- Uses 'azimuthlib-utf8-lower' file as a helper
+-- @tparam string s — Input string
+-- @tparam[opt=false] bool asTable — If true, will return result as a char table (default: false)
+-- @treturn string/table result:
+--
+-- * string — if 'asTable = false'
+-- * table — if 'asTable = true'
+-- @see string.lower
+function UTF8.lower(s, asTable)
     if not lowerCase then
         local c, b
         if lowerCase ~= false then
@@ -221,20 +241,24 @@ function utf8.lower(s, asTable) -- string.lower (s)
         end
         if not c then
             eprint("[ERROR][AzimuthLib]: utf8 library failed to load 'upper to lower' file")
-            return not asTable and lower(s) or utf8.table(lower(s))
+            return not asTable and lower(s) or UTF8.table(lower(s))
         end
         lowerCase = b
     end
     local r = {}
-    for chr in gmatch(s, utf8.charpattern) do
+    for chr in gmatch(s, UTF8.charpattern) do
         r[#r+1] = lowerCase[chr] and lowerCase[chr] or chr
     end
     return not asTable and concat(r) or r
 end
 
-function utf8.reverse(s) -- string.reverse (s)
+--- Reverses a string
+-- @tparam string s — Input string
+-- @treturn string — Reversed string
+-- @see string.reverse
+function UTF8.reverse(s)
     local r = {}
-    for chr in gmatch(s, utf8.charpattern) do
+    for chr in gmatch(s, UTF8.charpattern) do
         r[#r+1] = chr
     end
     for i = 1, floor(#r * 0.5) do
@@ -243,9 +267,15 @@ function utf8.reverse(s) -- string.reverse (s)
     return concat(r)
 end
 
-function utf8.sub(s, i, j) -- string.sub (s, i [, j])
+--- Returns a substring of the string passed
+-- @tparam string s — Input string
+-- @tparam int i — Starting character position (**not** byte position)
+-- @tparam[opt] int j — Ending character position. If not specified the substring will end at the end of the string
+-- @treturn string — Substring
+-- @see string.sub
+function UTF8.sub(s, i, j)
     local str = {}
-    for chr in gmatch(s, utf8.charpattern) do
+    for chr in gmatch(s, UTF8.charpattern) do
         str[#str+1] = chr
     end
     if j == nil or j == -1 then j = #str end
@@ -254,10 +284,17 @@ function utf8.sub(s, i, j) -- string.sub (s, i [, j])
     return concat({unpack(str, i, j)})
 end
 
---[[
-Added optional argument `asTable` - return as char table
-]]
-function utf8.upper(s, asTable) -- string.upper (s)
+--- Converts UTF-8 lowercase characters into upper case
+--- 
+--- Uses 'azimuthlib-utf8-lower' file as a helper
+-- @tparam string s — Input string
+-- @tparam[opt=false] bool asTable — If true, will return result as a char table (default: false)
+-- @treturn string/table result:
+--
+-- * string — if 'asTable = false'
+-- * table — if 'asTable = true'
+-- @see string.upper
+function UTF8.upper(s, asTable)
     if not upperCase then
         if not lowerCase then
             local c, b
@@ -267,7 +304,7 @@ function utf8.upper(s, asTable) -- string.upper (s)
             end
             if not c then
                 eprint("[ERROR][AzimuthLib]: utf8 library failed to load 'upper to lower' file")
-                return not asTable and upper(s) or utf8.table(upper(s))
+                return not asTable and upper(s) or UTF8.table(upper(s))
             end
             lowerCase = b
         end
@@ -279,16 +316,27 @@ function utf8.upper(s, asTable) -- string.upper (s)
         end
     end
     local r = {}
-    for chr in gmatch(s, utf8.charpattern) do
+    for chr in gmatch(s, UTF8.charpattern) do
         r[#r+1] = upperCase[chr] and upperCase[chr] or chr
     end
     return not asTable and concat(r) or r
 end
 
-function utf8.offset(s, n, i) -- utf8.offset (s, n [, i])
+--- Returns the byte-index of the n'th UTF-8 character after the given byte position i
+-- @tparam string s — Input string
+-- @tparam int n — Character index
+-- @tparam[opt] int i — Starting byte position:
+--
+-- * default: 1 — If n is positive
+-- * default: -1 — If n is negative
+-- @treturn int
+--
+-- * byte-index of the n'th UTF-8 character after the given byte position i — If n != 0
+-- * byte-index of the UTF-8 character byte position i lies within — If n == 0
+function UTF8.offset(s, n, i)
     local length = 0
     local pos = {}
-    for k, v in utf8.codes(s) do
+    for k, v in UTF8.codes(s) do
         length = length + 1
         pos[#pos+1] = k
     end
@@ -309,28 +357,38 @@ function utf8.offset(s, n, i) -- utf8.offset (s, n [, i])
     end
 end
 
-function utf8.codepoint(s, i, j) -- utf8.codepoint (s [, i [, j]])
+--- Returns the numerical codes (as numbers) from all characters in the given string that start between byte position i and j
+-- @tparam string s — Input string
+-- @tparam int i — Starting byte position
+-- @tparam[opt=i] int j — Ending byte position (default: equals i)
+-- @treturn int.. — Character codes
+-- @see string.byte
+function UTF8.codepoint(s, i, j)
     if not i then i = 1 end
     if not j then j = i end
     local r = {}
     local bytes = 1
-    for chr in gmatch(s, utf8.charpattern) do
+    for chr in gmatch(s, UTF8.charpattern) do
         if bytes > j then return unpack(r) end
         if bytes >= i then
-            r[#r+1] = utf8.singlebyte(chr)
+            r[#r+1] = UTF8.singlebyte(chr)
         end
         bytes = bytes + len(chr)
     end
     return unpack(r)
 end
 
-function utf8.codes(s) -- utf8.codes (s)
+--- Returns an iterator (like string.gmatch) which returns both the position and codepoint of each utf8 character in the string
+-- @tparam string s — Input string
+-- @treturn function iterator
+-- @see string.gmatch
+function UTF8.codes(s)
     local order = {}
     local r = {}
     local bytes = 1
-    for chr in gmatch(s, utf8.charpattern) do
+    for chr in gmatch(s, UTF8.charpattern) do
         order[#order+1] = bytes
-        r[bytes] = utf8.singlebyte(chr)
+        r[bytes] = UTF8.singlebyte(chr)
         bytes = bytes + len(chr)
     end
     r = {order, r}
@@ -346,23 +404,23 @@ function utf8.codes(s) -- utf8.codes (s)
     end
 end
 
---[[
-Returns 'true' if string a should be placed before b and 'false' otherwise.
-You can pass 'sensitive=true' to not ignore case
-Example: table.sort(mytable, utf8.compare)
-Example: table.sort(mytable, function(a,b) return utf8.compare(a, b, true) end) or table.sort(mytable, utf8.comparesensitive)
-]]
-function utf8.comparesensitive(a, b)
-    return utf8.compare(a, b, true)
-end
-
-function utf8.compare(a, b, sensitive)
+--- Compares two strings
+--- 
+--- Uses 'azimuthlib-utf8-compare' file as a helper
+-- @tparam string a — Input string a
+-- @tparam string b — Input string b
+-- @tparam[opt=false] bool sensitive — If true, function will be case-sensitive (default: false)
+-- @treturn bool — 'true' if string a should be placed before b and 'false' otherwise
+-- @usage table.sort(mytable, UTF8.compare)
+-- @usage table.sort(mytable, function(a, b) return UTF8.compare(a, b, true) end)
+-- @see UTF8.comparesensitive
+function UTF8.compare(a, b, sensitive)
     if not sensitive then
-        a = utf8.lower(a, true)
-        b = utf8.lower(b, true)
+        a = UTF8.lower(a, true)
+        b = UTF8.lower(b, true)
     else
-        a = utf8.table(a)
-        b = utf8.table(b)
+        a = UTF8.table(a)
+        b = UTF8.table(b)
     end
     
     if not alphabetSort then
@@ -398,8 +456,8 @@ function utf8.compare(a, b, sensitive)
             end
             if _type ~= 'string' then bf = true end
         end
-        if af and not bf then b[i] = utf8.singlebyte(b[i]) end
-        if not af and bf then a[i] = utf8.singlebyte(a[i]) end
+        if af and not bf then b[i] = UTF8.singlebyte(b[i]) end
+        if not af and bf then a[i] = UTF8.singlebyte(a[i]) end
         
         if a[i] < b[i] then
             return true
@@ -413,6 +471,18 @@ function utf8.compare(a, b, sensitive)
     return #a < #b
 end
 
+--- Compares two strings case-sensitively. It's just a shortcut that passes 'sensitive = true'
+--- 
+--- Uses 'azimuthlib-utf8-compare' file as a helper
+-- @tparam string a — Input string a
+-- @tparam string b — Input string b
+-- @treturn bool — 'true' if string a should be placed before b and 'false' otherwise
+-- @usage table.sort(mytable, UTF8.comparesensitive)
+-- @see UTF8.compare
+function UTF8.comparesensitive(a, b)
+    return UTF8.compare(a, b, true)
+end
+
 -- validation function
 -- getString(value, default [, minLen [, maxLen [, allowedChars [, forbiddenChars]]]])
 --[[ Performs checks on a potential string and returns it.
@@ -423,12 +493,26 @@ end
 * allowedChars (string) - Similar to TextBox allowedCharacters.
 * forbiddenChars (string) - Similar to TextBox forbiddenCharacters.
 ]]
-function utf8.getString(value, default, minLen, maxLen, allowedChars, forbiddenChars)
+
+--- Performs checks on a potential string and returns it
+-- @tparam var value — Variable for validation
+-- @tparam string default — Default value, will be returned if value is incorrect or too short
+-- @tparam[opt] int minLen — If present, string length should be at least minLen characters
+-- @tparam[opt] int maxLen — If present, string length should be no longer than maxLen characters, excess will be removed
+-- @tparam[opt] string allowedChars — If present, string should contain only specified characters, others will be removed
+-- @tparam[opt] string forbiddenChars — If present, string should not contain specified characters, they will be removed
+-- @treturn string — Resulting string
+-- @treturn bool isModified — If true, value was changed in some way
+function UTF8.getString(value, default, minLen, maxLen, allowedChars, forbiddenChars)
+    local isModified = false
+    if type(value) ~= "string" then
+        isModified = true
+    end
     value = tostring(value)
-    if not value then return default end
-    local valueArray = utf8.table(value)
+    if not value then return default, true end
+    local valueArray = UTF8.table(value)
     if allowedChars then
-        allowedChars = utf8.table(allowedChars)
+        allowedChars = UTF8.table(allowedChars)
         local arr = {}
         for _, v in ipairs(allowedChars) do
             arr[v] = true
@@ -437,28 +521,32 @@ function utf8.getString(value, default, minLen, maxLen, allowedChars, forbiddenC
         for _, v in ipairs(valueArray) do
             if arr[v] then
                 newArray[#newArray+1] = v
+            else
+                isModified = true
             end
         end
         valueArray = newArray
     end
     if forbiddenChars then
-        forbiddenChars = utf8.table(forbiddenChars)
+        forbiddenChars = UTF8.table(forbiddenChars)
         local arr = {}
         for _, v in ipairs(forbiddenChars) do
             arr[v] = true
         end
         local newArray = {}
         for _, v in ipairs(valueArray) do
-            if not arr[v] then
+            if arr[v] then
+                isModified = true
+            else
                 newArray[#newArray+1] = v
             end
         end
         valueArray = newArray
     end
     local length = #valueArray
-    if minLen and length < minLen then return default end
-    if maxLen and length > maxLen then return table.concat(valueArray, nil, 1, maxLen) end
-    return table.concat(valueArray)
+    if minLen and length < minLen then return default, true end
+    if maxLen and length > maxLen then return concat(valueArray, nil, 1, maxLen), true end
+    return concat(valueArray), isModified
 end
 
-return utf8
+return UTF8

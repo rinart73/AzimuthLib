@@ -1,0 +1,1439 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>UIColorPicker - AzimuthLib API Docs</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>AzimuthLib</h1>
+
+<ul>
+  <li><a href="../AzimuthLib.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Constructors">Constructors</a></li>
+<li><a href="#UIColorPicker__Methods">UIColorPicker: Methods</a></li>
+<li><a href="#UIColorPicker__Callbacks">UIColorPicker: Callbacks</a></li>
+<li><a href="#UIColorPicker__Properties">UIColorPicker: Properties</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/Azimuth.html">Azimuth</a></li>
+  <li><a href="../modules/UICollection.html">UICollection</a></li>
+  <li><strong>UIColorPicker</strong></li>
+  <li><a href="../modules/UIProportionalSplitter.html">UIProportionalSplitter</a></li>
+  <li><a href="../modules/UIRectangle.html">UIRectangle</a></li>
+  <li><a href="../modules/UTF8.html">UTF8</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>UIColorPicker</code></h1>
+<p>A color picker</p>
+<p>
+
+</p>
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <pre class="example">include(<span class="string">"azimuthlib-uicolorpicker"</span>)</pre>
+    </ul>
+
+
+<h2><a href="#Constructors">Constructors</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#UIColorPicker">UIColorPicker (namespace, parent)</a></td>
+	<td class="summary">Creates new UIColorPicker with its elements</td>
+	</tr>
+</table>
+<h2><a href="#UIColorPicker__Methods">UIColorPicker: Methods</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#hide">hide ()</a></td>
+	<td class="summary">Hides color picker</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#setAlpha">setAlpha (value)</a></td>
+	<td class="summary">Sets alpha value.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#setHue">setHue (value)</a></td>
+	<td class="summary">Sets color picker hue</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#setSaturation">setSaturation (value)</a></td>
+	<td class="summary">Sets saturation.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#setValue">setValue (value)</a></td>
+	<td class="summary">Sets color value.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#show">show ([size=vec2(400，300)[, title="Pick a color"%_t[, mode="HSVA"[, defaultColor=ColorRGB(1，0，0)[, onApplyCallback[, onCancelCallback[, valueSliderMin=0[, valueSliderMax=1[, alphaSliderMin=0[, alphaSliderMax=1]]]]]]]]]])</a></td>
+	<td class="summary">Shows color picker window, adjusted to desired mode and size</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#update">update (timeStep)</a></td>
+	<td class="summary">Updates color picker (checks for mouse position and clicks).</td>
+	</tr>
+</table>
+<h2><a href="#UIColorPicker__Callbacks">UIColorPicker: Callbacks</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#onApplyCallback">onApplyCallback (color, element)</a></td>
+	<td class="summary">Fires when user presses 'Apply' button if it was specified in the 'show' call</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#onCancelCallback">onCancelCallback (element)</a></td>
+	<td class="summary">Fires when user presses 'Cancel' button if it was specified in the 'show' call</td>
+	</tr>
+</table>
+<h2><a href="#UIColorPicker__Properties">UIColorPicker: Properties</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#alphaGradient">alphaGradient</a></td>
+	<td class="summary">Alpha gradient picture</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#alphaGradientBackground">alphaGradientBackground</a></td>
+	<td class="summary">Alpha gradient background</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#alphaInnerBorder">alphaInnerBorder</a></td>
+	<td class="summary">Inner border for alpha gradient</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#alphaOuterBorder">alphaOuterBorder</a></td>
+	<td class="summary">Outer border for alpha gradient</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#alphaPosition">alphaPosition</a></td>
+	<td class="summary">Container with two rects, used to display alpha position</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#applyButton">applyButton</a></td>
+	<td class="summary">'Apply' button</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#cancelButton">cancelButton</a></td>
+	<td class="summary">'Cancel' button</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#caption">caption</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#center">center</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#colorDisplay">colorDisplay</a></td>
+	<td class="summary">Displays resulting color</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#colorInnerBorder">colorInnerBorder</a></td>
+	<td class="summary">Inner border for color display</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#colorOuterBorder">colorOuterBorder</a></td>
+	<td class="summary">Outer border for color display</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#colorTextBox">colorTextBox</a></td>
+	<td class="summary">Displays resulting color as HEX sequence and allows to change it</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#colorsInnerBorder">colorsInnerBorder</a></td>
+	<td class="summary">Inner border for color palette</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#colorsOuterBorder">colorsOuterBorder</a></td>
+	<td class="summary">Outer border for color palette</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#colorsPalette">colorsPalette</a></td>
+	<td class="summary">Color palette picture</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#colorsPaletteBackground">colorsPaletteBackground</a></td>
+	<td class="summary">Color palette background (white or black)</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#colorsPosition">colorsPosition</a></td>
+	<td class="summary">Container with two rects, used to display palette color position</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#consumeAllEvents">consumeAllEvents</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#height">height</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#isGalaxyMap">isGalaxyMap</a></td>
+	<td class="summary">Indicates if this color picker belong to the GalaxyMap</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#localCenter">localCenter</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#localPosition">localPosition</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#localRect">localRect</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#lower">lower</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#mode">mode</a></td>
+	<td class="summary">Color mode</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#mouseOver">mouseOver</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#moveable">moveable</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#namespace">namespace</a></td>
+	<td class="summary">Your mod namespace</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#noActionsTimer">noActionsTimer</a></td>
+	<td class="summary">Used to prevent sliders and buttons from working for a short period of time after user entered color hexcode and clicked away</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#position">position</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#rect">rect</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#size">size</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#tooltip">tooltip</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#transparency">transparency</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#upper">upper</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#valueGradient">valueGradient</a></td>
+	<td class="summary">'value' gradient picture (used to adjust value in HSxx mode or saturation in HVxx mode)</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#valueGradientBackground">valueGradientBackground</a></td>
+	<td class="summary">Value/Saturation background (black or white)</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#valueInnerBorder">valueInnerBorder</a></td>
+	<td class="summary">Inner border for value gradient</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#valueOuterBorder">valueOuterBorder</a></td>
+	<td class="summary">Outer border for value gradient</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#valuePosition">valuePosition</a></td>
+	<td class="summary">Container with two rects, used to display 'value' position</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#visible">visible</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#width">width</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#window">window</a></td>
+	<td class="summary">Color picker window</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Constructors"></a>Constructors</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "UIColorPicker"></a>
+    <strong>UIColorPicker (namespace, parent)</strong>
+    </dt>
+
+    <dd>
+
+    Creates new UIColorPicker with its elements
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">table</span></span>
+          <span class="parameter">namespace</span>
+           — Your mod namespace
+          </li>
+          <li>
+              <span class="types"><span class="type">ScriptUI/GalaxyMap/UIContainer</span></span>
+          <span class="parameter">parent</span>
+           — Parent element</p>
+
+<p> <strong>(!)</strong> If you're planning to use color picker on Galaxy Map, pass GalaxyMap() as parent, <strong>NOT</strong> its child elements
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">table</span></span>
+        — UIColorPicker instance
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <pre class="example"><span class="keyword">local</span> uiColorPicker
+<span class="keyword">function</span> MyModNamespace.initUI()
+    uiColorPicker = UIColorPicker(MyModNamespace, ScriptUI())
+<span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="UIColorPicker__Methods"></a>UIColorPicker: Methods</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "hide"></a>
+    <strong>hide ()</strong>
+    </dt>
+
+    <dd>
+
+    Hides color picker
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "setAlpha"></a>
+    <strong>setAlpha (value)</strong>
+    </dt>
+
+    <dd>
+
+    Sets alpha value.  If selected mode doesn't have alpha, this function will do nothing
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">float</span></span>
+          <span class="parameter">value</span>
+           — Alpha value from 0 to 1
+          </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "setHue"></a>
+    <strong>setHue (value)</strong>
+    </dt>
+
+    <dd>
+
+    Sets color picker hue
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">float</span></span>
+          <span class="parameter">value</span>
+           — Hue value from 0 to 360
+          </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "setSaturation"></a>
+    <strong>setSaturation (value)</strong>
+    </dt>
+
+    <dd>
+
+    Sets saturation.  If selected mode doesn't have saturation, this function will do nothing
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">float</span></span>
+          <span class="parameter">value</span>
+           — Saturation value from 0 to 1
+          </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "setValue"></a>
+    <strong>setValue (value)</strong>
+    </dt>
+
+    <dd>
+
+    Sets color value.  If selected mode doesn't have value, this function will do nothing
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">float</span></span>
+          <span class="parameter">value</span>
+           — Color value from 0 to 1
+          </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "show"></a>
+    <strong>show ([size=vec2(400，300)[, title="Pick a color"%_t[, mode="HSVA"[, defaultColor=ColorRGB(1，0，0)[, onApplyCallback[, onCancelCallback[, valueSliderMin=0[, valueSliderMax=1[, alphaSliderMin=0[, alphaSliderMax=1]]]]]]]]]])</strong>
+    </dt>
+
+    <dd>
+
+    Shows color picker window, adjusted to desired mode and size
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">vec2</span></span>
+          <span class="parameter">size</span>
+           (<em>default</em>: vec2(400，300))
+           — Window size
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">title</span>
+           (<em>default</em>: "Pick a color"%_t)
+           — Window caption
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">mode</span>
+           (<em>default</em>: "HSVA")
+           — Color mode. Can be: HS, HSA, HSV, HSVA, HV, HVA, HVS, HVSA
+          </li>
+          <li>
+              <span class="types"><span class="type">Color</span></span>
+          <span class="parameter">defaultColor</span>
+           (<em>default</em>: ColorRGB(1，0，0))
+           — Color that will be set in color picker
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">onApplyCallback</span>
+           (<em>optional</em>)
+           — Callback that will fire when user will press 'Apply' button
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">onCancelCallback</span>
+           (<em>optional</em>)
+           — Callback that will fire when user will press 'Cancel' button
+          </li>
+          <li>
+              <span class="types"><span class="type">float</span></span>
+          <span class="parameter">valueSliderMin</span>
+           (<em>default</em>: 0)
+           — Minimal possible color value slider value
+          </li>
+          <li>
+              <span class="types"><span class="type">float</span></span>
+          <span class="parameter">valueSliderMax</span>
+           (<em>default</em>: 1)
+           — Maximal possible color value slider value
+          </li>
+          <li>
+              <span class="types"><span class="type">float</span></span>
+          <span class="parameter">alphaSliderMin</span>
+           (<em>default</em>: 0)
+           — Minimal possible alpha slider value
+          </li>
+          <li>
+              <span class="types"><span class="type">float</span></span>
+          <span class="parameter">alphaSliderMax</span>
+           (<em>default</em>: 1)
+           — Maximal possible alpha slider value
+          </li>
+    </ul>
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <li><a href="../modules/UIColorPicker.html#onApplyCallback">UIColorPicker:onApplyCallback</a></li>
+         <li><a href="../modules/UIColorPicker.html#onCancelCallback">UIColorPicker:onCancelCallback</a></li>
+    </ul>
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <pre class="example"><span class="keyword">function</span> MyModNamespace.onShowColorPickerBtnPressed()
+    uiColorPicker:show(vec2(<span class="number">400</span>, <span class="number">300</span>), <span class="string">"Pick a color"</span>%_t, <span class="string">"HSVA"</span>, ColorRGB(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>), <span class="string">"onColorPickerApply"</span>, <span class="string">"onColorPickerCancel"</span>, <span class="number">0.5</span>, <span class="number">1</span>)
+<span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "update"></a>
+    <strong>update (timeStep)</strong>
+    </dt>
+
+    <dd>
+
+    Updates color picker (checks for mouse position and clicks).  This function should run every tick
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">float</span></span>
+          <span class="parameter">timeStep</span>
+           — Time step variable from <code>update</code> or <code>updateClient</code> function
+          </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <pre class="example"><span class="keyword">function</span> MyModNamespace.getUpdateInterval()
+    <span class="keyword">if</span> colorPicker <span class="keyword">and</span> colorPicker.visible <span class="keyword">then</span> <span class="keyword">return</span> <span class="number">0</span> <span class="keyword">end</span> <span class="comment">-- every tick
+</span>    <span class="keyword">return</span> <span class="number">0.5</span>
+<span class="keyword">end</span>
+<span class="keyword">function</span> MyModNamespace.updateClient(timeStep)
+    colorPicker:update(timeStep)
+<span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="UIColorPicker__Callbacks"></a>UIColorPicker: Callbacks</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "onApplyCallback"></a>
+    <strong>onApplyCallback (color, element)</strong>
+    </dt>
+
+    <dd>
+
+    Fires when user presses 'Apply' button if it was specified in the 'show' call  If function will return 'false', the color picker window won't close
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Color</span></span>
+          <span class="parameter">color</span>
+           — Color that user selected
+          </li>
+          <li>
+              <span class="types"><a class="type" href="../modules/UIColorPicker.html#UIColorPicker">UIColorPicker</a></span>
+          <span class="parameter">element</span>
+           — This color picker
+          </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <pre class="example"><span class="keyword">function</span> MyModNamespace.onColorPickerApply(color, element)
+    <span class="keyword">if</span> someCheckPassed(color) <span class="keyword">then</span>
+        <span class="comment">-- do stuff
+</span>    <span class="keyword">else</span> <span class="comment">-- check failed, don't hide the window
+</span>        <span class="keyword">return</span> <span class="keyword">false</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "onCancelCallback"></a>
+    <strong>onCancelCallback (element)</strong>
+    </dt>
+
+    <dd>
+
+    Fires when user presses 'Cancel' button if it was specified in the 'show' call  If function will return 'false', the color picker window won't close
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><a class="type" href="../modules/UIColorPicker.html#UIColorPicker">UIColorPicker</a></span>
+          <span class="parameter">element</span>
+           — This color picker
+          </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="UIColorPicker__Properties"></a>UIColorPicker: Properties</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "alphaGradient"></a>
+    <strong><span class="type">Picture</span> alphaGradient</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Alpha gradient picture
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "alphaGradientBackground"></a>
+    <strong><span class="type">Picture</span> alphaGradientBackground</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Alpha gradient background
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "alphaInnerBorder"></a>
+    <strong><span class="type">UIRectangle</span> alphaInnerBorder</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Inner border for alpha gradient
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "alphaOuterBorder"></a>
+    <strong><span class="type">UIRectangle</span> alphaOuterBorder</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Outer border for alpha gradient
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "alphaPosition"></a>
+    <strong><span class="type">UIContainer</span> alphaPosition</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Container with two rects, used to display alpha position
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "applyButton"></a>
+    <strong><span class="type">Button</span> applyButton</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    'Apply' button
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "cancelButton"></a>
+    <strong><span class="type">Button</span> cancelButton</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    'Cancel' button
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "caption"></a>
+    <strong><span class="type">string</span> caption</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "center"></a>
+    <strong><span class="type">vec2</span> center</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "colorDisplay"></a>
+    <strong><span class="type">Picture</span> colorDisplay</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Displays resulting color
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "colorInnerBorder"></a>
+    <strong><span class="type">UIRectangle</span> colorInnerBorder</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Inner border for color display
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "colorOuterBorder"></a>
+    <strong><span class="type">UIRectangle</span> colorOuterBorder</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Outer border for color display
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "colorTextBox"></a>
+    <strong><span class="type">TextBox</span> colorTextBox</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Displays resulting color as HEX sequence and allows to change it
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "colorsInnerBorder"></a>
+    <strong><span class="type">UIRectangle</span> colorsInnerBorder</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Inner border for color palette
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "colorsOuterBorder"></a>
+    <strong><span class="type">UIRectangle</span> colorsOuterBorder</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Outer border for color palette
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "colorsPalette"></a>
+    <strong><span class="type">Picture</span> colorsPalette</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Color palette picture
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "colorsPaletteBackground"></a>
+    <strong><span class="type">Picture</span> colorsPaletteBackground</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Color palette background (white or black)
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "colorsPosition"></a>
+    <strong><span class="type">UIContainer</span> colorsPosition</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Container with two rects, used to display palette color position
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "consumeAllEvents"></a>
+    <strong><span class="type">bool</span> consumeAllEvents</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "height"></a>
+    <strong><span class="type">float</span> height</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isGalaxyMap"></a>
+    <strong><span class="type">bool</span> isGalaxyMap</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Indicates if this color picker belong to the GalaxyMap
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "localCenter"></a>
+    <strong><span class="type">vec2</span> localCenter</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "localPosition"></a>
+    <strong><span class="type">vec2</span> localPosition</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "localRect"></a>
+    <strong><span class="type">Rect</span> localRect</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "lower"></a>
+    <strong><span class="type">vec2</span> lower</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "mode"></a>
+    <strong><span class="type">int</span> mode</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Color mode
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "mouseOver"></a>
+    <strong><span class="type">bool</span> mouseOver</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "moveable"></a>
+    <strong><span class="type">bool</span> moveable</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "namespace"></a>
+    <strong><span class="type">table</span> namespace</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Your mod namespace
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "noActionsTimer"></a>
+    <strong><span class="type">float</span> noActionsTimer</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Used to prevent sliders and buttons from working for a short period of time after user entered color hexcode and clicked away
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "position"></a>
+    <strong><span class="type">vec2</span> position</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "rect"></a>
+    <strong><span class="type">Rect</span> rect</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "size"></a>
+    <strong><span class="type">vec2</span> size</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "tooltip"></a>
+    <strong><span class="type">nil/string</span> tooltip</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "transparency"></a>
+    <strong><span class="type">float</span> transparency</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "upper"></a>
+    <strong><span class="type">vec2</span> upper</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "valueGradient"></a>
+    <strong><span class="type">Picture</span> valueGradient</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    'value' gradient picture (used to adjust value in HSxx mode or saturation in HVxx mode)
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "valueGradientBackground"></a>
+    <strong><span class="type">Picture</span> valueGradientBackground</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Value/Saturation background (black or white)
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "valueInnerBorder"></a>
+    <strong><span class="type">UIRectangle</span> valueInnerBorder</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Inner border for value gradient
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "valueOuterBorder"></a>
+    <strong><span class="type">UIRectangle</span> valueOuterBorder</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Outer border for value gradient
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "valuePosition"></a>
+    <strong><span class="type">UIContainer</span> valuePosition</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Container with two rects, used to display 'value' position
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "visible"></a>
+    <strong><span class="type">bool</span> visible</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "width"></a>
+    <strong><span class="type">float</span> width</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "window"></a>
+    <strong><span class="type">Window</span> window</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Color picker window
+
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2020-07-11 17:14:24 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

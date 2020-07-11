@@ -1,18 +1,21 @@
--- UIRectangle(UIContainer parent, Rect rect [, Color color [, int thickness]])
---[[ Has UIContainer properties + additional:
-* topLine - Line : UIElement if thickness wasn't defined, Picture : UIElement otherwise
-* leftLine - Line : UIElement if thickness wasn't defined, Picture : UIElement otherwise
-* rightLine - Line : UIElement if thickness wasn't defined, Picture : UIElement otherwise
-* bottomLine - Line : UIElement if thickness wasn't defined, Picture : UIElement otherwise
-* thickness (int) - Can be changed only if it was defined during rectangle creation
-Example:
-  local window = ScriptUI():createWindow(Rect(400, 400, 800, 800))
-  local uiRect = UIRectangle(window, Rect(0, 0, 20, 20), ColorARGB(0.8, 1, 0, 0), 2)
-  uiRect.thickness = 3 -- will work
-Example:
-  local uiRect2 = UIRectangle(window, Rect(0, 0, 20, 20), ColorARGB(0.8, 1, 0, 0))
-  uiRect2.thickness = 3 -- will not work, because thickness wasn't defined on creation
-]]
+--- Unlike vanilla *UIRect*, UIRectangle creates **outlined** border instead of a filled rectangle
+-- @usage include("azimuthlib-uirectangle")
+-- @module UIRectangle
+
+local properties = { visible = true, position = true, size = true, lower = true, upper = true, center = true, tooltip = true, rect = true, width = true, height = true, layer = true, localCenter = true, localPosition = true, localRect = true }
+
+--- Creates new UIRectangle
+-- @within Constructors
+-- @function UIRectangle
+-- @tparam UIContainer parent — Parent element
+-- @tparam Rect rect — Element rect
+-- @tparam[opt] Color color — Element color
+-- @tparam[opt=1] int thickness — Border width
+-- @treturn table — UIRectangle instance
+-- @usage local uiRect = UIRectangle(window, Rect(0, 0, 20, 20), ColorARGB(0.8, 1, 0, 0), 2)
+--uiRect.thickness = 3 -- will work
+-- @usage local uiRect2 = UIRectangle(window, Rect(0, 0, 20, 20), ColorARGB(0.8, 1, 0, 0))
+--uiRect2.thickness = 3 -- will not work, because thickness wasn't defined on creation
 function UIRectangle(parent, rect, color, thickness)
     local c = parent:createContainer(rect)
     local e = { _container = c }
@@ -35,7 +38,6 @@ function UIRectangle(parent, rect, color, thickness)
         e.rightLine.color = color
         e.bottomLine.color = color
     end
-    local properties = { visible = true, position = true, size = true, lower = true, upper = true, center = true, tooltip = true, rect = true, width = true, height = true }
     return setmetatable(e, {
       __index = function(self, key)
           if key == "thickness" then
@@ -58,7 +60,7 @@ function UIRectangle(parent, rect, color, thickness)
               end
           elseif properties[key] then
               self._container[key] = value
-              if key ~= "visible" and key ~= "position" and key ~= "tooltip" then -- adjust size
+              if key ~= "visible" and key ~= "position" and key ~= "tooltip" and key ~= "layer" then -- adjust size
                   local size = self._container.size
                   local lower = self._container.lower
                   local upper = self._container.upper
@@ -76,3 +78,83 @@ function UIRectangle(parent, rect, color, thickness)
       end
     })
 end
+
+--- It's 'Line' if element was created without defining thickness, 'Picture' otherwise
+-- @within UIRectangle: Properties
+-- @tparam[readonly] UIElement topLine
+
+--- It's 'Line' if element was created without defining thickness, 'Picture' otherwise
+-- @within UIRectangle: Properties
+-- @tparam[readonly] UIElement leftLine
+
+--- It's 'Line' if element was created without defining thickness, 'Picture' otherwise
+-- @within UIRectangle: Properties
+-- @tparam[readonly] UIElement rightLine
+
+--- It's 'Line' if element was created without defining thickness, 'Picture' otherwise
+-- @within UIRectangle: Properties
+-- @tparam[readonly] UIElement bottomLine
+
+--- Can't be changed if it wasn't defined on element creation
+-- @within UIRectangle: Properties
+-- @tparam int thickness
+
+--- 
+-- @within UIRectangle: Properties
+-- @tparam vec2 center
+
+--- 
+-- @within UIRectangle: Properties
+-- @tparam float height
+
+--- 
+-- @within UIRectangle: Properties
+-- @tparam int layer
+
+--- 
+-- @within UIRectangle: Properties
+-- @tparam[readonly] vec2 localCenter
+
+--- 
+-- @within UIRectangle: Properties
+-- @tparam[readonly] vec2 localPosition
+
+--- 
+-- @within UIRectangle: Properties
+-- @tparam[readonly] vec2 localRect
+
+--- 
+-- @within UIRectangle: Properties
+-- @tparam vec2 lower
+
+--- 
+-- @within UIRectangle: Properties
+-- @tparam[readonly] bool mouseOver
+
+--- 
+-- @within UIRectangle: Properties
+-- @tparam vec2 position
+
+--- 
+-- @within UIRectangle: Properties
+-- @tparam Rect rect
+
+--- 
+-- @within UIRectangle: Properties
+-- @tparam vec2 size
+
+--- 
+-- @within UIRectangle: Properties
+-- @tparam nil/string tooltip
+
+--- 
+-- @within UIRectangle: Properties
+-- @tparam vec2 upper
+
+--- 
+-- @within UIRectangle: Properties
+-- @tparam bool visible
+
+--- 
+-- @within UIRectangle: Properties
+-- @tparam float width

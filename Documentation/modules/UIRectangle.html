@@ -1,0 +1,590 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>UIRectangle - AzimuthLib API Docs</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>AzimuthLib</h1>
+
+<ul>
+  <li><a href="../AzimuthLib.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Constructors">Constructors</a></li>
+<li><a href="#UIRectangle__Properties">UIRectangle: Properties</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/Azimuth.html">Azimuth</a></li>
+  <li><a href="../modules/UICollection.html">UICollection</a></li>
+  <li><a href="../modules/UIColorPicker.html">UIColorPicker</a></li>
+  <li><a href="../modules/UIProportionalSplitter.html">UIProportionalSplitter</a></li>
+  <li><strong>UIRectangle</strong></li>
+  <li><a href="../modules/UTF8.html">UTF8</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>UIRectangle</code></h1>
+<p>Unlike vanilla <em>UIRect</em>, UIRectangle creates <strong>outlined</strong> border instead of a filled rectangle</p>
+<p>
+
+</p>
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <pre class="example">include(<span class="string">"azimuthlib-uirectangle"</span>)</pre>
+    </ul>
+
+
+<h2><a href="#Constructors">Constructors</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#UIRectangle">UIRectangle (parent, rect[, color[, thickness=1]])</a></td>
+	<td class="summary">Creates new UIRectangle</td>
+	</tr>
+</table>
+<h2><a href="#UIRectangle__Properties">UIRectangle: Properties</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#bottomLine">bottomLine</a></td>
+	<td class="summary">It's 'Line' if element was created without defining thickness, 'Picture' otherwise</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#center">center</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#height">height</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#layer">layer</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#leftLine">leftLine</a></td>
+	<td class="summary">It's 'Line' if element was created without defining thickness, 'Picture' otherwise</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#localCenter">localCenter</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#localPosition">localPosition</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#localRect">localRect</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#lower">lower</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#mouseOver">mouseOver</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#position">position</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#rect">rect</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#rightLine">rightLine</a></td>
+	<td class="summary">It's 'Line' if element was created without defining thickness, 'Picture' otherwise</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#size">size</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#thickness">thickness</a></td>
+	<td class="summary">Can't be changed if it wasn't defined on element creation</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#tooltip">tooltip</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#topLine">topLine</a></td>
+	<td class="summary">It's 'Line' if element was created without defining thickness, 'Picture' otherwise</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#upper">upper</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#visible">visible</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#width">width</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Constructors"></a>Constructors</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "UIRectangle"></a>
+    <strong>UIRectangle (parent, rect[, color[, thickness=1]])</strong>
+    </dt>
+
+    <dd>
+
+    Creates new UIRectangle
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">UIContainer</span></span>
+          <span class="parameter">parent</span>
+           — Parent element
+          </li>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+           — Element rect
+          </li>
+          <li>
+              <span class="types"><span class="type">Color</span></span>
+          <span class="parameter">color</span>
+           (<em>optional</em>)
+           — Element color
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">thickness</span>
+           (<em>default</em>: 1)
+           — Border width
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">table</span></span>
+        — UIRectangle instance
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <li><pre class="example"><span class="keyword">local</span> uiRect = UIRectangle(window, Rect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">20</span>, <span class="number">20</span>), ColorARGB(<span class="number">0.8</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>), <span class="number">2</span>)
+uiRect.thickness = <span class="number">3</span> <span class="comment">-- will work</span></pre></li>
+        <li><pre class="example"><span class="keyword">local</span> uiRect2 = UIRectangle(window, Rect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">20</span>, <span class="number">20</span>), ColorARGB(<span class="number">0.8</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>))
+uiRect2.thickness = <span class="number">3</span> <span class="comment">-- will not work, because thickness wasn't defined on creation</span></pre></li>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="UIRectangle__Properties"></a>UIRectangle: Properties</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "bottomLine"></a>
+    <strong><span class="type">UIElement</span> bottomLine</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    It's 'Line' if element was created without defining thickness, 'Picture' otherwise
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "center"></a>
+    <strong><span class="type">vec2</span> center</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "height"></a>
+    <strong><span class="type">float</span> height</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "layer"></a>
+    <strong><span class="type">int</span> layer</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "leftLine"></a>
+    <strong><span class="type">UIElement</span> leftLine</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    It's 'Line' if element was created without defining thickness, 'Picture' otherwise
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "localCenter"></a>
+    <strong><span class="type">vec2</span> localCenter</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "localPosition"></a>
+    <strong><span class="type">vec2</span> localPosition</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "localRect"></a>
+    <strong><span class="type">vec2</span> localRect</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "lower"></a>
+    <strong><span class="type">vec2</span> lower</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "mouseOver"></a>
+    <strong><span class="type">bool</span> mouseOver</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "position"></a>
+    <strong><span class="type">vec2</span> position</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "rect"></a>
+    <strong><span class="type">Rect</span> rect</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "rightLine"></a>
+    <strong><span class="type">UIElement</span> rightLine</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    It's 'Line' if element was created without defining thickness, 'Picture' otherwise
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "size"></a>
+    <strong><span class="type">vec2</span> size</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "thickness"></a>
+    <strong><span class="type">int</span> thickness</strong>
+    </dt>
+
+    <dd>
+
+    Can't be changed if it wasn't defined on element creation
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "tooltip"></a>
+    <strong><span class="type">nil/string</span> tooltip</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "topLine"></a>
+    <strong><span class="type">UIElement</span> topLine</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    It's 'Line' if element was created without defining thickness, 'Picture' otherwise
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "upper"></a>
+    <strong><span class="type">vec2</span> upper</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "visible"></a>
+    <strong><span class="type">bool</span> visible</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "width"></a>
+    <strong><span class="type">float</span> width</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2020-07-11 17:14:24 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

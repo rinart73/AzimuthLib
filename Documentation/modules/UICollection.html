@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>UICollection - AzimuthLib API Docs</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>AzimuthLib</h1>
+
+<ul>
+  <li><a href="../AzimuthLib.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Constructors">Constructors</a></li>
+<li><a href="#UICollection__Methods">UICollection: Methods</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/Azimuth.html">Azimuth</a></li>
+  <li><strong>UICollection</strong></li>
+  <li><a href="../modules/UIColorPicker.html">UIColorPicker</a></li>
+  <li><a href="../modules/UIProportionalSplitter.html">UIProportionalSplitter</a></li>
+  <li><a href="../modules/UIRectangle.html">UIRectangle</a></li>
+  <li><a href="../modules/UTF8.html">UTF8</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>UICollection</code></h1>
+<p>Improved vanilla UICollection</p>
+<p>
+
+</p>
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <li><pre class="example"><span class="keyword">local</span> UICollection = include(<span class="string">"azimuthlib-uicollection"</span>)</pre></li>
+        <li><pre class="example"><span class="comment">-- You can access UICollection metatable to alter the class
+</span>UICollection.meta.show = <span class="keyword">function</span>()
+    <span class="keyword">for</span> _, element <span class="keyword">in</span> <span class="global">pairs</span>(self) <span class="keyword">do</span>
+        <span class="keyword">if</span> someCondition(element) <span class="keyword">then</span>
+            element.visible = <span class="keyword">true</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span></pre></li>
+    </ul>
+
+
+<h2><a href="#Constructors">Constructors</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#UICollection">UICollection ([...])</a></td>
+	<td class="summary">Creates new instance of the UICollection class.</td>
+	</tr>
+</table>
+<h2><a href="#UICollection__Methods">UICollection: Methods</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#hide">hide ()</a></td>
+	<td class="summary">Hides collection elements</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#insert">insert (...)</a></td>
+	<td class="summary">Adds elements to collection</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#show">show ()</a></td>
+	<td class="summary">Shows collection elements</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Constructors"></a>Constructors</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "UICollection"></a>
+    <strong>UICollection ([...])</strong>
+    </dt>
+
+    <dd>
+
+    Creates new instance of the UICollection class.  You can already add elements to collection here
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">UIElement..</span></span>
+          <span class="parameter">...</span>
+           (<em>optional</em>)
+           — Starting elements
+          </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <pre class="example"><span class="keyword">local</span> collection = UICollection(labelOne, button1, labelTwo)
+<span class="comment">-- They will be accessible as 'UIElement class name' + 'number'
+</span>collection.Label1.caption = <span class="string">"Label one"</span>
+collection.Label2.caption = <span class="string">"Label two"</span>
+collection.Button1.onPressedFunction = <span class="string">"onButton1PressedFunction"</span></pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="UICollection__Methods"></a>UICollection: Methods</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "hide"></a>
+    <strong>hide ()</strong>
+    </dt>
+
+    <dd>
+
+    Hides collection elements
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "insert"></a>
+    <strong>insert (...)</strong>
+    </dt>
+
+    <dd>
+
+    Adds elements to collection
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">UIElement..</span></span>
+          <span class="parameter">...</span>
+           — Various elements
+          </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <li><pre class="example"><span class="comment">-- You can add multiple elements at once
+</span>collection:insert(textField1, textField2)
+<span class="comment">-- And access them
+</span>collection.TextField1.text = <span class="string">"meh!"</span>
+collection.TextField2.text = <span class="string">"meh?"</span></pre></li>
+        <li><pre class="example"><span class="comment">-- Or you can assign elements directly to collection
+</span> collection.cancelButton = window:createButton(rect, <span class="string">"Cancel"</span>%_t, <span class="string">"onCancelButtonPressed"</span>)</pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "show"></a>
+    <strong>show ()</strong>
+    </dt>
+
+    <dd>
+
+    Shows collection elements
+
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2020-07-11 17:14:24 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

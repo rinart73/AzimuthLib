@@ -1,87 +1,6 @@
--- UIColorPicker(table namespace, UIContainer parent)
---[[ Initiates UIColorPicker with it's elements.
-* namespace (table) - Your mod namespace.
-* parent (UIContainer/ScriptUI/GalaxyMap) - If you're planning to use color picker on Galaxy Map, use GalaxyMap() as it's parent, NOT it's child elements.
-
-Properties:
-* Has all of 'Window' properties, except for 'showCloseButton', 'clickThrough' and 'closeableWithEscape'
-* namespace (table) - Your mod namespace
-* isGalaxyMap (bool) - Does this color picker belong to the GalaxyMap
-* mode (int) - Color mode
-* noActionsTimer (float) - Used to prevent sliders and buttons from working for a short period of time after user entered color hexcode and clicked away
-* window (Window) - Color picker window
-* colorsPaletteBackground (Picture) - Color palette background (white or black)
-* colorsPalette (Picture) - Color palette picture
-* colorsOuterBorder (UIRectangle) - Outer border for color palette
-* colorsInnerBorder (UIRectangle) - Inner border for color palette
-* colorsPosition (UIContainer) - Container with two rects, used to display palette color position
-* valueGradientBackground (Picture) - Value/Saturation background (black or white)
-* valueGradient (Picture) - 'value' gradient picture (used to adjust value in HSxx mode or saturation in HVxx mode)
-* valueOuterBorder (UIRectangle) - Outer border for value gradient
-* valueInnerBorder (UIRectangle) - Inner border for value gradient
-* valuePosition (UIContainer) - Container with two rects, used to display 'value' position
-* alphaGradientBackground (Picture) - Alpha gradient background
-* alphaGradient (Picture) - Alpha gradient picture
-* alphaOuterBorder (UIRectangle) - Outer border for alpha gradient
-* alphaInnerBorder (UIRectangle) - Inner border for alpha gradient
-* alphaPosition (UIContainer) - Container with two rects, used to display alpha position
-* colorDisplay (Picture) - Displays resulting color
-* colorOuterBorder (UIRectangle) - Outer border for color display
-* colorInnerBorder (UIRectangle) - Inner border for color display
-* colorTextBox (TextBox) - Displays resulting color as HEX sequence and allows to change it
-* applyButton (Button) - 'Apply' button
-* cancelButton (Button) - 'Cancel' button
-
-Methods: ]]
--- show([vec2 size [, string title [, string mode [, Color defaultColor [, string onApplyCallback [, string onCancelCallback]]]]]])
---[[ Shows color picker window, adjusted to desired mode.
-* size (vec2) - Window size. Default: vec2(400, 300)
-* title (string) - Window caption. Default: "Pick a color"%_t
-* mode (string) - Can be: HS, HSA, HSV, HSVA, HV, HVA, HVS, HVSA. Default: HSVA
-* defaultColor (color) - Color that will be set in color picker. Default: ColorRGB(1, 0, 0)
-* onApplyCallback (string) - Callback that will fire when user will press 'Apply' button:
-  Passed arguments:
-  * Color color - Color that user selected.
-  * UIColorPicker element - This color picker.
-  If callback will return 'false', window will not close.
-* onCancelCallback (string) - Callback that will fire when user will press 'Cancel' button:
-  Passed arguments:
-  * UIColorPicker element - This color picker.
-  If callback will return 'false', window will not close.
-]]
--- hide()
---[[ Hides color picker ]]
--- update(float timeStep)
---[[ Updates color picker (checks for mouse position and clicks). This function should run every tick.
-* timeStep (float) - Time step variable from `update` or `updateClient` function
-]]
--- setHue(float value)
---[[ Set color picker hue.
-* value (float) - From 0 to 360.
-]]
--- setSaturation(float value)
---[[ Set saturation. If selected mode doesn't have saturation, this function will do nothing.
-* value (float) - From 0 to 1.
-]]
--- setValue(float value)
---[[ Set value. If selected mode doesn't have value, this function will do nothing.
-* value (float) - From 0 to 1.
-]]
--- setAlpha(float value)
---[[ Set alpha. If selected mode doesn't have alpha, this function will do nothing.
-* value (float) - From 0 to 1.
-]]
---[[ Example:
-local uiColorPicker
-
-function MyModNamespace.initUI()
-    uiColorPicker = UIColorPicker(MyModNamespace, ScriptUI())
-end
-
-function MyModNamespace.onShowColorPickerBtnPressed()
-    uiColorPicker:show(vec2(400, 300), "Pick a color"%_t, "HSVA", ColorRGB(1, 0, 0), "onColorPickerApply", "onColorPickerCancel")
-end
-]]
+--- A color picker
+-- @usage include("azimuthlib-uicolorpicker")
+-- @module UIColorPicker
 
 package.path = package.path .. ";data/scripts/lib/?.lua"
 include("utility")
@@ -122,6 +41,19 @@ local function updateColor(self)
     end
 end
 
+
+--- Creates new UIColorPicker with its elements
+-- @within Constructors
+-- @function UIColorPicker
+-- @tparam table namespace — Your mod namespace
+-- @tparam ScriptUI/GalaxyMap/UIContainer parent — Parent element
+--
+-- **(!)** If you're planning to use color picker on Galaxy Map, pass GalaxyMap() as parent, **NOT** its child elements
+-- @treturn table — UIColorPicker instance
+-- @usage local uiColorPicker
+-- function MyModNamespace.initUI()
+--     uiColorPicker = UIColorPicker(MyModNamespace, ScriptUI())
+-- end
 function UIColorPicker(namespace, parent)
     local window = parent:createWindow(Rect(0, 0, 400, 300))
     window.showCloseButton = 0
@@ -556,3 +488,256 @@ function UIColorPicker(namespace, parent)
       end
     })
 end
+
+--- Shows color picker window, adjusted to desired mode and size
+-- @within UIColorPicker: Methods
+-- @function show
+-- @tparam[opt=vec2(400，300)] vec2 size — Window size
+-- @tparam[opt="Pick a color"%_t] string title — Window caption
+-- @tparam[opt="HSVA"] string mode — Color mode. Can be: HS, HSA, HSV, HSVA, HV, HVA, HVS, HVSA
+-- @tparam[opt=ColorRGB(1，0，0)] Color defaultColor — Color that will be set in color picker
+-- @tparam[opt] string onApplyCallback — Callback that will fire when user will press 'Apply' button
+-- @tparam[opt] string onCancelCallback — Callback that will fire when user will press 'Cancel' button
+-- @tparam[opt=0] float valueSliderMin — Minimal possible color value slider value
+-- @tparam[opt=1] float valueSliderMax — Maximal possible color value slider value
+-- @tparam[opt=0] float alphaSliderMin — Minimal possible alpha slider value
+-- @tparam[opt=1] float alphaSliderMax — Maximal possible alpha slider value
+-- @see UIColorPicker:onApplyCallback
+-- @see UIColorPicker:onCancelCallback
+-- @usage function MyModNamespace.onShowColorPickerBtnPressed()
+--     uiColorPicker:show(vec2(400, 300), "Pick a color"%_t, "HSVA", ColorRGB(1, 0, 0), "onColorPickerApply", "onColorPickerCancel", 0.5, 1)
+-- end
+
+--- Hides color picker
+-- @within UIColorPicker: Methods
+-- @function hide
+
+--- Updates color picker (checks for mouse position and clicks). This function should run every tick
+-- @within UIColorPicker: Methods
+-- @function update
+-- @tparam float timeStep — Time step variable from `update` or `updateClient` function
+-- @usage function MyModNamespace.getUpdateInterval()
+--     if colorPicker and colorPicker.visible then return 0 end -- every tick
+--     return 0.5
+-- end
+-- function MyModNamespace.updateClient(timeStep)
+--     colorPicker:update(timeStep)
+-- end
+
+--- Sets color picker hue
+-- @within UIColorPicker: Methods
+-- @function setHue
+-- @tparam float value — Hue value from 0 to 360
+
+--- Sets saturation. If selected mode doesn't have saturation, this function will do nothing
+-- @within UIColorPicker: Methods
+-- @function setSaturation
+-- @tparam float value — Saturation value from 0 to 1
+
+--- Sets color value. If selected mode doesn't have value, this function will do nothing
+-- @within UIColorPicker: Methods
+-- @function setValue
+-- @tparam float value — Color value from 0 to 1
+
+--- Sets alpha value. If selected mode doesn't have alpha, this function will do nothing
+-- @within UIColorPicker: Methods
+-- @function setAlpha
+-- @tparam float value — Alpha value from 0 to 1
+
+--- Fires when user presses 'Apply' button if it was specified in the 'show' call
+---
+--- If function will return 'false', the color picker window won't close
+-- @within UIColorPicker: Callbacks
+-- @function onApplyCallback
+-- @tparam Color color — Color that user selected
+-- @tparam UIColorPicker element — This color picker
+-- @usage function MyModNamespace.onColorPickerApply(color, element)
+--     if someCheckPassed(color) then
+--         -- do stuff
+--     else -- check failed, don't hide the window
+--         return false
+--     end
+-- end
+
+--- Fires when user presses 'Cancel' button if it was specified in the 'show' call
+---
+--- If function will return 'false', the color picker window won't close
+-- @within UIColorPicker: Callbacks
+-- @function onCancelCallback
+-- @tparam UIColorPicker element — This color picker
+
+--- Your mod namespace
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] table namespace
+
+--- Indicates if this color picker belong to the GalaxyMap
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] bool isGalaxyMap
+
+--- Color mode
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] int mode
+
+--- Used to prevent sliders and buttons from working for a short period of time after user entered color hexcode and clicked away
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] float noActionsTimer
+
+--- Color picker window
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] Window window
+
+--- Color palette background (white or black)
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] Picture colorsPaletteBackground
+
+--- Color palette picture
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] Picture colorsPalette
+
+--- Outer border for color palette
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] UIRectangle colorsOuterBorder
+
+--- Inner border for color palette
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] UIRectangle colorsInnerBorder
+
+--- Container with two rects, used to display palette color position
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] UIContainer colorsPosition
+
+--- Value/Saturation background (black or white)
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] Picture valueGradientBackground
+
+--- 'value' gradient picture (used to adjust value in HSxx mode or saturation in HVxx mode)
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] Picture valueGradient
+
+--- Outer border for value gradient
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] UIRectangle valueOuterBorder
+
+--- Inner border for value gradient
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] UIRectangle valueInnerBorder
+
+--- Container with two rects, used to display 'value' position
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] UIContainer valuePosition
+
+--- Alpha gradient background
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] Picture alphaGradientBackground
+
+--- Alpha gradient picture
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] Picture alphaGradient
+
+--- Outer border for alpha gradient
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] UIRectangle alphaOuterBorder
+
+--- Inner border for alpha gradient
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] UIRectangle alphaInnerBorder
+
+--- Container with two rects, used to display alpha position
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] UIContainer alphaPosition
+
+--- Displays resulting color
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] Picture colorDisplay
+
+--- Outer border for color display
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] UIRectangle colorOuterBorder
+
+--- Inner border for color display
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] UIRectangle colorInnerBorder
+
+--- Displays resulting color as HEX sequence and allows to change it
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] TextBox colorTextBox
+
+--- 'Apply' button
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] Button applyButton
+
+--- 'Cancel' button
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] Button cancelButton
+
+--- 
+-- @within UIColorPicker: Properties
+-- @tparam string caption
+
+--- 
+-- @within UIColorPicker: Properties
+-- @tparam bool consumeAllEvents
+
+--- 
+-- @within UIColorPicker: Properties
+-- @tparam bool moveable
+
+--- 
+-- @within UIColorPicker: Properties
+-- @tparam float transparency
+
+--- 
+-- @within UIColorPicker: Properties
+-- @tparam vec2 center
+
+--- 
+-- @within UIColorPicker: Properties
+-- @tparam float height
+
+--- 
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] vec2 localCenter
+
+--- 
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] vec2 localPosition
+
+--- 
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] Rect localRect
+
+--- 
+-- @within UIColorPicker: Properties
+-- @tparam vec2 lower
+
+--- 
+-- @within UIColorPicker: Properties
+-- @tparam[readonly] bool mouseOver
+
+--- 
+-- @within UIColorPicker: Properties
+-- @tparam vec2 position
+
+--- 
+-- @within UIColorPicker: Properties
+-- @tparam Rect rect
+
+--- 
+-- @within UIColorPicker: Properties
+-- @tparam vec2 size
+
+--- 
+-- @within UIColorPicker: Properties
+-- @tparam nil/string tooltip
+
+--- 
+-- @within UIColorPicker: Properties
+-- @tparam vec2 upper
+
+--- 
+-- @within UIColorPicker: Properties
+-- @tparam bool visible
+
+--- 
+-- @within UIColorPicker: Properties
+-- @tparam float width
