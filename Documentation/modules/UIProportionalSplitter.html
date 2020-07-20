@@ -33,16 +33,17 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Constructors">Constructors</a></li>
-<li><a href="#UIVerticalProportionalSplitter__Methods">UIVerticalProportionalSplitter: Methods</a></li>
-<li><a href="#UIVerticalProportionalSplitter__Properties">UIVerticalProportionalSplitter: Properties</a></li>
 <li><a href="#UIHorizontalProportionalSplitter__Methods">UIHorizontalProportionalSplitter: Methods</a></li>
 <li><a href="#UIHorizontalProportionalSplitter__Properties">UIHorizontalProportionalSplitter: Properties</a></li>
+<li><a href="#UIVerticalProportionalSplitter__Methods">UIVerticalProportionalSplitter: Methods</a></li>
+<li><a href="#UIVerticalProportionalSplitter__Properties">UIVerticalProportionalSplitter: Properties</a></li>
 </ul>
 
 
 <h2>Modules</h2>
 <ul class="nowrap">
   <li><a href="../modules/Azimuth.html">Azimuth</a></li>
+  <li><a href="../modules/CustomTabbedWindow.html">CustomTabbedWindow</a></li>
   <li><a href="../modules/UICollection.html">UICollection</a></li>
   <li><a href="../modules/UIColorPicker.html">UIColorPicker</a></li>
   <li><strong>UIProportionalSplitter</strong></li>
@@ -76,18 +77,18 @@
 	<td class="summary">Creates new UIVerticalProportionalSplitter</td>
 	</tr>
 </table>
-<h2><a href="#UIVerticalProportionalSplitter__Methods">UIVerticalProportionalSplitter: Methods</a></h2>
+<h2><a href="#UIHorizontalProportionalSplitter__Methods">UIHorizontalProportionalSplitter: Methods</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" ><a href="#UIVerticalProportionalSplitter:setMargin">UIVerticalProportionalSplitter:setMargin (left, right, top, bottom)</a></td>
+	<td class="name" ><a href="#UIHorizontalProportionalSplitter:setMargin">UIHorizontalProportionalSplitter:setMargin (left, right, top, bottom)</a></td>
 	<td class="summary">Sets global splitter margins</td>
 	</tr>
 	<tr>
-	<td class="name" ><a href="#UIVerticalProportionalSplitter:setPadding">UIVerticalProportionalSplitter:setPadding (left, right, top, bottom)</a></td>
+	<td class="name" ><a href="#UIHorizontalProportionalSplitter:setPadding">UIHorizontalProportionalSplitter:setPadding (left, right, top, bottom)</a></td>
 	<td class="summary">Sets partitions paddings (<strong>not</strong> paddingInside)</td>
 	</tr>
 </table>
-<h2><a href="#UIVerticalProportionalSplitter__Properties">UIVerticalProportionalSplitter: Properties</a></h2>
+<h2><a href="#UIHorizontalProportionalSplitter__Properties">UIHorizontalProportionalSplitter: Properties</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" ><a href="#inner">inner</a></td>
@@ -168,18 +169,18 @@
 </td>
 	</tr>
 </table>
-<h2><a href="#UIHorizontalProportionalSplitter__Methods">UIHorizontalProportionalSplitter: Methods</a></h2>
+<h2><a href="#UIVerticalProportionalSplitter__Methods">UIVerticalProportionalSplitter: Methods</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" ><a href="#UIHorizontalProportionalSplitter:setMargin">UIHorizontalProportionalSplitter:setMargin (left, right, top, bottom)</a></td>
+	<td class="name" ><a href="#UIVerticalProportionalSplitter:setMargin">UIVerticalProportionalSplitter:setMargin (left, right, top, bottom)</a></td>
 	<td class="summary">Sets global splitter margins</td>
 	</tr>
 	<tr>
-	<td class="name" ><a href="#UIHorizontalProportionalSplitter:setPadding">UIHorizontalProportionalSplitter:setPadding (left, right, top, bottom)</a></td>
+	<td class="name" ><a href="#UIVerticalProportionalSplitter:setPadding">UIVerticalProportionalSplitter:setPadding (left, right, top, bottom)</a></td>
 	<td class="summary">Sets partitions paddings (<strong>not</strong> paddingInside)</td>
 	</tr>
 </table>
-<h2><a href="#UIHorizontalProportionalSplitter__Properties">UIHorizontalProportionalSplitter: Properties</a></h2>
+<h2><a href="#UIVerticalProportionalSplitter__Properties">UIVerticalProportionalSplitter: Properties</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" ><a href="#inner">inner</a></td>
@@ -408,404 +409,6 @@
 </span><span class="global">print</span>(splitter[<span class="number">3</span>]) <span class="comment">-- Rect(285, 5, 325, 25)
 </span><span class="global">print</span>(splitter[<span class="number">4</span>]) <span class="comment">-- Rect(335, 5, 695, 25)</span></pre></li>
     </ul>
-
-</dd>
-</dl>
-    <h2 class="section-header "><a name="UIVerticalProportionalSplitter__Methods"></a>UIVerticalProportionalSplitter: Methods</h2>
-
-    <dl class="function">
-    <dt>
-    <a name = "UIVerticalProportionalSplitter:setMargin"></a>
-    <strong>UIVerticalProportionalSplitter:setMargin (left, right, top, bottom)</strong>
-    </dt>
-
-    <dd>
-
-    Sets global splitter margins
-
-
-    <h3>Parameters:</h3>
-    <ul>
-          <li>
-              <span class="types"><span class="type">int</span></span>
-          <span class="parameter">left</span>
-
-
-
-          </li>
-          <li>
-              <span class="types"><span class="type">int</span></span>
-          <span class="parameter">right</span>
-
-
-
-          </li>
-          <li>
-              <span class="types"><span class="type">int</span></span>
-          <span class="parameter">top</span>
-
-
-
-          </li>
-          <li>
-              <span class="types"><span class="type">int</span></span>
-          <span class="parameter">bottom</span>
-
-
-
-          </li>
-    </ul>
-
-
-
-
-    <h3>Usage:</h3>
-    <ul class="usage">
-        <li><pre class="example">splitter:setMargin(<span class="number">10</span>, <span class="number">5</span>, <span class="number">10</span>, <span class="number">10</span>)</pre></li>
-        <li><pre class="example"><span class="comment">-- You can also use direct assignment
-</span>splitter.margin = <span class="number">5</span></pre></li>
-    </ul>
-
-</dd>
-    <dt>
-    <a name = "UIVerticalProportionalSplitter:setPadding"></a>
-    <strong>UIVerticalProportionalSplitter:setPadding (left, right, top, bottom)</strong>
-    </dt>
-
-    <dd>
-
-    Sets partitions paddings (<strong>not</strong> paddingInside)
-
-
-    <h3>Parameters:</h3>
-    <ul>
-          <li>
-              <span class="types"><span class="type">int</span></span>
-          <span class="parameter">left</span>
-
-
-
-          </li>
-          <li>
-              <span class="types"><span class="type">int</span></span>
-          <span class="parameter">right</span>
-
-
-
-          </li>
-          <li>
-              <span class="types"><span class="type">int</span></span>
-          <span class="parameter">top</span>
-
-
-
-          </li>
-          <li>
-              <span class="types"><span class="type">int</span></span>
-          <span class="parameter">bottom</span>
-
-
-
-          </li>
-    </ul>
-
-
-
-
-    <h3>Usage:</h3>
-    <ul class="usage">
-        <li><pre class="example">splitter:setPadding(<span class="number">10</span>, <span class="number">5</span>, <span class="number">10</span>, <span class="number">10</span>)</pre></li>
-        <li><pre class="example"><span class="comment">-- You can also use direct assignment
-</span>splitter.padding = <span class="number">5</span></pre></li>
-    </ul>
-
-</dd>
-</dl>
-    <h2 class="section-header "><a name="UIVerticalProportionalSplitter__Properties"></a>UIVerticalProportionalSplitter: Properties</h2>
-
-    <dl class="function">
-    <dt>
-    <a name = "inner"></a>
-    <strong><span class="type">Rect</span> inner</strong>
-            <span class="warning">[read-only]</span>
-    </dt>
-
-    <dd>
-
-    Returns input rect after applying margin
-
-
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "margin"></a>
-    <strong><span class="type">int</span> margin</strong>
-            <span class="warning">[write-only]</span>
-    </dt>
-
-    <dd>
-
-    Set splitter margin for all sides
-
-
-
-
-
-    <h3>See also:</h3>
-    <ul>
-         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setMargin">UIVerticalProportionalSplitter:setMargin</a>
-    </ul>
-
-
-</dd>
-    <dt>
-    <a name = "marginBottom"></a>
-    <strong><span class="type">int</span> marginBottom</strong>
-    </dt>
-
-    <dd>
-
-
-
-
-
-
-
-    <h3>See also:</h3>
-    <ul>
-         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setMargin">UIVerticalProportionalSplitter:setMargin</a>
-    </ul>
-
-
-</dd>
-    <dt>
-    <a name = "marginLeft"></a>
-    <strong><span class="type">int</span> marginLeft</strong>
-    </dt>
-
-    <dd>
-
-
-
-
-
-
-
-    <h3>See also:</h3>
-    <ul>
-         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setMargin">UIVerticalProportionalSplitter:setMargin</a>
-    </ul>
-
-
-</dd>
-    <dt>
-    <a name = "marginRight"></a>
-    <strong><span class="type">int</span> marginRight</strong>
-    </dt>
-
-    <dd>
-
-
-
-
-
-
-
-    <h3>See also:</h3>
-    <ul>
-         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setMargin">UIVerticalProportionalSplitter:setMargin</a>
-    </ul>
-
-
-</dd>
-    <dt>
-    <a name = "marginTop"></a>
-    <strong><span class="type">int</span> marginTop</strong>
-    </dt>
-
-    <dd>
-
-
-
-
-
-
-
-    <h3>See also:</h3>
-    <ul>
-         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setMargin">UIVerticalProportionalSplitter:setMargin</a>
-    </ul>
-
-
-</dd>
-    <dt>
-    <a name = "padding"></a>
-    <strong><span class="type">int</span> padding</strong>
-            <span class="warning">[write-only]</span>
-    </dt>
-
-    <dd>
-
-    Set padding for all partitions
-
-
-
-
-
-    <h3>See also:</h3>
-    <ul>
-         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setPadding">UIVerticalProportionalSplitter:setPadding</a>
-    </ul>
-
-
-</dd>
-    <dt>
-    <a name = "paddingBottom"></a>
-    <strong><span class="type">int</span> paddingBottom</strong>
-    </dt>
-
-    <dd>
-
-
-
-
-
-
-
-    <h3>See also:</h3>
-    <ul>
-         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setPadding">UIVerticalProportionalSplitter:setPadding</a>
-    </ul>
-
-
-</dd>
-    <dt>
-    <a name = "paddingInside"></a>
-    <strong><span class="type">int</span> paddingInside</strong>
-    </dt>
-
-    <dd>
-
-    Padding between partitions
-
-
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "paddingLeft"></a>
-    <strong><span class="type">int</span> paddingLeft</strong>
-    </dt>
-
-    <dd>
-
-
-
-
-
-
-
-    <h3>See also:</h3>
-    <ul>
-         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setPadding">UIVerticalProportionalSplitter:setPadding</a>
-    </ul>
-
-
-</dd>
-    <dt>
-    <a name = "paddingRight"></a>
-    <strong><span class="type">int</span> paddingRight</strong>
-    </dt>
-
-    <dd>
-
-
-
-
-
-
-
-    <h3>See also:</h3>
-    <ul>
-         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setPadding">UIVerticalProportionalSplitter:setPadding</a>
-    </ul>
-
-
-</dd>
-    <dt>
-    <a name = "paddingTop"></a>
-    <strong><span class="type">int</span> paddingTop</strong>
-    </dt>
-
-    <dd>
-
-
-
-
-
-
-
-    <h3>See also:</h3>
-    <ul>
-         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setPadding">UIVerticalProportionalSplitter:setPadding</a>
-    </ul>
-
-
-</dd>
-    <dt>
-    <a name = "partitions"></a>
-    <strong><span class="type">table[Rect]</span> partitions</strong>
-            <span class="warning">[read-only]</span>
-    </dt>
-
-    <dd>
-
-    Calculated partitions
-
-
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "proportions"></a>
-    <strong><span class="type">table[number]</span> proportions</strong>
-    </dt>
-
-    <dd>
-
-    Table of proportions that can either be absolute pixels or relative weights
-
-
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "rect"></a>
-    <strong><span class="type">Rect</span> rect</strong>
-    </dt>
-
-    <dd class="empty">
-
-
-
-
-
-
-
-
 
 </dd>
 </dl>
@@ -1207,13 +810,411 @@
 
 </dd>
 </dl>
+    <h2 class="section-header "><a name="UIVerticalProportionalSplitter__Methods"></a>UIVerticalProportionalSplitter: Methods</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "UIVerticalProportionalSplitter:setMargin"></a>
+    <strong>UIVerticalProportionalSplitter:setMargin (left, right, top, bottom)</strong>
+    </dt>
+
+    <dd>
+
+    Sets global splitter margins
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">left</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">right</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">top</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">bottom</span>
+
+
+
+          </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <li><pre class="example">splitter:setMargin(<span class="number">10</span>, <span class="number">5</span>, <span class="number">10</span>, <span class="number">10</span>)</pre></li>
+        <li><pre class="example"><span class="comment">-- You can also use direct assignment
+</span>splitter.margin = <span class="number">5</span></pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "UIVerticalProportionalSplitter:setPadding"></a>
+    <strong>UIVerticalProportionalSplitter:setPadding (left, right, top, bottom)</strong>
+    </dt>
+
+    <dd>
+
+    Sets partitions paddings (<strong>not</strong> paddingInside)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">left</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">right</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">top</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">bottom</span>
+
+
+
+          </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <li><pre class="example">splitter:setPadding(<span class="number">10</span>, <span class="number">5</span>, <span class="number">10</span>, <span class="number">10</span>)</pre></li>
+        <li><pre class="example"><span class="comment">-- You can also use direct assignment
+</span>splitter.padding = <span class="number">5</span></pre></li>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="UIVerticalProportionalSplitter__Properties"></a>UIVerticalProportionalSplitter: Properties</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "inner"></a>
+    <strong><span class="type">Rect</span> inner</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Returns input rect after applying margin
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "margin"></a>
+    <strong><span class="type">int</span> margin</strong>
+            <span class="warning">[write-only]</span>
+    </dt>
+
+    <dd>
+
+    Set splitter margin for all sides
+
+
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setMargin">UIVerticalProportionalSplitter:setMargin</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "marginBottom"></a>
+    <strong><span class="type">int</span> marginBottom</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setMargin">UIVerticalProportionalSplitter:setMargin</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "marginLeft"></a>
+    <strong><span class="type">int</span> marginLeft</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setMargin">UIVerticalProportionalSplitter:setMargin</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "marginRight"></a>
+    <strong><span class="type">int</span> marginRight</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setMargin">UIVerticalProportionalSplitter:setMargin</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "marginTop"></a>
+    <strong><span class="type">int</span> marginTop</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setMargin">UIVerticalProportionalSplitter:setMargin</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "padding"></a>
+    <strong><span class="type">int</span> padding</strong>
+            <span class="warning">[write-only]</span>
+    </dt>
+
+    <dd>
+
+    Set padding for all partitions
+
+
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setPadding">UIVerticalProportionalSplitter:setPadding</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "paddingBottom"></a>
+    <strong><span class="type">int</span> paddingBottom</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setPadding">UIVerticalProportionalSplitter:setPadding</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "paddingInside"></a>
+    <strong><span class="type">int</span> paddingInside</strong>
+    </dt>
+
+    <dd>
+
+    Padding between partitions
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "paddingLeft"></a>
+    <strong><span class="type">int</span> paddingLeft</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setPadding">UIVerticalProportionalSplitter:setPadding</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "paddingRight"></a>
+    <strong><span class="type">int</span> paddingRight</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setPadding">UIVerticalProportionalSplitter:setPadding</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "paddingTop"></a>
+    <strong><span class="type">int</span> paddingTop</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../modules/UIProportionalSplitter.html#UIVerticalProportionalSplitter:setPadding">UIVerticalProportionalSplitter:setPadding</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "partitions"></a>
+    <strong><span class="type">table[Rect]</span> partitions</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Calculated partitions
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "proportions"></a>
+    <strong><span class="type">table[number]</span> proportions</strong>
+    </dt>
+
+    <dd>
+
+    Table of proportions that can either be absolute pixels or relative weights
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "rect"></a>
+    <strong><span class="type">Rect</span> rect</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+</dl>
 
 
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2020-07-11 17:14:24 </i>
+<i style="float:right;">Last updated 2020-07-20 17:11:34 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

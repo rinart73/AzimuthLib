@@ -33,8 +33,8 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Constructors">Constructors</a></li>
-<li><a href="#UIColorPicker__Methods">UIColorPicker: Methods</a></li>
 <li><a href="#UIColorPicker__Callbacks">UIColorPicker: Callbacks</a></li>
+<li><a href="#UIColorPicker__Methods">UIColorPicker: Methods</a></li>
 <li><a href="#UIColorPicker__Properties">UIColorPicker: Properties</a></li>
 </ul>
 
@@ -42,6 +42,7 @@
 <h2>Modules</h2>
 <ul class="nowrap">
   <li><a href="../modules/Azimuth.html">Azimuth</a></li>
+  <li><a href="../modules/CustomTabbedWindow.html">CustomTabbedWindow</a></li>
   <li><a href="../modules/UICollection.html">UICollection</a></li>
   <li><strong>UIColorPicker</strong></li>
   <li><a href="../modules/UIProportionalSplitter.html">UIProportionalSplitter</a></li>
@@ -69,6 +70,17 @@
 	<tr>
 	<td class="name" ><a href="#UIColorPicker">UIColorPicker (namespace, parent)</a></td>
 	<td class="summary">Creates new UIColorPicker with its elements</td>
+	</tr>
+</table>
+<h2><a href="#UIColorPicker__Callbacks">UIColorPicker: Callbacks</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#onApplyCallback">onApplyCallback (color, element)</a></td>
+	<td class="summary">Fires when user presses 'Apply' button if it was specified in the 'show' call</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#onCancelCallback">onCancelCallback (element)</a></td>
+	<td class="summary">Fires when user presses 'Cancel' button if it was specified in the 'show' call</td>
 	</tr>
 </table>
 <h2><a href="#UIColorPicker__Methods">UIColorPicker: Methods</a></h2>
@@ -100,17 +112,6 @@
 	<tr>
 	<td class="name" ><a href="#update">update (timeStep)</a></td>
 	<td class="summary">Updates color picker (checks for mouse position and clicks).</td>
-	</tr>
-</table>
-<h2><a href="#UIColorPicker__Callbacks">UIColorPicker: Callbacks</a></h2>
-<table class="function_list">
-	<tr>
-	<td class="name" ><a href="#onApplyCallback">onApplyCallback (color, element)</a></td>
-	<td class="summary">Fires when user presses 'Apply' button if it was specified in the 'show' call</td>
-	</tr>
-	<tr>
-	<td class="name" ><a href="#onCancelCallback">onCancelCallback (element)</a></td>
-	<td class="summary">Fires when user presses 'Cancel' button if it was specified in the 'show' call</td>
 	</tr>
 </table>
 <h2><a href="#UIColorPicker__Properties">UIColorPicker: Properties</a></h2>
@@ -381,6 +382,73 @@
 
 </dd>
 </dl>
+    <h2 class="section-header "><a name="UIColorPicker__Callbacks"></a>UIColorPicker: Callbacks</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "onApplyCallback"></a>
+    <strong>onApplyCallback (color, element)</strong>
+    </dt>
+
+    <dd>
+
+    Fires when user presses 'Apply' button if it was specified in the 'show' call  If function will return 'false', the color picker window won't close
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Color</span></span>
+          <span class="parameter">color</span>
+           — Color that user selected
+          </li>
+          <li>
+              <span class="types"><a class="type" href="../modules/UIColorPicker.html#UIColorPicker">UIColorPicker</a></span>
+          <span class="parameter">element</span>
+           — This color picker
+          </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <pre class="example"><span class="keyword">function</span> MyModNamespace.onColorPickerApply(color, element)
+    <span class="keyword">if</span> someCheckPassed(color) <span class="keyword">then</span>
+        <span class="comment">-- do stuff
+</span>    <span class="keyword">else</span> <span class="comment">-- check failed, don't hide the window
+</span>        <span class="keyword">return</span> <span class="keyword">false</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "onCancelCallback"></a>
+    <strong>onCancelCallback (element)</strong>
+    </dt>
+
+    <dd>
+
+    Fires when user presses 'Cancel' button if it was specified in the 'show' call  If function will return 'false', the color picker window won't close
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><a class="type" href="../modules/UIColorPicker.html#UIColorPicker">UIColorPicker</a></span>
+          <span class="parameter">element</span>
+           — This color picker
+          </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
     <h2 class="section-header "><a name="UIColorPicker__Methods"></a>UIColorPicker: Methods</h2>
 
     <dl class="function">
@@ -618,73 +686,6 @@
     colorPicker:update(timeStep)
 <span class="keyword">end</span></pre>
     </ul>
-
-</dd>
-</dl>
-    <h2 class="section-header "><a name="UIColorPicker__Callbacks"></a>UIColorPicker: Callbacks</h2>
-
-    <dl class="function">
-    <dt>
-    <a name = "onApplyCallback"></a>
-    <strong>onApplyCallback (color, element)</strong>
-    </dt>
-
-    <dd>
-
-    Fires when user presses 'Apply' button if it was specified in the 'show' call  If function will return 'false', the color picker window won't close
-
-
-    <h3>Parameters:</h3>
-    <ul>
-          <li>
-              <span class="types"><span class="type">Color</span></span>
-          <span class="parameter">color</span>
-           — Color that user selected
-          </li>
-          <li>
-              <span class="types"><a class="type" href="../modules/UIColorPicker.html#UIColorPicker">UIColorPicker</a></span>
-          <span class="parameter">element</span>
-           — This color picker
-          </li>
-    </ul>
-
-
-
-
-    <h3>Usage:</h3>
-    <ul class="usage">
-        <pre class="example"><span class="keyword">function</span> MyModNamespace.onColorPickerApply(color, element)
-    <span class="keyword">if</span> someCheckPassed(color) <span class="keyword">then</span>
-        <span class="comment">-- do stuff
-</span>    <span class="keyword">else</span> <span class="comment">-- check failed, don't hide the window
-</span>        <span class="keyword">return</span> <span class="keyword">false</span>
-    <span class="keyword">end</span>
-<span class="keyword">end</span></pre>
-    </ul>
-
-</dd>
-    <dt>
-    <a name = "onCancelCallback"></a>
-    <strong>onCancelCallback (element)</strong>
-    </dt>
-
-    <dd>
-
-    Fires when user presses 'Cancel' button if it was specified in the 'show' call  If function will return 'false', the color picker window won't close
-
-
-    <h3>Parameters:</h3>
-    <ul>
-          <li>
-              <span class="types"><a class="type" href="../modules/UIColorPicker.html#UIColorPicker">UIColorPicker</a></span>
-          <span class="parameter">element</span>
-           — This color picker
-          </li>
-    </ul>
-
-
-
-
 
 </dd>
 </dl>
@@ -1432,7 +1433,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2020-07-11 17:14:24 </i>
+<i style="float:right;">Last updated 2020-07-20 17:11:34 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

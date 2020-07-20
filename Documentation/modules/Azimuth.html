@@ -33,14 +33,15 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Functions">Functions</a></li>
-<li><a href="#Log__Properties">Log: Properties</a></li>
 <li><a href="#Log__Methods">Log: Methods</a></li>
+<li><a href="#Log__Properties">Log: Properties</a></li>
 </ul>
 
 
 <h2>Modules</h2>
 <ul class="nowrap">
   <li><strong>Azimuth</strong></li>
+  <li><a href="../modules/CustomTabbedWindow.html">CustomTabbedWindow</a></li>
   <li><a href="../modules/UICollection.html">UICollection</a></li>
   <li><a href="../modules/UIColorPicker.html">UIColorPicker</a></li>
   <li><a href="../modules/UIProportionalSplitter.html">UIProportionalSplitter</a></li>
@@ -100,6 +101,29 @@
 	<td class="summary">Serializes table as readable multi-line text</td>
 	</tr>
 </table>
+<h2><a href="#Log__Methods">Log: Methods</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#Debug">Debug (msg, ...)</a></td>
+	<td class="summary">Logs a debug message if specified consoleLogLevel &amp; logLevel allow that</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#Error">Error (msg, ...)</a></td>
+	<td class="summary">Logs an error if specified consoleLogLevel &amp; logLevel allow that</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#Info">Info (msg, ...)</a></td>
+	<td class="summary">Logs an info message if specified consoleLogLevel &amp; logLevel allow that</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#Warn">Warn (msg, ...)</a></td>
+	<td class="summary">Logs a warning if specified consoleLogLevel &amp; logLevel allow that</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#setLevel">setLevel (consoleLogLevel[, logLevel=consoleLogLevel])</a></td>
+	<td class="summary">Changes log level</td>
+	</tr>
+</table>
 <h2><a href="#Log__Properties">Log: Properties</a></h2>
 <table class="function_list">
 	<tr>
@@ -139,29 +163,6 @@
 	<tr>
 	<td class="name" ><a href="#showTableAddress">showTableAddress</a></td>
 	<td class="summary">When auto-serializing tables should tables display their address?</td>
-	</tr>
-</table>
-<h2><a href="#Log__Methods">Log: Methods</a></h2>
-<table class="function_list">
-	<tr>
-	<td class="name" ><a href="#Debug">Debug (msg, ...)</a></td>
-	<td class="summary">Logs a debug message if specified consoleLogLevel &amp; logLevel allow that</td>
-	</tr>
-	<tr>
-	<td class="name" ><a href="#Error">Error (msg, ...)</a></td>
-	<td class="summary">Logs an error if specified consoleLogLevel &amp; logLevel allow that</td>
-	</tr>
-	<tr>
-	<td class="name" ><a href="#Info">Info (msg, ...)</a></td>
-	<td class="summary">Logs an info message if specified consoleLogLevel &amp; logLevel allow that</td>
-	</tr>
-	<tr>
-	<td class="name" ><a href="#Warn">Warn (msg, ...)</a></td>
-	<td class="summary">Logs a warning if specified consoleLogLevel &amp; logLevel allow that</td>
-	</tr>
-	<tr>
-	<td class="name" ><a href="#setLevel">setLevel (consoleLogLevel[, logLevel=consoleLogLevel])</a></td>
-	<td class="summary">Changes log level</td>
 	</tr>
 </table>
 
@@ -616,6 +617,166 @@ Azimuth.saveConfig(<span class="string">"MainConfigFile"</span>, modConfig, conf
 
 </dd>
 </dl>
+    <h2 class="section-header "><a name="Log__Methods"></a>Log: Methods</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Debug"></a>
+    <strong>Debug (msg, ...)</strong>
+    </dt>
+
+    <dd>
+
+    Logs a debug message if specified consoleLogLevel &amp; logLevel allow that
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">msg</span>
+           — Log message. May include %s, %d and other parameters similarly to the string.format
+          </li>
+          <li>
+              <span class="types"><span class="type">var..</span></span>
+          <span class="parameter">...</span>
+           — Various arguments
+          </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Error"></a>
+    <strong>Error (msg, ...)</strong>
+    </dt>
+
+    <dd>
+
+    Logs an error if specified consoleLogLevel &amp; logLevel allow that
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">msg</span>
+           — Log message. May include %s, %d and other parameters similarly to the string.format
+          </li>
+          <li>
+              <span class="types"><span class="type">var..</span></span>
+          <span class="parameter">...</span>
+           — Various arguments
+          </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <li><pre class="example">logs:Error(<span class="string">"Something went wrong"</span>)</pre></li>
+        <li><pre class="example">mylogs:Error(<span class="string">"Ship '%s' got error code '%i' at coordinates: %s"</span>, Entity().name, errorCode, {x = <span class="number">15</span>, y = <span class="number">28</span>})</pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Info"></a>
+    <strong>Info (msg, ...)</strong>
+    </dt>
+
+    <dd>
+
+    Logs an info message if specified consoleLogLevel &amp; logLevel allow that
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">msg</span>
+           — Log message. May include %s, %d and other parameters similarly to the string.format
+          </li>
+          <li>
+              <span class="types"><span class="type">var..</span></span>
+          <span class="parameter">...</span>
+           — Various arguments
+          </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Warn"></a>
+    <strong>Warn (msg, ...)</strong>
+    </dt>
+
+    <dd>
+
+    Logs a warning if specified consoleLogLevel &amp; logLevel allow that
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">msg</span>
+           — Log message. May include %s, %d and other parameters similarly to the string.format
+          </li>
+          <li>
+              <span class="types"><span class="type">var..</span></span>
+          <span class="parameter">...</span>
+           — Various arguments
+          </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <li><pre class="example">logs:Warn(<span class="string">"Warning message"</span>)</pre></li>
+        <li><pre class="example">mylogs:Warn(<span class="string">"A deprecated method '%s' was used"</span>, methodName)</pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "setLevel"></a>
+    <strong>setLevel (consoleLogLevel[, logLevel=consoleLogLevel])</strong>
+    </dt>
+
+    <dd>
+
+    Changes log level
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">consoleLogLevel</span>
+           — Determines which level messages will be displayed in a console. 1 - Errors, 2 - Errors &amp; Warnings, 3 - E &amp; W &amp; Info, 4 - E &amp; W &amp; I &amp; Debug
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">logLevel</span>
+           (<em>default</em>: consoleLogLevel)
+           — Same as consoleLogLevel, but messages will be written only in log file, not console
+          </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
     <h2 class="section-header "><a name="Log__Properties"></a>Log: Properties</h2>
 
     <dl class="function">
@@ -780,173 +941,13 @@ Azimuth.saveConfig(<span class="string">"MainConfigFile"</span>, modConfig, conf
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Log__Methods"></a>Log: Methods</h2>
-
-    <dl class="function">
-    <dt>
-    <a name = "Debug"></a>
-    <strong>Debug (msg, ...)</strong>
-    </dt>
-
-    <dd>
-
-    Logs a debug message if specified consoleLogLevel &amp; logLevel allow that
-
-
-    <h3>Parameters:</h3>
-    <ul>
-          <li>
-              <span class="types"><span class="type">string</span></span>
-          <span class="parameter">msg</span>
-           — Log message. May include %s, %d and other parameters similarly to the string.format
-          </li>
-          <li>
-              <span class="types"><span class="type">var..</span></span>
-          <span class="parameter">...</span>
-           — Various arguments
-          </li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Error"></a>
-    <strong>Error (msg, ...)</strong>
-    </dt>
-
-    <dd>
-
-    Logs an error if specified consoleLogLevel &amp; logLevel allow that
-
-
-    <h3>Parameters:</h3>
-    <ul>
-          <li>
-              <span class="types"><span class="type">string</span></span>
-          <span class="parameter">msg</span>
-           — Log message. May include %s, %d and other parameters similarly to the string.format
-          </li>
-          <li>
-              <span class="types"><span class="type">var..</span></span>
-          <span class="parameter">...</span>
-           — Various arguments
-          </li>
-    </ul>
-
-
-
-
-    <h3>Usage:</h3>
-    <ul class="usage">
-        <li><pre class="example">logs:Error(<span class="string">"Something went wrong"</span>)</pre></li>
-        <li><pre class="example">mylogs:Error(<span class="string">"Ship '%s' got error code '%i' at coordinates: %s"</span>, Entity().name, errorCode, {x = <span class="number">15</span>, y = <span class="number">28</span>})</pre></li>
-    </ul>
-
-</dd>
-    <dt>
-    <a name = "Info"></a>
-    <strong>Info (msg, ...)</strong>
-    </dt>
-
-    <dd>
-
-    Logs an info message if specified consoleLogLevel &amp; logLevel allow that
-
-
-    <h3>Parameters:</h3>
-    <ul>
-          <li>
-              <span class="types"><span class="type">string</span></span>
-          <span class="parameter">msg</span>
-           — Log message. May include %s, %d and other parameters similarly to the string.format
-          </li>
-          <li>
-              <span class="types"><span class="type">var..</span></span>
-          <span class="parameter">...</span>
-           — Various arguments
-          </li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Warn"></a>
-    <strong>Warn (msg, ...)</strong>
-    </dt>
-
-    <dd>
-
-    Logs a warning if specified consoleLogLevel &amp; logLevel allow that
-
-
-    <h3>Parameters:</h3>
-    <ul>
-          <li>
-              <span class="types"><span class="type">string</span></span>
-          <span class="parameter">msg</span>
-           — Log message. May include %s, %d and other parameters similarly to the string.format
-          </li>
-          <li>
-              <span class="types"><span class="type">var..</span></span>
-          <span class="parameter">...</span>
-           — Various arguments
-          </li>
-    </ul>
-
-
-
-
-    <h3>Usage:</h3>
-    <ul class="usage">
-        <li><pre class="example">logs:Warn(<span class="string">"Warning message"</span>)</pre></li>
-        <li><pre class="example">mylogs:Warn(<span class="string">"A deprecated method '%s' was used"</span>, methodName)</pre></li>
-    </ul>
-
-</dd>
-    <dt>
-    <a name = "setLevel"></a>
-    <strong>setLevel (consoleLogLevel[, logLevel=consoleLogLevel])</strong>
-    </dt>
-
-    <dd>
-
-    Changes log level
-
-
-    <h3>Parameters:</h3>
-    <ul>
-          <li>
-              <span class="types"><span class="type">int</span></span>
-          <span class="parameter">consoleLogLevel</span>
-           — Determines which level messages will be displayed in a console. 1 - Errors, 2 - Errors &amp; Warnings, 3 - E &amp; W &amp; Info, 4 - E &amp; W &amp; I &amp; Debug
-          </li>
-          <li>
-              <span class="types"><span class="type">int</span></span>
-          <span class="parameter">logLevel</span>
-           (<em>default</em>: consoleLogLevel)
-           — Same as consoleLogLevel, but messages will be written only in log file, not console
-          </li>
-    </ul>
-
-
-
-
-
-</dd>
-</dl>
 
 
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2020-07-11 17:14:24 </i>
+<i style="float:right;">Last updated 2020-07-20 17:11:34 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

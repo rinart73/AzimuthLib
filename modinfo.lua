@@ -13,6 +13,9 @@ meta =
     -- Title of your mod that will be displayed to players
     title = "AzimuthLib - Library for modders",
 
+    -- Type of your mod, either "mod" or "factionpack"
+    type = "mod",
+
     -- Description of your mod that will be displayed to players
     description = "A resource for modders that provides functions to make mod development easier. Mostly used in Rinart73 mods.",
 
@@ -20,8 +23,10 @@ meta =
     authors = {"Rinart73"},
 
     -- Version of your mod, should be in format 1.0.0 (major.minor.patch) or 1.0 (major.minor)
-    -- This will be used to check for unmet dependencies or incompatibilities
-    version = "1.4.1",
+    -- This will be used to check for unmet dependencies or incompatibilities, and to check compatibility between clients and dedicated servers with mods.
+    -- If a client with an unmatching major or minor mod version wants to log into a server, login is prohibited.
+    -- Unmatching patch version still allows logging into a server. This works in both ways (server or client higher or lower version).
+    version = "1.4.2",
 
     -- If your mod requires dependencies, enter them here. The game will check that all dependencies given here are met.
     -- Possible attributes:

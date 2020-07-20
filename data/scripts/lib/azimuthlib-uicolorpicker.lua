@@ -2,7 +2,6 @@
 -- @usage include("azimuthlib-uicolorpicker")
 -- @module UIColorPicker
 
-package.path = package.path .. ";data/scripts/lib/?.lua"
 include("utility")
 include("azimuthlib-uiproportionalsplitter")
 include("azimuthlib-uirectangle")

@@ -1,0 +1,2836 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>CustomTabbedWindow - AzimuthLib API Docs</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>AzimuthLib</h1>
+
+<ul>
+  <li><a href="../AzimuthLib.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Constructors">Constructors</a></li>
+<li><a href="#CustomTab__Methods">CustomTab: Methods</a></li>
+<li><a href="#CustomTab__Properties">CustomTab: Properties</a></li>
+<li><a href="#CustomTabbedWindow__Methods">CustomTabbedWindow: Methods</a></li>
+<li><a href="#CustomTabbedWindow__Properties">CustomTabbedWindow: Properties</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/Azimuth.html">Azimuth</a></li>
+  <li><strong>CustomTabbedWindow</strong></li>
+  <li><a href="../modules/UICollection.html">UICollection</a></li>
+  <li><a href="../modules/UIColorPicker.html">UIColorPicker</a></li>
+  <li><a href="../modules/UIProportionalSplitter.html">UIProportionalSplitter</a></li>
+  <li><a href="../modules/UIRectangle.html">UIRectangle</a></li>
+  <li><a href="../modules/UTF8.html">UTF8</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>CustomTabbedWindow</code></h1>
+<p>Currently TabbedWindows inside PlayerWindow, ShipWindow or Hud are bugged (they don't work); CustomTabbedWindow was created as a workaround.</p>
+<p>
+
+</p>
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <pre class="example"><span class="keyword">local</span> CustomTabbedWindow = include(<span class="string">"azimuthlib-customtabbedwindow"</span>)</pre>
+    </ul>
+
+
+<h2><a href="#Constructors">Constructors</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#CustomTabbedWindow">CustomTabbedWindow (namespace, parent, rect)</a></td>
+	<td class="summary">Creates new CustomTabbedWindow with its elements</td>
+	</tr>
+</table>
+<h2><a href="#CustomTab__Methods">CustomTab: Methods</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#clear">clear ()</a></td>
+	<td class="summary">Removes tab contents</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createAllianceEmblem">createAllianceEmblem (rect, allianceIndex)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createArrowLine">createArrowLine ()</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createButton">createButton (rect, caption, onBtnPressedFunction)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createCheckBox">createCheckBox (rect, caption, onCheckedFunction)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createComboBox">createComboBox (rect, onSelectedFunction)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createContainer">createContainer (rect)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createCraftPortrait">createCraftPortrait (rect, function)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createFrame">createFrame (rect)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createInputWindow">createInputWindow ()</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createInventorySelection">createInventorySelection (rect, width)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createLabel">createLabel (position, caption, fontSize)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createLine">createLine (from, to)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createListBox">createListBox (rect)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createListBoxEx">createListBoxEx (rect)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createMapArrowLine">createMapArrowLine ()</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createMapIcon">createMapIcon (texture, coordinates[, color])</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createMultiLineTextBox">createMultiLineTextBox (rect)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createNumbersBar">createNumbersBar (rect)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createPicture">createPicture (rect, path)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createPlanDisplayer">createPlanDisplayer (rect)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createProgressBar">createProgressBar (rect, color)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createRect">createRect (rect, color)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createRoundButton">createRoundButton (rect, icon, onBtnPressedFunction)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createSavedDesignsSelection">createSavedDesignsSelection (rect, width)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createScrollFrame">createScrollFrame (rect)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createSelection">createSelection (rect, width)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createSlider">createSlider (rect, min, max, steps, caption, onValueChangedFunction)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createStatisticsBar">createStatisticsBar (rect, color)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createTabbedWindow">createTabbedWindow (rect)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createTextBox">createTextBox (rect, onTextChangedFunction)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createTextField">createTextField (rect, text)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createTree">createTree (rect)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createValueComboBox">createValueComboBox (rect, onSelectedFunction)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createWindow">createWindow (rect)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+</table>
+<h2><a href="#CustomTab__Properties">CustomTab: Properties</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#center">center</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#description">description</a></td>
+	<td class="summary">A tooltip that is displayed when player hovers tab button</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#height">height</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#icon">icon</a></td>
+	<td class="summary">Tab button icon</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#isActiveTab">isActiveTab</a></td>
+	<td class="summary">Indicates if this tab is selected</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#layer">layer</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#localCenter">localCenter</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#localPosition">localPosition</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#localRect">localRect</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#lower">lower</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#mouseOver">mouseOver</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#name">name</a></td>
+	<td class="summary">Tab unique name</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#onSelectedFunction">onSelectedFunction</a></td>
+	<td class="summary">A callback that will fires when this tab is being selected</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#position">position</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#rect">rect</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#size">size</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#tooltip">tooltip</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#upper">upper</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#visible">visible</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#width">width</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+</table>
+<h2><a href="#CustomTabbedWindow__Methods">CustomTabbedWindow: Methods</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#activateAllTabs">activateAllTabs ()</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#activateTab">activateTab (tab)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#clear">clear ()</a></td>
+	<td class="summary">Deletes all tabs</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#createTab">createTab (name, icon, description)</a></td>
+	<td class="summary">Creates new tab and it's elements</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#deactivateTab">deactivateTab (tab)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#getActiveTab">getActiveTab ()</a></td>
+	<td class="summary">Returns selected tab</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#getTab">getTab (name)</a></td>
+	<td class="summary">Finds tab by name</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#moveTabToPosition">moveTabToPosition (tab, pos)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#moveTabToTheRight">moveTabToTheRight (tab)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#selectTab">selectTab (tab)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+</table>
+<h2><a href="#CustomTabbedWindow__Properties">CustomTabbedWindow: Properties</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#center">center</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#height">height</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#layer">layer</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#localCenter">localCenter</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#localPosition">localPosition</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#localRect">localRect</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#lower">lower</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#mouseOver">mouseOver</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#onSelectedFunction">onSelectedFunction</a></td>
+	<td class="summary">A callback that will fires when tab is being selected</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#position">position</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#rect">rect</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#size">size</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#tooltip">tooltip</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#upper">upper</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#visible">visible</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#width">width</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Constructors"></a>Constructors</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "CustomTabbedWindow"></a>
+    <strong>CustomTabbedWindow (namespace, parent, rect)</strong>
+    </dt>
+
+    <dd>
+
+    Creates new CustomTabbedWindow with its elements
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">table</span></span>
+          <span class="parameter">namespace</span>
+           — Your mod namespace
+          </li>
+          <li>
+              <span class="types"><span class="type">ScriptUI/GalaxyMap/UIContainer</span></span>
+          <span class="parameter">parent</span>
+           — Parent element
+          </li>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+           — Rect area
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../modules/CustomTabbedWindow.html#CustomTabbedWindow">CustomTabbedWindow</a></span>
+
+
+
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul class="usage">
+        <pre class="example"><span class="keyword">function</span> MyModNamespace.initUI()
+    <span class="keyword">local</span> tabbedWindow = CustomTabbedWindow(MyModNamespace, window, Rect(vec2(<span class="number">10</span>, <span class="number">10</span>), size - <span class="number">10</span>))
+<span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="CustomTab__Methods"></a>CustomTab: Methods</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "clear"></a>
+    <strong>clear ()</strong>
+    </dt>
+
+    <dd>
+
+    Removes tab contents
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createAllianceEmblem"></a>
+    <strong>createAllianceEmblem (rect, allianceIndex)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">allianceIndex</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Picture</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createArrowLine"></a>
+    <strong>createArrowLine ()</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">ArrowLine</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createButton"></a>
+    <strong>createButton (rect, caption, onBtnPressedFunction)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">caption</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">onBtnPressedFunction</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Button</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createCheckBox"></a>
+    <strong>createCheckBox (rect, caption, onCheckedFunction)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">caption</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">onCheckedFunction</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">CheckBox</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createComboBox"></a>
+    <strong>createComboBox (rect, onSelectedFunction)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">onSelectedFunction</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">ComboBox</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createContainer"></a>
+    <strong>createContainer (rect)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">UIContainer</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createCraftPortrait"></a>
+    <strong>createCraftPortrait (rect, function)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">function</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">CraftPortrait</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createFrame"></a>
+    <strong>createFrame (rect)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Frame</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createInputWindow"></a>
+    <strong>createInputWindow ()</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">InputWindow</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createInventorySelection"></a>
+    <strong>createInventorySelection (rect, width)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">width</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">InventorySelection</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createLabel"></a>
+    <strong>createLabel (position, caption, fontSize)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect/vec2</span></span>
+          <span class="parameter">position</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">caption</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">fontSize</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Label</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createLine"></a>
+    <strong>createLine (from, to)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">vec2</span></span>
+          <span class="parameter">from</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">vec2</span></span>
+          <span class="parameter">to</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Line</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createListBox"></a>
+    <strong>createListBox (rect)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">ListBox</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createListBoxEx"></a>
+    <strong>createListBoxEx (rect)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">ListBoxEx</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createMapArrowLine"></a>
+    <strong>createMapArrowLine ()</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">MapArrowLine</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createMapIcon"></a>
+    <strong>createMapIcon (texture, coordinates[, color])</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">texture</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">ivec2</span></span>
+          <span class="parameter">coordinates</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">Color</span></span>
+          <span class="parameter">color</span>
+           (<em>optional</em>)
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">MapIcon</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createMultiLineTextBox"></a>
+    <strong>createMultiLineTextBox (rect)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">MultiLineTextBox</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createNumbersBar"></a>
+    <strong>createNumbersBar (rect)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">NumbersBar</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createPicture"></a>
+    <strong>createPicture (rect, path)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">path</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Picture</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createPlanDisplayer"></a>
+    <strong>createPlanDisplayer (rect)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">PlanDisplayer</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createProgressBar"></a>
+    <strong>createProgressBar (rect, color)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">Color</span></span>
+          <span class="parameter">color</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">ProgressBar</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createRect"></a>
+    <strong>createRect (rect, color)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">Color</span></span>
+          <span class="parameter">color</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">UIRect</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createRoundButton"></a>
+    <strong>createRoundButton (rect, icon, onBtnPressedFunction)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">icon</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">onBtnPressedFunction</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">RoundButton</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createSavedDesignsSelection"></a>
+    <strong>createSavedDesignsSelection (rect, width)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">width</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">SavedDesignsSelection</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createScrollFrame"></a>
+    <strong>createScrollFrame (rect)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">ScrollFrame</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createSelection"></a>
+    <strong>createSelection (rect, width)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">width</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Selection</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createSlider"></a>
+    <strong>createSlider (rect, min, max, steps, caption, onValueChangedFunction)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">min</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">max</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">steps</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">caption</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">onValueChangedFunction</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Slider</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createStatisticsBar"></a>
+    <strong>createStatisticsBar (rect, color)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">Color</span></span>
+          <span class="parameter">color</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">StatisticsBar</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createTabbedWindow"></a>
+    <strong>createTabbedWindow (rect)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">TabbedWindow</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createTextBox"></a>
+    <strong>createTextBox (rect, onTextChangedFunction)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">onTextChangedFunction</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">TextBox</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createTextField"></a>
+    <strong>createTextField (rect, text)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">text</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">TextField</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createTree"></a>
+    <strong>createTree (rect)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Tree</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createValueComboBox"></a>
+    <strong>createValueComboBox (rect, onSelectedFunction)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">onSelectedFunction</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">ValueComboBox</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createWindow"></a>
+    <strong>createWindow (rect)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">Rect</span></span>
+          <span class="parameter">rect</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Window</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="CustomTab__Properties"></a>CustomTab: Properties</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "center"></a>
+    <strong><span class="type">vec2</span> center</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "description"></a>
+    <strong><span class="type">string</span> description</strong>
+    </dt>
+
+    <dd>
+
+    A tooltip that is displayed when player hovers tab button
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "height"></a>
+    <strong><span class="type">float</span> height</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "icon"></a>
+    <strong><span class="type">string</span> icon</strong>
+    </dt>
+
+    <dd>
+
+    Tab button icon
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isActiveTab"></a>
+    <strong><span class="type">bool</span> isActiveTab</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Indicates if this tab is selected
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "layer"></a>
+    <strong><span class="type">int</span> layer</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "localCenter"></a>
+    <strong><span class="type">vec2</span> localCenter</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "localPosition"></a>
+    <strong><span class="type">vec2</span> localPosition</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "localRect"></a>
+    <strong><span class="type">Rect</span> localRect</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "lower"></a>
+    <strong><span class="type">vec2</span> lower</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "mouseOver"></a>
+    <strong><span class="type">bool</span> mouseOver</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "name"></a>
+    <strong><span class="type">string</span> name</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd>
+
+    Tab unique name
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "onSelectedFunction"></a>
+    <strong><span class="type">string</span> onSelectedFunction</strong>
+    </dt>
+
+    <dd>
+
+    A callback that will fires when this tab is being selected
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "position"></a>
+    <strong><span class="type">vec2</span> position</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "rect"></a>
+    <strong><span class="type">Rect</span> rect</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "size"></a>
+    <strong><span class="type">vec2</span> size</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "tooltip"></a>
+    <strong><span class="type">nil/string</span> tooltip</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "upper"></a>
+    <strong><span class="type">vec2</span> upper</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "visible"></a>
+    <strong><span class="type">bool</span> visible</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "width"></a>
+    <strong><span class="type">float</span> width</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="CustomTabbedWindow__Methods"></a>CustomTabbedWindow: Methods</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "activateAllTabs"></a>
+    <strong>activateAllTabs ()</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "activateTab"></a>
+    <strong>activateTab (tab)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">CustomTab</span></span>
+          <span class="parameter">tab</span>
+
+
+
+          </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "clear"></a>
+    <strong>clear ()</strong>
+    </dt>
+
+    <dd>
+
+    Deletes all tabs
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "createTab"></a>
+    <strong>createTab (name, icon, description)</strong>
+    </dt>
+
+    <dd>
+
+    Creates new tab and it's elements
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">name</span>
+           — Unique name
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">icon</span>
+           — Tab icon
+          </li>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">description</span>
+           — Text that will be displayed upon hovering tab icon
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">CustomTab</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "deactivateTab"></a>
+    <strong>deactivateTab (tab)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">CustomTab</span></span>
+          <span class="parameter">tab</span>
+
+
+
+          </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getActiveTab"></a>
+    <strong>getActiveTab ()</strong>
+    </dt>
+
+    <dd>
+
+    Returns selected tab
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">CustomTab</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getTab"></a>
+    <strong>getTab (name)</strong>
+    </dt>
+
+    <dd>
+
+    Finds tab by name
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">string</span></span>
+          <span class="parameter">name</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">CustomTab</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "moveTabToPosition"></a>
+    <strong>moveTabToPosition (tab, pos)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">CustomTab</span></span>
+          <span class="parameter">tab</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">int</span></span>
+          <span class="parameter">pos</span>
+
+
+
+          </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "moveTabToTheRight"></a>
+    <strong>moveTabToTheRight (tab)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">CustomTab</span></span>
+          <span class="parameter">tab</span>
+
+
+
+          </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "selectTab"></a>
+    <strong>selectTab (tab)</strong>
+    </dt>
+
+    <dd>
+
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">CustomTab</span></span>
+          <span class="parameter">tab</span>
+
+
+
+          </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="CustomTabbedWindow__Properties"></a>CustomTabbedWindow: Properties</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "center"></a>
+    <strong><span class="type">vec2</span> center</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "height"></a>
+    <strong><span class="type">float</span> height</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "layer"></a>
+    <strong><span class="type">int</span> layer</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "localCenter"></a>
+    <strong><span class="type">vec2</span> localCenter</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "localPosition"></a>
+    <strong><span class="type">vec2</span> localPosition</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "localRect"></a>
+    <strong><span class="type">Rect</span> localRect</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "lower"></a>
+    <strong><span class="type">vec2</span> lower</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "mouseOver"></a>
+    <strong><span class="type">bool</span> mouseOver</strong>
+            <span class="warning">[read-only]</span>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "onSelectedFunction"></a>
+    <strong><span class="type">string</span> onSelectedFunction</strong>
+    </dt>
+
+    <dd>
+
+    A callback that will fires when tab is being selected
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "position"></a>
+    <strong><span class="type">vec2</span> position</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "rect"></a>
+    <strong><span class="type">Rect</span> rect</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "size"></a>
+    <strong><span class="type">vec2</span> size</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "tooltip"></a>
+    <strong><span class="type">nil/string</span> tooltip</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "upper"></a>
+    <strong><span class="type">vec2</span> upper</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "visible"></a>
+    <strong><span class="type">bool</span> visible</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "width"></a>
+    <strong><span class="type">float</span> width</strong>
+    </dt>
+
+    <dd class="empty">
+
+
+
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2020-07-20 17:11:34 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
