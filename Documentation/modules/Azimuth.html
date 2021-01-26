@@ -48,6 +48,10 @@
   <li><a href="../modules/UIRectangle.html">UIRectangle</a></li>
   <li><a href="../modules/UTF8.html">UTF8</a></li>
 </ul>
+<h2>Examples</h2>
+<ul class="nowrap">
+  <li><a href="../examples/config-options.lua.html">config-options.lua</a></li>
+</ul>
 
 </div>
 
@@ -61,7 +65,7 @@
     <li>Logging functions with separate console and file log levels</li>
     <li>Ordered 'pairs' function</li>
     <li>'serialize' function for debugging tables and serializing data</li>
-    <li>Validation functions for int &amp; float values</li>
+    <li>Validation functions for int, float and table values</li>
 </ul>
 </p>
     <h3>Usage:</h3>
@@ -81,6 +85,10 @@
 	<td class="summary">Validation function that checks if a value is not empty, correct type and within borders</td>
 	</tr>
 	<tr>
+	<td class="name" ><a href="#isList">isList (o[, fix=false])</a></td>
+	<td class="summary">Validation function that checks if a table is a proper list (numerical keys only, no gaps).</td>
+	</tr>
+	<tr>
 	<td class="name" ><a href="#loadConfig">loadConfig (modName, options[, isSeedDependant=false[, modFolder=false]])</a></td>
 	<td class="summary">Loads mod config from file</td>
 	</tr>
@@ -90,7 +98,7 @@
 	</tr>
 	<tr>
 	<td class="name" ><a href="#orderedPairs">orderedPairs (tbl[, sort[, ref]])</a></td>
-	<td class="summary">Allows to iterate a table by key in alphabetical order</td>
+	<td class="summary">Allows to iterate a table by key in alphabetical or custom order</td>
 	</tr>
 	<tr>
 	<td class="name" ><a href="#saveConfig">saveConfig (modName, config[, options[, isSeedDependant=false[, modFolder=false[, minify=false]]]])</a></td>
@@ -99,6 +107,10 @@
 	<tr>
 	<td class="name" ><a href="#serialize">serialize (o[, options[, prefix=""[, addCarriageReturn=false[, minify=false[, recursive=false]]]]])</a></td>
 	<td class="summary">Serializes table as readable multi-line text</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#validate">validate (data, options)</a></td>
+	<td class="summary">Validation function that allows to check and fix input data with the use of a config options table.</td>
 	</tr>
 </table>
 <h2><a href="#Log__Methods">Log: Methods</a></h2>
@@ -295,6 +307,48 @@
 
 </dd>
     <dt>
+    <a name = "isList"></a>
+    <strong>isList (o[, fix=false])</strong>
+    </dt>
+
+    <dd>
+
+    Validation function that checks if a table is a proper list (numerical keys only, no gaps).  Can transform table into list if required
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">table</span></span>
+          <span class="parameter">o</span>
+           — Input table
+          </li>
+          <li>
+              <span class="types"><span class="type">bool</span></span>
+          <span class="parameter">fix</span>
+           (<em>default</em>: false)
+           — If true, function will return 'fixed' list
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">bool</span></span>
+        isValidList</li>
+        <li>
+           <span class="types"><span class="type">int</span></span>
+        listLength</li>
+        <li>
+           <span class="types"><span class="type">table</span></span>
+        fixedList</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
     <a name = "loadConfig"></a>
     <strong>loadConfig (modName, options[, isSeedDependant=false[, modFolder=false]])</strong>
     </dt>
@@ -314,15 +368,7 @@
           <li>
               <span class="types"><span class="type">table</span></span>
           <span class="parameter">options</span>
-
-<p> — Config options with default values and comments. Each element of the table can have following propertiesː</p>
-
-<ul>
-    <li>var default — Default value of a variable</li>
-    <li>number min/max <em>(optional)</em> — Minimum and maximum values of a variable (if it's a number)</li>
-    <li>string format <em>(optional)</em> — Selected way of rounding will be applied for loaded numeric variable (can be 'floor', 'round' or 'ceil')</li>
-</ul>
-
+           — Config options with default values (key [1] or ["default"]) and other optional properties. More about config options: <a href="../examples/config-options.lua.html#">config-options.lua</a>
           </li>
           <li>
               <span class="types"><span class="type">bool</span></span>
@@ -346,7 +392,7 @@
         <li>
            <span class="types"><span class="type">var</span></span>
 
-<p> status — Error/status Can be one of the followingː</p>
+<p> status — Error/status. Can be one of the followingː</p>
 
 <ul>
     <li>string — It's an error message.</li>
@@ -361,9 +407,9 @@
 
     <h3>Usage:</h3>
     <ul class="usage">
-        <li><pre class="example"><span class="keyword">local</span> tbl = Azimuth.loadConfig(<span class="string">"MyMod"</span>, { WindowWidth = { default = <span class="number">300</span> } })</pre></li>
+        <li><pre class="example"><span class="keyword">local</span> tbl = Azimuth.loadConfig(<span class="string">"MyMod"</span>, { WindowWidth = {<span class="number">300</span>} })</pre></li>
         <li><pre class="example"><span class="keyword">local</span> configOptions = {
-  WindowWidth = { default = <span class="number">300</span>, comment = <span class="string">"UI window width"</span>, min = <span class="number">100</span>, max = <span class="number">600</span>, format = <span class="string">"ceil"</span> }
+  WindowWidth = {<span class="number">300</span>, round = <span class="number">1</span>, min = <span class="number">100</span>, max = <span class="number">600</span>, comment = <span class="string">"UI window width"</span>}
 }
 <span class="keyword">local</span> modConfig, isModified = Azimuth.loadConfig(<span class="string">"MainConfigFile"</span>, configOptions, <span class="keyword">true</span>, <span class="string">"MyMod"</span>)
 <span class="keyword">if</span> isModified <span class="keyword">then</span>
@@ -434,7 +480,7 @@
 
     <dd>
 
-    Allows to iterate a table by key in alphabetical order
+    Allows to iterate a table by key in alphabetical or custom order
 
 
     <h3>Parameters:</h3>
@@ -448,7 +494,7 @@
               <span class="types"><span class="type">function</span></span>
           <span class="parameter">sort</span>
            (<em>optional</em>)
-            — Sorting function for keys
+           — Sorting function for keys
           </li>
           <li>
               <span class="types"><span class="type">table</span></span>
@@ -505,7 +551,8 @@
 <p> — Config options with default values and comments. Each element of the table can have following propertiesː</p>
 
 <ul>
-    <li>var default <em>(optional)</em> — Default value of a variable. Will be added to a commentary unless it's a table</li>
+    <li>var [1] <em>(optional)</em> — Default value of a variable (new format). Will be added to a commentary unless it's a table</li>
+    <li>var default <em>(optional)</em> — Default value of a variable (old format). Will be added to a commentary unless it's a table</li>
     <li>string comment <em>(optional)</em> — Variable description </li>
 </ul>
 
@@ -545,7 +592,7 @@
     <h3>Usage:</h3>
     <ul class="usage">
         <pre class="example"><span class="keyword">local</span> configOptions = {
-  WindowWidth = { default = <span class="number">300</span>, comment = <span class="string">"UI window width"</span>, min = <span class="number">100</span>, max = <span class="number">600</span>, format = <span class="string">"ceil"</span> }
+  WindowWidth = {<span class="number">300</span>, min = <span class="number">100</span>, max = <span class="number">600</span>, round = -<span class="number">1</span>, comment = <span class="string">"UI window width"</span>}
 }
 Azimuth.saveConfig(<span class="string">"MainConfigFile"</span>, modConfig, configOptions, <span class="keyword">false</span>, <span class="string">"MyMod"</span>)</pre>
     </ul>
@@ -612,8 +659,54 @@ Azimuth.saveConfig(<span class="string">"MainConfigFile"</span>, modConfig, conf
     <h3>Usage:</h3>
     <ul class="usage">
         <li><pre class="example"><span class="global">print</span>(Azimuth.serialize(myTable))</pre></li>
-        <li><pre class="example"><span class="global">print</span>(Azimuth.serialize({ myVar = <span class="number">30</span> }, { myVar = { default = <span class="number">20</span>, comment = <span class="string">"This variable does stuff"</span> } }))</pre></li>
+        <li><pre class="example"><span class="global">print</span>(Azimuth.serialize({myVar = <span class="number">30</span>}, {myVar = {default = <span class="number">20</span>, comment = <span class="string">"This variable does stuff"</span>}}))</pre></li>
+        <li><pre class="example"><span class="global">print</span>(Azimuth.serialize({myVar = <span class="number">30</span>}, {[<span class="string">"myVar"</span>] = {<span class="number">20</span>, comment = <span class="string">"This variable does stuff"</span> }}))</pre></li>
     </ul>
+
+</dd>
+    <dt>
+    <a name = "validate"></a>
+    <strong>validate (data, options)</strong>
+    </dt>
+
+    <dd>
+
+    Validation function that allows to check and fix input data with the use of a config options table.  Works <strong>ONLY</strong> for the <strong>NEW</strong> config options format
+
+
+    <h3>Parameters:</h3>
+    <ul>
+          <li>
+              <span class="types"><span class="type">table</span></span>
+          <span class="parameter">data</span>
+
+
+
+          </li>
+          <li>
+              <span class="types"><span class="type">table</span></span>
+          <span class="parameter">options</span>
+
+
+
+          </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">table</span></span>
+        fixedData</li>
+        <li>
+           <span class="types"><span class="type">bool</span></span>
+        isModified</li>
+        <li>
+           <span class="types"><span class="type">bool</span></span>
+        _</li>
+    </ol>
+
+
+
 
 </dd>
 </dl>
@@ -947,7 +1040,7 @@ Azimuth.saveConfig(<span class="string">"MainConfigFile"</span>, modConfig, conf
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2020-07-20 17:11:34 </i>
+<i style="float:right;">Last updated 2021-01-26 04:05:35 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
