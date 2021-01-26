@@ -8,6 +8,8 @@
 -- @usage local Azimuth = include("azimuthlib-basic")
 -- @module Azimuth
 
+include("utility")
+
 local Azimuth = {}
 
 
