@@ -353,9 +353,9 @@ function Azimuth.loadConfig(modName, options, isSeedDependant, modFolder)
     end
     local getDefaultConfig
     if newFormat then
-        getDefaultConfig = function(options) return Azimuth.validate(nil, options) end
+        getDefaultConfig = function() return Azimuth.validate(nil, options) end
     else
-        getDefaultConfig = function(options)
+        getDefaultConfig = function()
             local r = {}
             for k, v in pairs(options) do
                 r[k] = v.default
@@ -752,7 +752,7 @@ end
 -- @treturn bool _
 function Azimuth.validate(data, options)
     options = Azimuth._prepareOptions(options)
-    return Azimuth._validateFields(data, options)
+    return Azimuth._validateFields(data or {}, options)
 end
 
 return Azimuth
