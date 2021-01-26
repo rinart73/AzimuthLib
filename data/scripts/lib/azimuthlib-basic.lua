@@ -4,9 +4,10 @@
 --- * Logging functions with separate console and file log levels
 --- * Ordered 'pairs' function
 --- * 'serialize' function for debugging tables and serializing data
---- * Validation functions for int & float values
+--- * Validation functions for int, float and table values
 -- @usage local Azimuth = include("azimuthlib-basic")
 -- @module Azimuth
+
 local Azimuth = {}
 
 
@@ -76,28 +77,10 @@ end
 -- @usage logs:Error("Something went wrong")
 -- @usage mylogs:Error("Ship '%s' got error code '%i' at coordinates: %s", Entity().name, errorCode, {x = 15, y = 28})
 function Log:Error(msg, ...)
-    -- temporary backwards compatibility
-    local oldMsg
-    if type(self) ~= 'table' then
-        --[[if not Azimuth._logWarning then
-            Azimuth._logWarning = true
-            print("[WARN][AzimuthLib]: One of the mods in the file '%s' uses the old way to calling log functions via dot (eg '.Debug'). Use colons now (eg ':Debug'). Right now it will still work but can result in log mix-ups, but in the future versions backwards compatibility will be removed and this will result in an error instead.", getScriptPath())
-        end]]
-        oldMsg = msg
-        msg = self
-        self = Azimuth._log
-    end
-    if 1 > self.consoleLogLevel and 1 > self.logLevel then return end
-    local args
-    if oldMsg then -- old .
-        args = self:_transformArgs(oldMsg, ...)
-    else -- new :
-        args = self:_transformArgs(...)
-    end
     if 1 <= self.consoleLogLevel then
-        eprint("[ERROR][%s]: "..msg, self.modName, unpack(args))
-    else
-        printlog("[ERROR][%s]: "..msg, self.modName, unpack(args))
+        eprint("[ERROR][%s]: "..msg, self.modName, unpack(self:_transformArgs(...)))
+    elseif 1 <= self.logLevel then
+        printlog("[ERROR][%s]: "..msg, self.modName, unpack(self:_transformArgs(...)))
     end
 end
 
@@ -109,28 +92,10 @@ end
 -- @usage logs:Warn("Warning message")
 -- @usage mylogs:Warn("A deprecated method '%s' was used", methodName)
 function Log:Warn(msg, ...)
-    -- temporary backwards compatibility
-    local oldMsg
-    if type(self) ~= 'table' then
-        --[[if not Azimuth._logWarning then
-            Azimuth._logWarning = true
-            print("[WARN][AzimuthLib]: One of the mods in the file '%s' uses the old way to calling log functions via dot (eg '.Debug'). Use colons now (eg ':Debug'). Right now it will still work but can result in log mix-ups, but in the future versions backwards compatibility will be removed and this will result in an error instead.", getScriptPath())
-        end]]
-        oldMsg = msg
-        msg = self
-        self = Azimuth._log
-    end
-    if 2 > self.consoleLogLevel and 2 > self.logLevel then return end
-    local args
-    if oldMsg then -- old .
-        args = self:_transformArgs(oldMsg, ...)
-    else -- new :
-        args = self:_transformArgs(...)
-    end
     if 2 <= self.consoleLogLevel then
-        print("[WARN][%s]: "..msg, self.modName, unpack(args))
-    else
-        printlog("[WARN][%s]: "..msg, self.modName, unpack(args))
+        print("[WARN][%s]: "..msg, self.modName, unpack(self:_transformArgs(...)))
+    elseif 2 <= self.logLevel then
+        printlog("[WARN][%s]: "..msg, self.modName, unpack(self:_transformArgs(...)))
     end
 end
 
@@ -140,28 +105,10 @@ end
 -- @tparam string msg — Log message. May include %s, %d and other parameters similarly to the string.format
 -- @tparam var.. ... — Various arguments
 function Log:Info(msg, ...)
-    -- temporary backwards compatibility
-    local oldMsg
-    if type(self) ~= 'table' then
-        --[[if not Azimuth._logWarning then
-            Azimuth._logWarning = true
-            print("[WARN][AzimuthLib]: One of the mods in the file '%s' uses the old way to calling log functions via dot (eg '.Debug'). Use colons now (eg ':Debug'). Right now it will still work but can result in log mix-ups, but in the future versions backwards compatibility will be removed and this will result in an error instead.", getScriptPath())
-        end]]
-        oldMsg = msg
-        msg = self
-        self = Azimuth._log
-    end
-    if 3 > self.consoleLogLevel and 3 > self.logLevel then return end
-    local args
-    if oldMsg then -- old .
-        args = self:_transformArgs(oldMsg, ...)
-    else -- new :
-        args = self:_transformArgs(...)
-    end
     if 3 <= self.consoleLogLevel then
-        print("[INFO][%s]: "..msg, self.modName, unpack(args))
-    else
-        printlog("[INFO][%s]: "..msg, self.modName, unpack(args))
+        print("[INFO][%s]: "..msg, self.modName, unpack(self:_transformArgs(...)))
+    elseif 3 <= self.logLevel then
+        printlog("[INFO][%s]: "..msg, self.modName, unpack(self:_transformArgs(...)))
     end
 end
 
@@ -171,28 +118,10 @@ end
 -- @tparam string msg — Log message. May include %s, %d and other parameters similarly to the string.format
 -- @tparam var.. ... — Various arguments
 function Log:Debug(msg, ...)
-    -- temporary backwards compatibility
-    local oldMsg
-    if type(self) ~= 'table' then
-        --[[if not Azimuth._logWarning then
-            Azimuth._logWarning = true
-            print("[WARN][AzimuthLib]: One of the mods in the file '%s' uses the old way to calling log functions via dot (eg '.Debug'). Use colons now (eg ':Debug'). Right now it will still work but can result in log mix-ups, but in the future versions backwards compatibility will be removed and this will result in an error instead.", getScriptPath())
-        end]]
-        oldMsg = msg
-        msg = self
-        self = Azimuth._log
-    end
-    if 4 > self.consoleLogLevel and 4 > self.logLevel then return end
-    local args
-    if oldMsg then -- old .
-        args = self:_transformArgs(oldMsg, ...)
-    else -- new :
-        args = self:_transformArgs(...)
-    end
     if 4 <= self.consoleLogLevel then
-        print("[DEBUG][%s]: "..msg, self.modName, unpack(args))
-    else
-        printlog("[DEBUG][%s]: "..msg, self.modName, unpack(args))
+        print("[DEBUG][%s]: "..msg, self.modName, unpack(self:_transformArgs(...)))
+    elseif 4 <= self.logLevel then
+        printlog("[DEBUG][%s]: "..msg, self.modName, unpack(self:_transformArgs(...)))
     end
 end
 
@@ -231,16 +160,13 @@ function Azimuth.logs(modName, consoleLogLevel, logLevel)
       showTableAddress = false
     }, Log)
     newLog:setLevel(consoleLogLevel, logLevel)
-
-    -- temporary backwards compatibility
-    Azimuth._log = newLog
-
     return newLog
 end
 
---- Allows to iterate a table by key in alphabetical order
+
+--- Allows to iterate a table by key in alphabetical or custom order
 -- @tparam table tbl — Table
--- @tparam[opt] function sort  — Sorting function for keys
+-- @tparam[opt] function sort — Sorting function for keys
 -- @tparam[opt] table ref — A reference table, orderedPairs will add the 'len' attrute to it
 -- @treturn function iterator
 -- @usage for k, v in Azimuth.orderedPairs(myTable, function(tbl, firstKey, secondKey) return tbl[firstKey] < tbl[secondKey] end) do
@@ -285,202 +211,238 @@ end
 -- @tparam[opt=false] bool recursive — If true, the resulting table dump will have "__address" field for each non-empty table, containing its address
 -- @treturn string result — Serialized table
 -- @usage print(Azimuth.serialize(myTable))
--- @usage print(Azimuth.serialize({ myVar = 30 }, { myVar = { default = 20, comment = "This variable does stuff" } }))
+-- @usage print(Azimuth.serialize({myVar = 30}, {myVar = {default = 20, comment = "This variable does stuff"}}))
+-- @usage print(Azimuth.serialize({myVar = 30}, {["myVar"] = {20, comment = "This variable does stuff" }}))
 function Azimuth.serialize(o, options, prefix, addCarriageReturn, minify, recursive)
-    if type(o) == 'table' then
-        if minify then options = nil end
-        if not prefix or minify then prefix = "" end
-        local newLine = ""
-        if not minify then
-            newLine = addCarriageReturn and "\r\n" or "\n"
+    if type(o) ~= "table" then
+        return type(o) == "string" and '"'..o:gsub("([\"\\])", "\\%1")..'"' or tostring(o)
+    end
+
+    if minify then options = nil end
+    if options then
+        options = Azimuth._prepareOptions(options)
+    end
+    if not prefix or minify then prefix = "" end
+    if recursive == true or not recursive then
+        recursive = { isDebug = recursive == true, tables = {} }
+    end
+    local endL = ""
+    if not minify then
+        endL = addCarriageReturn and "\r\n" or "\n"
+    end
+
+    local function _serialize(o, options, endL, prefix, minify, recursive)
+        if type(o) ~= "table" then
+            return type(o) == "string" and '"'..o:gsub("([\"\\])", "\\%1")..'"' or tostring(o)
         end
-        if recursive == true or not recursive then
-            recursive = { isDebug = recursive == true, tables = {} }
+        local address = tostring(o)
+        if recursive.tables[address] then -- recursion
+            return '{["__recursion"]="'..address..'"}' or '{["__recursion"] = "'..address..'"}'
         end
-        local tblString = tostring(o)
-        if recursive.tables[tblString] then -- recursion
-            return minify and '{["__recursion"]="'..tblString..'"}' or '{["__recursion"] = "'..tblString..'"}'
+        if options and options._ then
+            options = options._
         end
         local s = "{"
-        local newprefix = minify and "" or prefix .. "  "
-        -- check if it's a list
-        local isList = true
-        local minKey = math.huge
-        local maxKey = 0
-        local numVars = 0
-        for k, _ in pairs(o) do
-            if type(k) ~= 'number' then
-                isList = false
-                break
-            end
-            if k < minKey then minKey = k end
-            if k > maxKey then maxKey = k end
-            numVars = numVars + 1
-        end
-        local hasTableAsChild = false
-        if isList and minKey == 1 and maxKey == numVars then -- write as list
-            for k = 1, numVars do
+        local newPrefix = minify and "" or prefix.."  "
+        local hasTableChild = false
+        local isList, length = Azimuth.isList(o)
+        if isList then
+            for k = 1, length do
                 local v = o[k]
-                if not hasTableAsChild and type(v) == "table" then
-                    recursive.tables[tblString] = true
-                    hasTableAsChild = true
+                if not hasTableChild and type(v) == "table" then
+                    recursive.tables[address] = true
+                    hasTableChild = true
                 end
-                s = s .. (k == 1 and newLine or "," .. newLine) .. newprefix .. Azimuth.serialize(v, nil, newprefix, addCarriageReturn, minify, recursive)
+                local fieldOptions
+                if options then
+                    fieldOptions = options["*"]
+                    if not fieldOptions then fieldOptions = options[k] end
+                end
+                s = s..(k == 1 and endL or ","..endL)..newPrefix.._serialize(v, fieldOptions, endL, newPrefix, minify, recursive)
             end
-        else -- write as usual table
-            local ov
+        else -- normal table
             local i = 0
-            local ref = {} -- table length
+            local ref = {} -- stores table length
             for k, v in Azimuth.orderedPairs(o, nil, ref) do
                 i = i + 1
                 if i == 1 and not minify then
-                    s = s .. newLine
+                    s = s..endL
                 end
-                ov = options and options[k]
-                if ov then
-                    if ov.default ~= nil and type(ov.default) ~= "table" then
-                        s = s .. newprefix .. "-- Default: " .. tostring(ov.default) .. (ov.comment and ". " .. ov.comment or "") .. newLine
-                    elseif ov.comment then
-                        s = s .. newprefix .. "-- " .. ov.comment .. newLine
+                local fieldOptions
+                if options then
+                    fieldOptions = options["*"]
+                    if not fieldOptions then fieldOptions = options[k] end
+                end
+                if fieldOptions then
+                    -- multiline comments
+                    local commentStart, commentEnd = "-- ", ""
+                    local comment
+                    if fieldOptions.comment then
+                        local count
+                        comment, count = fieldOptions.comment:gsub("([\r\n]%s*)", endL..newPrefix)
+                        if count > 0 then
+                            commentStart, commentEnd = "--[=[", "]=]"
+                        end
+                    end
+                    local default = fieldOptions[1] and fieldOptions[1] or fieldOptions.default
+                    if default ~= nil and type(default) ~= "table" then
+                        s = s..newPrefix..commentStart.."Default: "..tostring(default)..(comment and ". "..comment or "")..commentEnd..endL
+                    elseif comment then
+                        s = s..newPrefix..commentStart..comment..commentEnd..endL
                     end
                 end
                 if type(k) ~= 'number' then
-                    k = '"' .. tostring(k):gsub("([\"\\])", "\\%1") .. '"'
+                    k = '"'..tostring(k):gsub("([\"\\])", "\\%1")..'"'
                 end
-                if not hasTableAsChild and type(v) == "table" then
-                    recursive.tables[tblString] = true
-                    hasTableAsChild = true
+                if not hasTableChild and type(v) == "table" then
+                    recursive.tables[address] = true
+                    hasTableChild = true
                 end
                 if minify then
-                    s = s .. (i == 1 and '[' or ',[') .. k .. ']=' .. Azimuth.serialize(v, nil, newprefix, addCarriageReturn, minify, recursive)
+                    s = s..(i == 1 and "[" or ",[")..k.."]=".._serialize(v, fieldOptions, endL, newPrefix, minify, recursive)
                 else
-                    s = s .. newprefix .. '[' .. k .. '] = ' .. Azimuth.serialize(v, nil, newprefix, addCarriageReturn, minify, recursive)
+                    s = s..newPrefix.."["..k.."] = ".._serialize(v, fieldOptions, endL, newPrefix, minify, recursive)
                     if i < ref.len then
-                        s = s .. "," .. newLine
+                        s = s..","..endL
                     end
                 end
             end
         end
         -- write table address
-        if recursive.isDebug and not (isList and numVars == 0) then
-            s = s .. ',' .. newLine .. newprefix .. (minify and '["__address"]="' or '["__address"] = "')..tblString..'"'
+        if recursive.isDebug and not (isList and length == 0) then
+            s = s..","..endL..newPrefix..(minify and '["__address"]="' or '["__address"] = "')..address..'"'
         end
-        if isList and numVars == 0 then -- empty
-            s = s .. "}"
+        if isList and length == 0 then -- empty
+            s = s.."}"
         else
-            s = s .. newLine .. prefix .. "}"
+            s = s..endL..prefix.."}"
         end
         return s
-    else
-        return type(o) == "string" and '"'..o:gsub("([\"\\])", "\\%1")..'"' or tostring(o)
     end
+
+    return _serialize(o, options, endL, prefix, minify, recursive)
 end
 
 --- Loads mod config from file
 -- @tparam string modName — Mod name (file name)
--- @tparam table options — Config options with default values and comments. Each element of the table can have following propertiesː
---
--- * var default — Default value of a variable
--- * number min/max *(optional)* — Minimum and maximum values of a variable (if it's a number)
--- * string format *(optional)* — Selected way of rounding will be applied for loaded numeric variable (can be 'floor', 'round' or 'ceil')
+-- @tparam table options — Config options with default values (key [1] or ["default"]) and other optional properties. More about config options: @{config-options.lua}
 -- @tparam[opt=false] bool isSeedDependant — Set to true if config is specific for this server (it's useful only on client side)
 -- @tparam[opt=false] bool/string modFolder — If true, then config will be loaded from "moddata/ModName/ModName.lua". Or you can specify different folder name
 -- @treturn table modConfig — Loaded mod config table
--- @treturn var status — Error/status Can be one of the followingː
+-- @treturn var status — Error/status. Can be one of the followingː
 --
 -- * string — It's an error message.
 -- * number, 1 — File wasn't found. It's a hint that you should re-save the config.
 -- * number, 0 — Config was successfully loaded, but was modified by `options` (maybe some variable didn't fit in the boundaries). It's a hint that you should re-save the config.
 -- * nil — Config was successfully loaded, no modifications were made.
--- @usage local tbl = Azimuth.loadConfig("MyMod", { WindowWidth = { default = 300 } })
+-- @usage local tbl = Azimuth.loadConfig("MyMod", { WindowWidth = {300} })
 -- @usage local configOptions = {
---   WindowWidth = { default = 300, comment = "UI window width", min = 100, max = 600, format = "ceil" }
+--   WindowWidth = {300, round = 1, min = 100, max = 600, comment = "UI window width"}
 -- }
 -- local modConfig, isModified = Azimuth.loadConfig("MainConfigFile", configOptions, true, "MyMod")
 -- if isModified then
 --     Azimuth.saveConfig("MainConfigFile", modConfig, configOptions, true, "MyMod")
 -- end
 function Azimuth.loadConfig(modName, options, isSeedDependant, modFolder)
-    local defaultValues = {}
+    local newFormat
     for k, v in pairs(options) do
-        defaultValues[k] = v.default
+        if k ~= "__prepared" then
+            newFormat = not v.default
+            break
+        end
     end
+    local getDefaultConfig
+    if newFormat then
+        getDefaultConfig = function(options) return Azimuth.validate(nil, options) end
+    else
+        getDefaultConfig = function(options)
+            local r = {}
+            for k, v in pairs(options) do
+                r[k] = v.default
+            end
+            return r
+        end
+    end
+
     local dir = "moddata"
     if onServer() then
-        dir = Server().folder .. "/" .. dir
+        dir = Server().folder.."/"..dir
     end
     if modFolder then
         if modFolder == true then
             modFolder = modName
         end
-        dir = dir .. "/" .. modFolder
+        dir = dir.."/"..modFolder
     end
-    local filename = dir .. "/" .. modName .. (isSeedDependant and '_' .. GameSettings().seed or "") .. ".lua"
+    local filename = dir.."/"..modName..(isSeedDependant and "_"..GameSettings().seed or "")..".lua"
+
     local file, err = io.open(filename, "rb")
     if err then
         if not err:find("No such file or directory", 1, true) then
-            eprint("[ERROR]["..modName.."]: Failed to load config file '"..filename.."': " .. err)
-            return defaultValues, err
+            eprint("[ERROR][%s]: Failed to load config file '%s': %s", modName, filename, err)
+            return getDefaultConfig(), err
         else
-            return defaultValues, 1 -- file wasn't found
+            return getDefaultConfig(), 1 -- file wasn't found
         end
     end
     local fileContents = file:read("*all") or ""
-    local result, err = loadstring("return " .. fileContents)
+    local data, err = loadstring("return "..fileContents)
     file:close()
-    if not result then
-        eprint("[ERROR]["..modName.."]: Failed to load config file '"..filename.."': " .. err .. "; File contents: "..fileContents)
-        return defaultValues, err
+    if not data then
+        eprint("[ERROR][%s]: Failed to load config file '%s': %s; File contents: %s", modName, filename, err, fileContents)
+        return getDefaultConfig(), err
     end
-    result = result()
+    data = data()
+    if type(data) ~= "table" then -- empty file
+        return getDefaultConfig(), 0
+    end
+
     local isModified = false -- if modified is false, there is no need to rewrite config file
-    local value
-    -- if file is empty, just use default
-    if type(result) ~= "table" then
-        result = defaultValues
-        isModified = true
-    else
-        -- now check if config variables are present and correct
+    if newFormat then
+        data, isModified = Azimuth.validate(data, options)
+    else -- old
+        -- check if config variables are present and correct
         local rv
         for k, v in pairs(options) do
-            rv = result[k]
+            rv = data[k]
             if rv == nil or type(rv) ~= type(v.default) then
-                result[k] = v.default
+                data[k] = v.default
                 isModified = true
             else
                 if v.format then
                     if v.format == "ceil" then
-                        value = math.ceil(result[k])
-                        isModified = isModified or (result[k] ~= value)
-                        result[k] = value
+                        value = math.ceil(data[k])
+                        isModified = isModified or (data[k] ~= value)
+                        data[k] = value
                     elseif v.format == "round" then
-                        if result[k] >= 0 then
-                            value = math.floor(result[k] + 0.5)
-                            isModified = isModified or (result[k] ~= value)
-                            result[k] = value
+                        if data[k] >= 0 then
+                            value = math.floor(data[k] + 0.5)
+                            isModified = isModified or (data[k] ~= value)
+                            data[k] = value
                         else
-                            value = math.ceil(result[k] - 0.5)
-                            isModified = isModified or (result[k] ~= value)
-                            result[k] = value
+                            value = math.ceil(data[k] - 0.5)
+                            isModified = isModified or (data[k] ~= value)
+                            data[k] = value
                         end
                     elseif v.format == "floor" then
-                        value = math.floor(result[k])
-                        isModified = isModified or (result[k] ~= value)
-                        result[k] = value
+                        value = math.floor(data[k])
+                        isModified = isModified or (data[k] ~= value)
+                        data[k] = value
                     end
                 end
                 if v.min and rv < v.min then
-                    result[k] = v.min
+                    data[k] = v.min
                     isModified = true
                 elseif v.max and rv > v.max then
-                    result[k] = v.max
+                    data[k] = v.max
                     isModified = true
                 end
             end
         end
     end
+
     isModified = isModified and 0 or nil
-    return result, isModified
+    return data, isModified
 end
 
 --- Saves mod config to file
@@ -488,7 +450,8 @@ end
 -- @tparam table config — Mod config table
 -- @tparam[opt] table options — Config options with default values and comments. Each element of the table can have following propertiesː
 --
--- * var default *(optional)* — Default value of a variable. Will be added to a commentary unless it's a table
+-- * var [1] *(optional)* — Default value of a variable (new format). Will be added to a commentary unless it's a table
+-- * var default *(optional)* — Default value of a variable (old format). Will be added to a commentary unless it's a table
 -- * string comment *(optional)* — Variable description 
 -- @tparam[opt=false] bool isSeedDependant — Set to true if config is specific for this server (it's useful only on client side)
 -- @tparam[opt=false] bool/string modFolder — If true, then config will be loaded from "moddata/ModName/ModName.lua". Or you can specify different folder name
@@ -496,36 +459,32 @@ end
 -- @treturn bool success
 -- @treturn string/nil error — Explains what went wrong
 -- @usage local configOptions = {
---   WindowWidth = { default = 300, comment = "UI window width", min = 100, max = 600, format = "ceil" }
+--   WindowWidth = {300, min = 100, max = 600, round = -1, comment = "UI window width"}
 -- }
 -- Azimuth.saveConfig("MainConfigFile", modConfig, configOptions, false, "MyMod")
 function Azimuth.saveConfig(modName, config, options, isSeedDependant, modFolder, minify)
     local dir = "moddata"
     if onServer() then
-        dir = Server().folder .. "/" .. dir
+        dir = Server().folder.."/"..dir
     end
     if modFolder then
         if modFolder == true then
             modFolder = modName
         end
-        dir = dir .. "/" .. modFolder
-        if onClient() then
-            --createDirectory(modFolder)
-            createDirectory(dir)
-        else
-            createDirectory(dir)
-        end
+        dir = dir.."/"..modFolder
+        createDirectory(dir)
     end
-    local filename = dir .. "/" .. modName .. (isSeedDependant and '_' .. GameSettings().seed or "") .. ".lua"
+    local filename = dir.."/"..modName..(isSeedDependant and "_"..GameSettings().seed or "")..".lua"
     local file, err = io.open(filename, "wb")
     if err then
-        eprint("[ERROR]["..modName.."]: Failed to save config file '"..filename.."': " .. err)
+        eprint("[ERROR][%s]: Failed to save config file '%s': %s", modName, filename, err)
         return false, err
     end
     file:write(Azimuth.serialize(config, options, "", true, minify))
     file:close()
     return true
 end
+
 
 --- Validation function that checks if a value is not empty, correct type and within borders
 -- @tparam var value — Any variable for checking
@@ -585,6 +544,215 @@ function Azimuth.getInt(value, bounds, default, isBoundsEnum)
     value = tonumber(value)
     if not value then return default, true end
     return Azimuth.getFloat(math.floor(value), bounds, default, isBoundsEnum)
+end
+
+--- Validation function that checks if a table is a proper list (numerical keys only, no gaps). Can transform table into list if required
+-- @tparam table o — Input table
+-- @tparam[opt=false] bool fix — If true, function will return 'fixed' list
+-- @treturn bool isValidList
+-- @treturn int listLength
+-- @treturn table fixedList
+function Azimuth.isList(o, fix)
+    local isList = true
+    local minKey = math.huge
+    local maxKey = 0
+    local i = 0
+    local list = fix and {} or nil
+    for k, v in pairs(o) do
+        if type(k) ~= 'number' then
+            isList = false
+            if not fix then return false, i end
+        else
+            if k < minKey then minKey = k end
+            if k > maxKey then maxKey = k end
+        end
+        i = i + 1
+        if fix then
+            list[i] = v
+        end
+    end
+    isList = isList and minKey == 1 and maxKey == i
+    return isList, i, list
+end
+
+local function getDefault(options)
+    if options.optional then return end
+    if type(options[1]) ~= "table" then return options[1] end
+    return table.deepcopy(options[1])
+end
+
+function Azimuth._prepareOptions(options)
+    if options.__prepared then return options end
+
+    for k, v in Azimuth.orderedPairs(options) do
+        local parts = k:split(".")
+        local length = #parts
+        if length > 1 then
+            local path = parts[1]
+            if not options[parts[1]] then
+                options[parts[1]] = {{}, _ = {}}
+            end
+            local obj = options[parts[1]]
+            if not obj._ then
+                obj._ = {}
+            end
+            obj = obj._
+            for i = 2, length - 1 do
+                local part = parts[i]
+                if not obj[part] then
+                    obj[part] = {{}, _ = {}}
+                end
+                if not obj[part]._ then
+                    obj[part]._ = {}
+                end
+                obj = obj[part]._
+            end
+            if not obj[parts[length]] then
+                obj[parts[length]] = table.deepcopy(v)
+            end
+            options[k] = nil
+        end
+    end
+
+    options.__prepared = true
+    return options
+end
+
+function Azimuth._validateVar(value, options)
+    if value == nil and options.optional then return end
+
+    local isModified = false
+
+    local dtype = type(options[1])
+    if type(value) ~= dtype then
+        if value ~= nil and dtype == "string" then
+            value = tostring(value)
+            isModified = true
+        elseif dtype == "number" then
+            value = tonumber(value)
+            isModified = true
+            if value == nil then
+                return getDefault(options), true
+            end
+        elseif dtype == "table" and options._ then -- continue to check table fields
+            value = getDefault(options)
+            isModified = true
+        else
+            return getDefault(options), true
+        end
+    end
+
+    if dtype == "string" then
+        if options.len then -- TODO: Use UTF8 when asked to
+            local length = value:len()
+            if length < options.len[1] then
+                return getDefault(options), true
+            elseif length > options.len[2] then
+                value = value:sub(1, options.len[2])
+                isModified = true
+            end
+        end
+        if options.upper then
+            local newValue = value:upper()
+            if value ~= newValue then isModified = true end
+            value = newValue
+        elseif options.lower then
+            local newValue = value:lower()
+            if value ~= newValue then isModified = true end
+            value = newValue
+        end
+        if options.pattern and not value.find(options.pattern) then
+            return getDefault(options), true
+        end
+    elseif dtype == "number" then
+        if options.round then
+            if options.round == -1 then
+                local newValue = math.floor(value)
+                if value ~= newValue then isModified = true end
+                value = newValue
+            elseif options.round == 0 then
+                local newValue = round(value)
+                if value ~= newValue then isModified = true end
+                value = newValue
+            else -- 1
+                local newValue = math.ceil(value)
+                if value ~= newValue then isModified = true end
+                value = newValue
+            end
+        end
+        if options.min and value < options.min then
+            value = options.min
+            isModified = true
+        elseif options.max and value > options.max then
+            value = options.max
+            isModified = true
+        end
+    end
+
+    if options.enum then
+        local found = false
+        for k, v in ipairs(options.enum) do
+            if v == value then
+                found = true
+                break
+            end
+        end
+        if not found then
+            return getDefault(options), true
+        end
+    end
+
+    if options._ then -- table with fields
+        local varModified, isValid
+        value, varModified, isValid = Azimuth._validateFields(value, options._, options.list)
+        if not isValid and options.required then
+            return nil, true
+        end
+        isModified = isModified or varModified
+    end
+
+    return value, isModified, true
+end
+
+function Azimuth._validateFields(data, options, listExpected)
+    local isModified = false
+    local varModified, isValid
+    for k, v in pairs(options) do
+        if k ~= "*" and k ~= "__prepared" then
+            if listExpected then
+                k = tonumber(k)
+            end
+            if k then
+                data[k], varModified, isValid = Azimuth._validateVar(data[k], v)
+                if not isValid and v.required then -- important field is invalid, remove the whole category
+                    return nil, true
+                end
+                isModified = isModified or varModified
+            end
+        end
+    end
+    if options["*"] then
+        for k, v in pairs(data) do
+            data[k], varModified = Azimuth._validateVar(v, options["*"])
+            isModified = isModified or varModified
+        end
+    end
+    if listExpected then
+        varModified, _, data = Azimuth.isList(data, true)
+        isModified = isModified or varModified
+    end
+    return data, isModified, true
+end
+
+--- Validation function that allows to check and fix input data with the use of a config options table. Works **ONLY** for the **NEW** config options format
+-- @tparam table data
+-- @tparam table options
+-- @treturn table fixedData
+-- @treturn bool isModified
+-- @treturn bool _
+function Azimuth.validate(data, options)
+    options = Azimuth._prepareOptions(options)
+    return Azimuth._validateFields(data, options)
 end
 
 return Azimuth
