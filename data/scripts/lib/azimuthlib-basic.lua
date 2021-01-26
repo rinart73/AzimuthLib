@@ -285,7 +285,7 @@ function Azimuth.serialize(o, options, prefix, addCarriageReturn, minify, recurs
                         end
                     end
                     local default = fieldOptions[1] and fieldOptions[1] or fieldOptions.default
-                    if default ~= nil and type(default) ~= "table" then
+                    if fieldOptions.comment ~= false and default ~= nil and type(default) ~= "table" then
                         s = s..newPrefix..commentStart.."Default: "..tostring(default)..(comment and ". "..comment or "")..commentEnd..endL
                     elseif comment then
                         s = s..newPrefix..commentStart..comment..commentEnd..endL
