@@ -349,7 +349,7 @@ function Azimuth.loadConfig(modName, options, isSeedDependant, modFolder)
     local newFormat
     for k, v in pairs(options) do
         if k ~= "__prepared" then
-            newFormat = not v.default
+            newFormat = v.default == nil
             break
         end
     end
